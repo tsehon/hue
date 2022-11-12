@@ -1,25 +1,19 @@
 import React, { useState } from 'react';
+import Searchbar from './components/Searchbar';
+
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, TextInput, Text, View, ScrollView } from 'react-native';
-
-const Searchbar = () => {
-  const [searchText, setSearchText] = useState('');
-  return (
-    <TextInput
-      style={styles.searchbar}
-      placeholder="Search"
-      onChangeText={newText => setSearchText(newText)}
-      defaultValue={searchText}
-    />
-  );
-}
 
 export default function App() {
   return (
     <ScrollView style={styles.page}>
       <Searchbar/>
       <View style={styles.container}>
-        <Text>hue</Text>
+        <Text>where the categories go</Text>
+        <StatusBar style="auto" />
+      </View>
+      <View style={styles.container}>
+        <Text>where the products go</Text>
         <StatusBar style="auto" />
       </View>
       <View style={styles.feed}>
@@ -32,27 +26,20 @@ export default function App() {
 
 const styles = StyleSheet.create({
   page: {
-    flex: 1,
+    height: '100%',
     paddingTop: 60,
   },
-  searchbar: {
-    height: 40,
-    width: '90%',
-    alignSelf: 'center',
-    textAlign: 'center',
+  container: {
+    padding: 30,
+    height: '15%',
+    backgroundColor: 'lightblue',
     borderColor: 'black',
     borderWidth: 1,
-  },
-  container: {
-    flex: 1,
-    paddingTop: 10,
-    backgroundColor: 'lightblue',
     alignItems: 'center',
     justifyContent: 'center',
   },
   feed: {
-    flex: 2,
-    height: '100%',
+    height: 1000,
     backgroundColor: 'lightgrey',
     alignItems: 'center',
     justifyContent: 'center',
