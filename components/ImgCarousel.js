@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Dimensions, View, Image, Text } from 'react-native';
+import { Dimensions, View, Image } from 'react-native';
 import Carousel from 'react-native-reanimated-carousel';
 
 // Takes in array of image links (props.images)
@@ -15,7 +15,7 @@ const ImgCarousel = (props) => {
     }
 
       return (
-          <View style={{width: width, height: width}}>
+          <View style={{width: width+40, height: width+40, flex: 1, justifyContent: 'center', alignItems: 'center'}}>
               <Carousel
                   loop
                   width={width}
@@ -24,6 +24,9 @@ const ImgCarousel = (props) => {
                   data={props.images}
                   scrollAnimationDuration={300}
                   onScrollEnd={(index) => setActiveIndex(index)}
+                  panGestureHandlerProps={{
+                    activeOffsetX: [-10, 10],
+                  }}
                   renderItem={({ index }) => (
                       <View
                           style={{
@@ -42,7 +45,7 @@ const ImgCarousel = (props) => {
                   )}
               />
             <View
-                style={{alignItems: 'center', justifyContent: 'center'}}
+                style={{alignItems: 'center', justifyContent: 'center', height: 24}}
             >
                 <Pagination
                     data={props.images}
