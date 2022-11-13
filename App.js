@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import Searchbar from './components/Searchbar';
 
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, TextInput, Text, View, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, ScrollView } from 'react-native';
 
 export default function App() {
   return (
-    <ScrollView style={styles.page}>
+    <ScrollView contentContainerStyle={styles.page}>
       <Searchbar/>
       <View style={styles.container}>
         <Text>where the categories go</Text>
@@ -26,12 +26,12 @@ export default function App() {
 
 const styles = StyleSheet.create({
   page: {
-    height: '100%',
+    flex: 1,
     paddingTop: 60,
   },
   container: {
     padding: 30,
-    height: '15%',
+    flex: 1,
     backgroundColor: 'lightblue',
     borderColor: 'black',
     borderWidth: 1,
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   feed: {
-    height: 1000,
+    flex: 4,
     backgroundColor: 'lightgrey',
     alignItems: 'center',
     justifyContent: 'center',
