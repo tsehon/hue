@@ -1,5 +1,5 @@
-import ImgCarousel from './ImgCarousel';
-import Stars from './Stars';
+import ImgCarousel from '../components/ImgCarousel';
+import Stars from '../components/Stars';
 import { StyleSheet, TextInput, Text, View, ScrollView } from 'react-native';
 import { useFonts } from 'expo-font';
 
@@ -20,33 +20,33 @@ const ProductPage = (props) => {
             'https://m.media-amazon.com/images/I/7177MvUbeIS._AC_SL1500_.jpg',
             'https://m.media-amazon.com/images/I/81vz-QbgyvS._AC_SX679_.jpg'
           ]}
-          style={{width: 390-40}}
+          style={{ width: 390 - 40 }}
         />
       </View>
       <View
         style={styles.infoSection}
       >
         <Text style={styles.title} numberOfLines={2}>{props.name}</Text>
-        <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingTop: 4}}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingTop: 4 }}>
           <View
-            style={{width: '40%'}}
+            style={{ width: '40%' }}
           >
             <Text
-            numberOfLines={1}
-            style={[styles.info, styles.text]}
+              numberOfLines={1}
+              style={[styles.info, styles.text]}
             >
               {props.brand}
             </Text>
             <Text
-            style={[styles.info, styles.text]}
+              style={[styles.info, styles.text]}
             >
               {props.price}
             </Text>
           </View>
           <View
-            style={[{width: '60%'}, styles.rightAlign]}
+            style={[{ width: '60%' }, styles.rightAlign]}
           >
-            <View style={[{flex: 1, flexDirection: 'row', alignItems: 'flex-end'}, styles.info]}>
+            <View style={[{ flex: 1, flexDirection: 'row', alignItems: 'flex-end' }, styles.info]}>
               <Stars
                 rating={props.rating}
                 disabled={true}
