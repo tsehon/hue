@@ -6,7 +6,7 @@ import { StyleSheet, Text, View, ScrollView } from 'react-native';
 
 export default function App() {
   return (
-    <ScrollView contentContainerStyle={styles.page}>
+    <View style={styles.page}>
       <Searchbar/>
       <View style={styles.container}>
         <Text>where the categories go</Text>
@@ -20,7 +20,7 @@ export default function App() {
         <Text>discover feed</Text>
         <StatusBar style="auto" />
       </View>
-    </ScrollView>
+    </View>
   );
 }
 
