@@ -1,26 +1,35 @@
 import React, { useState } from 'react';
-import Searchbar from './components/Searchbar';
 
-import { StatusBar } from 'expo-status-bar';
+import { NavigationContainer } from '@react-navigation/native'
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
+
+import MainPage from './pages/MainPage.js';
+import ProductPage from './pages/ProductPage.js';
+import SearchPage from './pages/SearchPage.js';
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <View style={styles.page}>
-      <Searchbar/>
-      <View style={styles.container}>
-        <Text>where the categories go</Text>
-        <StatusBar style="auto" />
-      </View>
-      <View style={styles.container}>
-        <Text>where the products go</Text>
-        <StatusBar style="auto" />
-      </View>
-      <View style={styles.feed}>
-        <Text>discover feed</Text>
-        <StatusBar style="auto" />
-      </View>
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator screenOptions={{
+        headerShown: false
+      }}>
+        <Stack.Screen
+          name="Home"
+          component={MainPage}
+        />
+        <Stack.Screen
+          name="Product"
+          component={ProductPage}
+        />
+        <Stack.Screen
+          name="Search"
+          component={SearchPage}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
@@ -37,6 +46,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  searchbar: {
+    paddingHorizontal: 10,
+    flex: 2
   },
   feed: {
     flex: 4,
