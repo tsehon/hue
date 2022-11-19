@@ -3,10 +3,48 @@ import Stars from '../components/Stars';
 import { StyleSheet, TextInput, Text, View, ScrollView } from 'react-native';
 import { useFonts } from 'expo-font';
 
-ProductPage = (props) => {
+export default function ProductPageRoute({navigation, route}) {
   const [fontsLoaded] = useFonts({
     'Inter': require('../assets/fonts/Inter.ttf'),
   });
+
+  const { productId } = route.params;
+  const [productName, setProductName] = useState('');
+  const [productPrice, setProductPrice] = useState(0);
+  const [productBrand, setProductBrand] = useState('');
+  const [productLink, setProductLink] = useState('');
+  const [productRating, setProductRating] = useState(0.0);
+
+  useEffect(() => {
+      fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    const doc = (await getDocs(collection(db, 'products'), where("id", "==", {productId})))[0];
+
+    const item = doc.data();
+    setProductName(item.name);
+    setProductPrice(item.price);
+    setProductBrand(item.brand);
+    setProductLink(item.link);
+    setProductRating(item.rating);
+  }
+
+  const itemConverter = {
+      toFirestore: (item) => {
+          return {
+              name: item.name,
+          };
+      },
+      fromFirestore: (snapshot, options) => {
+        const data = snapshot.data(options);
+        const id = snapshot.id;
+
+        return new Product(id, data.name, data.price, data.brand,
+          data.link, data.rating);
+      }
+  };
+
   return (
     <View
       style={styles.page}
@@ -98,5 +136,3 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter',
   }
 });
-
-export default ProductPage;

@@ -3,17 +3,19 @@ import SearchBar from 'react-native-elements/dist/searchbar/SearchBar-ios';
 
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { Button } from 'react-native-elements';
 
-export default function MainPage({navigation}) {
+export default function MainPage({ navigation }) {
   return (
     <ScrollView contentContainerStyle={styles.page}>
       <SearchBar
         style={styles.searchbar}
-        onChangeText={() => navigation.navigate('Search')}
-        onPress={() => navigation.navigate('Search')}
+        onFocus={() => navigation.navigate('Search')}
         placeholder="Search"
         platform='ios'
       />
+      <Button onPress={() => navigation.navigate('Product',)}>
+      </Button>
       <View style={styles.container}>
         <Text>where the categories go</Text>
         <StatusBar style="auto" />
@@ -33,7 +35,7 @@ export default function MainPage({navigation}) {
 const styles = StyleSheet.create({
   page: {
     flex: 1,
-    paddingTop: 60,
+    paddingTop: 20,
   },
   container: {
     padding: 30,
