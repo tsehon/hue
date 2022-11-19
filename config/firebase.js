@@ -3,7 +3,7 @@ import { initializeFirestore } from "firebase/firestore";
 
 import { API_KEY, AUTH_DOMAIN, PROJECT_ID, STORAGE_BUCKET, MESSAGING_SENDER_ID, APP_ID, MEASUREMENT_ID } from '@env';
 
-const firebaseConfig = { 
+const firebaseConfig = {
     apiKey: API_KEY,
     authDomain: AUTH_DOMAIN,
     projectId: PROJECT_ID,
@@ -16,6 +16,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = initializeFirestore(app, {
     useFetchStreams: false,
+    experimentalForceLongPolling: true,
 });
 
 export default db;

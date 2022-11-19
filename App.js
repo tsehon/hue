@@ -1,34 +1,66 @@
 import React, { useState } from 'react';
 
 import { NavigationContainer } from '@react-navigation/native'
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
 
 import MainPage from './pages/MainPage.js';
 import ProductPage from './pages/ProductPage.js';
 import SearchPage from './pages/SearchPage.js';
 
-const Stack = createNativeStackNavigator();
+import { Feather } from '@expo/vector-icons';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+
+const Tab = createMaterialBottomTabNavigator();
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{
-        headerShown: false
-      }}>
-        <Stack.Screen
+      <Tab.Navigator
+        screenOptions={{
+          headerShown: false,
+
+        }}
+        backBehavior={{
+          initialRoute: "home",
+        }}
+        initialRouteName="Home"
+        barStyle={{ backgroundColor: 'white' }}
+      >
+        <Tab.Screen
           name="Home"
           component={MainPage}
+          options={{
+            tabBarLabel: null,
+            tabBarIcon: ({ color }) => (
+              <Feather
+                name="home"
+                size={24}
+                color={color}
+                style={{ height: 40, paddingTop: 5 }}
+              />
+            )
+          }}
         />
-        <Stack.Screen
-          name="Product"
-          component={ProductPage}
-        />
-        <Stack.Screen
+        <Tab.Screen
           name="Search"
           component={SearchPage}
+          options={{
+            tabBarLabel: null,
+            tabBarIcon: ({ color }) => (
+              <Feather
+                name="search"
+                size={24}
+                color={color}
+                style={{ height: 40, paddingTop: 5 }}
+              />
+            )
+          }}
         />
-      </Stack.Navigator>
+      </Tab.Navigator>
     </NavigationContainer>
   );
 }
