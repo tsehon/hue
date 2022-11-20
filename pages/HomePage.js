@@ -5,7 +5,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import { Button } from 'react-native-elements';
 
-export default function MainPage({ navigation }) {
+export default function HomePage({ navigation }) {
   return (
     <ScrollView contentContainerStyle={styles.page}>
       <SearchBar
