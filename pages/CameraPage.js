@@ -30,7 +30,7 @@ export default function CameraPage({ navigation, route }) {
 
     useEffect(() => {
         (async () => {
-            const cameraStatus = await Camera.requestPermissionsAsync()
+            const cameraStatus = await Camera.requestCameraPermissionsAsync()
             setHasCameraPermissions(cameraStatus.status == 'granted')
 
             const audioStatus = await Audio.requestPermissionsAsync()
@@ -56,7 +56,7 @@ export default function CameraPage({ navigation, route }) {
                     const data = await videoRecordPromise;
                     const source = data.uri
                     let sourceThumb = await generateThumbnail(source)
-                    navigation.navigate('savePost', { source, sourceThumb })
+                    navigation.navigate('Upload', { source, sourceThumb })
                 }
             } catch (error) {
                 console.warn(error)
@@ -77,9 +77,9 @@ export default function CameraPage({ navigation, route }) {
             aspect: [16, 9],
             quality: 1
         })
-        if (!result.cancelled) {
-            let sourceThumb = await generateThumbnail(result.uri)
-            navigation.navigate('savePost', { source: result.uri, sourceThumb })
+        if (!result.canceled) {
+            let sourceThumb = await generateThumbnail(result.assets[0].uri)
+            navigation.navigate('Upload', { source: result.assets[0].uri, sourceThumb })
         }
     }
 
