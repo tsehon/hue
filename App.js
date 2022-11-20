@@ -5,9 +5,7 @@ import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import MainDirectory from './pages/MainDirectory.js';
-import HomePage from './pages/HomePage.js';
 import SearchPage from './pages/SearchPage.js';
-import CameraPage from './pages/CameraPage.js';
 import ProductPage from './pages/ProductPage.js';
 
 const Stack = createNativeStackNavigator();
@@ -18,8 +16,6 @@ export default function App() {
       <Stack.Navigator
           initialRouteName='MainDirectory'>
         <Stack.Screen name="MainDirectory" component={MainDirectory} options={{ headerShown: false }} />
-        <Stack.Screen name="Home" component={HomePage} options={{ headerShown: false }} />
-        <Stack.Screen name="Camera" component={CameraPage} options={{ headerShown: false }} />
         <Stack.Screen name="Search" component={SearchPage} options={{ headerShown: false }} />
         <Stack.Screen name="Product" component={ProductPage} options={{ headerShown: false }} />
       </Stack.Navigator>

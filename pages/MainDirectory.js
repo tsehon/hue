@@ -6,8 +6,8 @@ import { createMaterialBottomTabNavigator } from '@react-navigation/material-bot
 import { StyleSheet } from 'react-native';
 
 import MainPage from './HomePage.js';
-import SearchPage from './SearchPage.js';
 import CameraPage from './CameraPage.js';
+import ExplorePage from './ExplorePage.js';
 
 import { Feather } from '@expo/vector-icons';
 
@@ -55,8 +55,8 @@ export default function MainDirectory() {
                 }}
             />
             <Tab.Screen
-                name="Search"
-                component={SearchPage}
+                name="Explore"
+                component={ExplorePage}
                 options={{
                     tabBarLabel: "Explore",
                     tabBarIcon: ({ color }) => (
