@@ -88,8 +88,8 @@ export default function SearchPage({navigation}) {
             return (
                 <Text
                     style={styles.dropdownitem}
-                    onPress={({ item }) => navigation.navigate('Product', {
-                        productId: { item }
+                    onPress={() => navigation.navigate('Product', {
+                        productId: item
                     })}>
                     {name}
                 </Text>

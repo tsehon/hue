@@ -8,6 +8,7 @@ import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import MainPage from './pages/MainPage.js';
 import SearchPage from './pages/SearchPage.js';
 import CameraPage from './pages/CameraPage.js';
+import SearchPageNav from './pages/SearchPageNavigation';
 
 import { Feather } from '@expo/vector-icons';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -61,8 +62,8 @@ export default function App() {
           }}
         />
         <Tab.Screen
-          name="Search"
-          component={SearchPage}
+          name="SearchHome"
+          component={SearchPageNav}
           options={{
             tabBarLabel: null,
             tabBarIcon: ({ color }) => (

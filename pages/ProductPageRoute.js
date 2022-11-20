@@ -1,12 +1,15 @@
+import React, { useState, useEffect } from 'react';
 import ImgCarousel from '../components/ImgCarousel';
 import Stars from '../components/Stars';
 import { StyleSheet, TextInput, Text, View, ScrollView } from 'react-native';
-import { useFonts } from 'expo-font';
+// import { useFonts } from 'expo-font';
+import { doc, getDoc, getDocs, collection } from "firebase/firestore";
+import db from '../config/firebase';
 
 export default function ProductPageRoute({navigation, route}) {
-  const [fontsLoaded] = useFonts({
-    'Inter': require('../assets/fonts/Inter.ttf'),
-  });
+  // const [fontsLoaded] = useFonts({
+  //   'Inter': require('../assets/fonts/Inter.ttf'),
+  // });
 
   const { productId } = route.params;
   const [productName, setProductName] = useState('');
@@ -14,57 +17,63 @@ export default function ProductPageRoute({navigation, route}) {
   const [productBrand, setProductBrand] = useState('');
   const [productLink, setProductLink] = useState('');
   const [productRating, setProductRating] = useState(0.0);
+  const [productNumRatings, setNumRatings] = useState(0);
+  const [productImages, setProductImages] = useState([]);
 
   useEffect(() => {
       fetchData();
   }, []);
 
   const fetchData = async () => {
-    const doc = (await getDocs(collection(db, 'products'), where("id", "==", {productId})))[0];
+    const docRef = doc(db, 'products', productId);
+    const imagesRef = collection(db, 'products', productId, 'images');
+    const docSnap = await getDoc(docRef);
+    const imageSnap = await getDocs(imagesRef);
 
-    const item = doc.data();
+    const item = docSnap.data();
     setProductName(item.name);
     setProductPrice(item.price);
     setProductBrand(item.brand);
     setProductLink(item.link);
-    setProductRating(item.rating);
+    setProductRating(item.avgRating);
+    setNumRatings(item.numRatings);
+
+    const imageArr = [];
+    imageSnap.docs.map(d => imageArr.push(d.data().url));
+    setProductImages(imageArr);
   }
 
-  const itemConverter = {
-      toFirestore: (item) => {
-          return {
-              name: item.name,
-          };
-      },
-      fromFirestore: (snapshot, options) => {
-        const data = snapshot.data(options);
-        const id = snapshot.id;
+  // const itemConverter = {
+  //     toFirestore: (item) => {
+  //         return {
+  //             name: item.name,
+  //         };
+  //     },
+  //     fromFirestore: (snapshot, options) => {
+  //       const data = snapshot.data(options);
+  //       const id = snapshot.id;
 
-        return new Product(id, data.name, data.price, data.brand,
-          data.link, data.rating);
-      }
-  };
+  //       return new Product(id, data.name, data.price, data.brand,
+  //         data.link, data.rating);
+  //     }
+  // };
 
   return (
-    <View
+    <ScrollView
       style={styles.page}
     >
       <View
         style={styles.centered}
       >
         <ImgCarousel
-          images={[
-            'https://m.media-amazon.com/images/I/716OsGt9a2S._AC_SX679_.jpg',
-            'https://m.media-amazon.com/images/I/7177MvUbeIS._AC_SL1500_.jpg',
-            'https://m.media-amazon.com/images/I/81vz-QbgyvS._AC_SX679_.jpg'
-          ]}
+          images={productImages}
           style={{ width: 390 - 40 }}
         />
       </View>
       <View
         style={styles.infoSection}
       >
-        <Text style={styles.title} numberOfLines={2}>{props.name}</Text>
+        <Text style={styles.title} numberOfLines={2}>{productName}</Text>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingTop: 4 }}>
           <View
             style={{ width: '40%' }}
@@ -73,12 +82,12 @@ export default function ProductPageRoute({navigation, route}) {
               numberOfLines={1}
               style={[styles.info, styles.text]}
             >
-              {props.brand}
+              {productBrand}
             </Text>
             <Text
               style={[styles.info, styles.text]}
             >
-              {props.price}
+              {productPrice}
             </Text>
           </View>
           <View
@@ -86,21 +95,21 @@ export default function ProductPageRoute({navigation, route}) {
           >
             <View style={[{ flex: 1, flexDirection: 'row', alignItems: 'flex-end' }, styles.info]}>
               <Stars
-                rating={props.rating}
+                rating={productRating}
                 disabled={true}
                 alignSelf={'flex-end'}
               />
-              <Text styles={styles.text}>({props.rating})</Text>
+              <Text styles={styles.text}>({productRating})</Text>
             </View>
             <Text
               style={[styles.info, styles.text]}
             >
-              {props.numRatings} reviews
+              {productNumRatings} reviews
             </Text>
           </View>
         </View>
       </View>
-    </View>
+    </ScrollView>
   )
 }
 
@@ -121,7 +130,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    fontFamily: 'Inter',
+    // fontFamily: 'Inter',
     fontWeight: '700',
   },
   info: {
@@ -133,6 +142,6 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 16,
-    fontFamily: 'Inter',
+    // fontFamily: 'Inter',
   }
 });
