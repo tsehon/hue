@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import HomeNav from './nav/HomeNav';
 import CreateNav from './nav/CreateNav';
@@ -9,11 +9,34 @@ import { Feather } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 
+import  { useFonts } from 'expo-font';
+import * as SplashScreen from 'expo-splash-screen';
+import React, { useEffect, useCallback } from 'react';
+
 const Tab = createMaterialBottomTabNavigator();
 
 export default function MainDirectory() {
+  const [fontsLoaded] = useFonts({
+    'Plus-Jakarta-Sans': require('./assets/fonts/Plus-Jakarta-Sans.ttf'),
+  });
+
+  useEffect(() => {
+    async function prepare() {
+      await SplashScreen.preventAutoHideAsync();
+    }
+    prepare();
+  }, []);
+
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) return null;
+
   return (
-    <NavigationContainer>
+    <NavigationContainer onReady={onLayoutRootView}>
       <Tab.Navigator
         screenOptions={{
           headerShown: false,
