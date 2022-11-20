@@ -6,8 +6,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
 
 import MainPage from './pages/MainPage.js';
-import ProductPage from './pages/ProductPage.js';
 import SearchPage from './pages/SearchPage.js';
+import CameraPage from './pages/CameraPage.js';
 
 import { Feather } from '@expo/vector-icons';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -38,6 +38,21 @@ export default function App() {
             tabBarIcon: ({ color }) => (
               <Feather
                 name="home"
+                size={24}
+                color={color}
+                style={{ height: 40, paddingTop: 5 }}
+              />
+            )
+          }}
+        />
+        <Tab.Screen
+          name="Camera"
+          component={CameraPage}
+          options={{
+            tabBarLabel: null,
+            tabBarIcon: ({ color }) => (
+              <Feather
+                name="plus-square"
                 size={24}
                 color={color}
                 style={{ height: 40, paddingTop: 5 }}
