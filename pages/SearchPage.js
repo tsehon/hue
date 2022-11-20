@@ -5,11 +5,8 @@ import { collection, getDocs } from "firebase/firestore";
 
 import db from '../config/firebase';
 import SearchItem from '../lib/SearchItem';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-const Stack = createNativeStackNavigator();
-
-export default function SearchPage({navigation}) {
+export default function SearchPage({navigation, route}) {
     const [query, setQuery] = useState('');
     const [data, setData] = useState([]);
     const [items, setItems] = useState([]);

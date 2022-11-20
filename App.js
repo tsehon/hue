@@ -1,26 +1,17 @@
-import React, { useState } from 'react';
 import { StyleSheet } from 'react-native';
 
-import { NavigationContainer } from '@react-navigation/native'
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
-
-import MainPage from './pages/MainPage.js';
-import SearchPage from './pages/SearchPage.js';
-import CameraPage from './pages/CameraPage.js';
-import SearchPageNav from './pages/SearchPageNavigation';
+import HomeNav from './nav/HomeNav';
+import CreateNav from './nav/CreateNav';
+import ExploreNav from './nav/ExploreNav';
 
 import { Feather } from '@expo/vector-icons';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import MainDirectory from './pages/MainDirectory.js';
-import SearchPage from './pages/SearchPage.js';
-import ProductPage from './pages/ProductPage.js';
+import { NavigationContainer } from '@react-navigation/native';
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 
-const Stack = createNativeStackNavigator();
+const Tab = createMaterialBottomTabNavigator();
 
-export default function App() {
+export default function MainDirectory() {
   return (
     <NavigationContainer>
       <Tab.Navigator
@@ -35,46 +26,43 @@ export default function App() {
         barStyle={{ backgroundColor: 'white' }}
       >
         <Tab.Screen
-          name="Home"
-          component={MainPage}
+          name="HomeNav"
+          component={HomeNav}
           options={{
-            tabBarLabel: null,
+            tabBarLabel: "Home",
             tabBarIcon: ({ color }) => (
               <Feather
                 name="home"
                 size={24}
                 color={color}
-                style={{ height: 40, paddingTop: 5 }}
               />
             )
           }}
         />
         <Tab.Screen
-          name="Camera"
-          component={CameraPage}
+          name="CreateNav"
+          component={CreateNav}
           options={{
-            tabBarLabel: null,
+            tabBarLabel: "Create",
             tabBarIcon: ({ color }) => (
               <Feather
                 name="plus-square"
                 size={24}
                 color={color}
-                style={{ height: 40, paddingTop: 5 }}
               />
             )
           }}
         />
         <Tab.Screen
-          name="SearchHome"
-          component={SearchPageNav}
+          name="ExploreNav"
+          component={ExploreNav}
           options={{
-            tabBarLabel: null,
+            tabBarLabel: "Explore",
             tabBarIcon: ({ color }) => (
               <Feather
                 name="search"
                 size={24}
                 color={color}
-                style={{ height: 40, paddingTop: 5 }}
               />
             )
           }}
@@ -109,3 +97,4 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
