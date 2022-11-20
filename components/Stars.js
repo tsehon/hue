@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import StarRating from 'react-native-star-rating-widget';
 
 /*
@@ -10,7 +10,12 @@ disabled: boolean, true or false
 alignSelf: if set to 'flex-end', will override alignSelf: 'flex-start' (presumably inherent to library)
 */
 const Stars = (props) => {
-    const [rating, setRating] = useState(props.rating);
+    const [rating, setRating] = useState(0);
+
+    useEffect(() => {
+        setRating(props.rating)
+    });
+
     return (
         <StarRating
             rating={rating}
