@@ -9,11 +9,12 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import HomePageSection from '../components/HomePageSection';
 import CategoryButton from '../components/CategoryButtons';
 import CategoryButtonGrid from '../components/CategoryButtons';
+import Thumbnail from '../components/Videos';
 
 export default function HomePage({ navigation }) {
   return (
-    <SafeAreaView style={styles.page}>
-      <ScrollView contentContainerStyle={styles.page}>
+    <SafeAreaView style={styles.page} edges={['top', 'left', 'right']}>
+      <ScrollView>
         <SearchBar
           style={styles.searchbar}
           onChangeText={(input) => {
@@ -24,25 +25,58 @@ export default function HomePage({ navigation }) {
           placeholder="Search"
           platform='ios'
         />
-        <Button onPress={() => navigation.navigate('Product',)}>
-        </Button>
+
+        <HomePageSection
+          title="Reviews For You"
+        >
+
+        </HomePageSection>
+
         <HomePageSection
           title="Trending Categories"
         >
-          <CategoryButtonGrid title="Beauty"></CategoryButtonGrid>
+          <CategoryButtonGrid categories={["Beauty", "Lawnmowers", "Tech", "Skincare"]}></CategoryButtonGrid>
         </HomePageSection>
-        <View style={styles.container}>
-          <Text>where the categories go</Text>
-          <StatusBar style="auto" />
-        </View>
-        <View style={styles.container}>
-          <Text>where the products go</Text>
-          <StatusBar style="auto" />
-        </View>
-        <View style={styles.feed}>
-          <Text>discover feed</Text>
-          <StatusBar style="auto" />
-        </View>
+
+        <HomePageSection
+          title="Trending in Beauty"
+        >
+          <ScrollView horizontal>
+            <Thumbnail uri='https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4' style={{width:200, height:300}}></Thumbnail>
+            <Thumbnail uri='https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4' style={{width:200, height:300}}></Thumbnail>
+          </ScrollView>
+        </HomePageSection>
+
+        <HomePageSection
+          title="Trending in Lawnmowers"
+        >
+          
+        </HomePageSection>
+
+        <HomePageSection
+          title="Products For You"
+        >
+          
+        </HomePageSection>
+
+        <HomePageSection
+          title="Trending Products"
+        >
+          
+        </HomePageSection>
+
+        <HomePageSection
+          title="Trending in Tech"
+        >
+          
+        </HomePageSection>
+
+        <HomePageSection
+          title="Trending in Skincare"
+        >
+          
+        </HomePageSection>
+
       </ScrollView>
     </SafeAreaView>
   );
