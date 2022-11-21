@@ -20,7 +20,16 @@ export function CategoryButtonScrollView(props) {
 
 export default function CategoryButtonGrid(props) {
     return (
-        <CategoryButton title={props.title}></CategoryButton>
+        <View style={styles.flexGrid}>
+            {props.categories.map((element, index) => (
+                <View style={styles.gridButton} key={index}>
+                    <CategoryButton
+                        key={index}
+                        title={element}
+                    />
+                </View>
+            ))}
+        </View>
     );
 }
 
@@ -28,7 +37,8 @@ export default function CategoryButtonGrid(props) {
 const styles = StyleSheet.create({
     button: {
         backgroundColor: '#EDEDED',
-        width: 174,
+        // width: 174,
+        width: 180,
         height: 84,
         borderRadius: 10,
         paddingTop: 10,
@@ -39,5 +49,13 @@ const styles = StyleSheet.create({
         fontWeight: '400',
         color: '#000000',
         fontFamily: 'Plus-Jakarta-Sans',
+    },
+    flexGrid: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'space-between',
+    },
+    gridButton: {
+        marginTop: 8,
     }
 });

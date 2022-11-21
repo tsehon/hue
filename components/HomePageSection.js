@@ -13,10 +13,9 @@ export default function HomePageSection(props) {
 const styles = StyleSheet.create({
     title: {
         fontSize: 20,
-        fontWeight: '600',
         paddingTop: 10,
         paddingBottom: 10,
-        fontFamily: 'Plus-Jakarta-Sans',
+        fontFamily: 'PlusJakartaSans-SemiBold',
     },
     container: {
         padding: 10,
