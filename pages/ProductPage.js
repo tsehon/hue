@@ -6,7 +6,7 @@ import { StyleSheet, TextInput, Text, View, ScrollView } from 'react-native';
 import { doc, getDoc, getDocs, collection } from "firebase/firestore";
 import db from '../config/firebase';
 
-export default function ProductPage({navigation, route}) {
+export default function ProductPage({ navigation, route }) {
   // const [fontsLoaded] = useFonts({
   //   'Inter': require('../assets/fonts/Inter.ttf'),
   // });
@@ -21,7 +21,7 @@ export default function ProductPage({navigation, route}) {
   const [productImages, setProductImages] = useState([]);
 
   useEffect(() => {
-      fetchData();
+    fetchData();
   }, []);
 
   const fetchData = async () => {

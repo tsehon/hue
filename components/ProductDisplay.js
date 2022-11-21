@@ -1,6 +1,6 @@
 import { StyleSheet, View, Text, TouchableOpacity, Button, ScrollView } from 'react-native'
 
-function CategoryButton(props) {
+export default function ProductButton(props) {
     return (
         <TouchableOpacity
             style={styles.button}
@@ -10,7 +10,7 @@ function CategoryButton(props) {
     );
 }
 
-export function CategoryButtonScrollView(props) {
+export function ProductScrollView(props) {
     return (
         <ScrollView horizontal>
             { props.children }
@@ -18,9 +18,9 @@ export function CategoryButtonScrollView(props) {
     );
 }
 
-export default function CategoryButtonGrid(props) {
+export function ProductGrid(props) {
     return (
-        <CategoryButton title={props.title}></CategoryButton>
+        <ProductButton title={props.title}></ProductButton>
     );
 }
 

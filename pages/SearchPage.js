@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { SearchBar } from 'react-native-elements';
-import { StyleSheet, Text, View, SafeAreaView, FlatList } from 'react-native';
+// import { SearchBar } from 'react-native-elements';
+import SearchBar from 'react-native-elements/dist/searchbar/SearchBar-ios';
+import { StyleSheet, Text, View, SafeAreaView, FlatList, ScrollView, TouchableOpacity } from 'react-native';
 import { collection, getDocs } from "firebase/firestore";
 
-import db from '../config/firebase';
-import SearchItem from '../lib/SearchItem';
+import { Feather } from '@expo/vector-icons';
 
-export default function SearchPage({navigation, route}) {
-    const [query, setQuery] = useState('');
+import db from '../config/firebase';
+
+import SearchItem from '../lib/SearchItem';
+import BackButton from '../components/BackButton';
+
+export default function SearchPage({ navigation, route }) {
+    const [query, setQuery] = useState(route.text);
     const [data, setData] = useState([]);
     const [items, setItems] = useState([]);
     const [itemDict, setItemDict] = useState({});
@@ -95,28 +100,48 @@ export default function SearchPage({navigation, route}) {
     }
 
     return (
-        <View style={styles.container}>
-            <SearchBar
-                onChangeText={filterResults}
-                value={query}
-                placeholder="Search for a product or category..."
-                platform='ios'
-            />
+        <SafeAreaView>
+            <SafeAreaView style={styles.container}>
+                <TouchableOpacity
+                    style={styles.backButton}
+                    onPress={() => { navigation.goBack() }}
+                >
+                    <Feather
+                        name="arrow-left"
+                        size={24}
+                        color="black"
+                    />
+                </TouchableOpacity>
+                <SearchBar
+                    containerStyle={styles.searchbar}
+                    onChangeText={filterResults}
+                    value={query}
+                    placeholder="Search for a product or category..."
+                    platform='ios'
+                />
+            </SafeAreaView>
             <FlatList
                 data={items}
                 keyExtractor={(item) => item}
                 extraData={query}
                 renderItem={renderSearchItem}
             />
-        </View>
+        </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
         fill: 1,
-        paddingHorizontal: 10,
-        alignSelf: 'center',
+        flexDirection: 'row',
+    },
+    backButton: {
+        fill: 1,
+        paddingLeft: 20,
+        paddingVertical: 30,
+    },
+    searchbar: {
+        width: 325
     },
     dropdownitem: {
         paddingLeft: 15,

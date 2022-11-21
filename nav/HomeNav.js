@@ -15,7 +15,11 @@ export default function HomeNav({ navigation, route }) {
                 headerShown: false
             }}>
             <Stack.Screen name="Home" component={HomePage} />
-            <Stack.Screen name="Search" component={SearchPage} />
+            <Stack.Screen name="Search" component={SearchPage}
+                options={{
+                    animation: 'none'
+                }}
+            />
             <Stack.Screen name="Product" component={ProductPage} />
         </Stack.Navigator>
     );

@@ -8,18 +8,58 @@ import Stars from '../components/Stars';
 import { Feather } from '@expo/vector-icons'
 import { StackActions } from '@react-navigation/native';
 
+import { storage } from '../config/firebase';
+import { ref, uploadBytes } from 'firebase/storage';
+import db from '../config/firebase';
+
+const videosRef = ref(storage, 'videos');
+
 export default function UploadReviewPage({ navigation, route }) {
     const [productName, setProductName] = useState('');
     const [description, setDescription] = useState('');
     const [rating, setRating] = useState(0.0);
+    const [reviewID, setReviewID] = useState('');
 
     const [requestRunning, setRequestRunning] = useState(false);
 
     const handlePost = () => {
         setRequestRunning(true);
-        // createPost(description, route.params.source, route.params.sourceThumb);
+        postReview();
+        postVideo();
         // StackActions.popToTop();
         setRequestRunning(false);
+    }
+
+    const postVideo = () => {
+        /*
+        const video = route.source;
+        const uploadRef = ref(storage, `videos/${reviewID}.mp4`);
+
+        const metadata = {
+            productName: { productName },
+            description: { description },
+            rating: { rating }
+        }
+
+        fetch(video)
+            .then((response) => response.blob())
+            .then((blob) => uploadBytes(uploadRef, blob, metadata))
+            .then((snapshot) => { });
+        */
+    }
+
+    const postReview = () => {
+        /*
+        db.collection("reviews").add({
+            productName: { productName },
+            description: { description },
+            rating: { rating }
+        }).then((docRef) => {
+            setReviewID(docRef.id);
+        }).catch((error) => {
+            console.error("error addding review: ", error);
+        })
+        */
     }
 
     if (requestRunning) {
@@ -69,22 +109,28 @@ export default function UploadReviewPage({ navigation, route }) {
             </View>
             <View style={styles.tagBoxContainer}>
                 <Text style={{ marginBottom: 10 }}> Tags </Text>
-                <View style={styles.tagsContainer}>
+                <ScrollView horizontal containerStyle={styles.tagsContainer}>
                     <TouchableOpacity
                         style={styles.tag}>
-                        <Text style={styles.tagText}>Tag 1</Text>
+                        <Text style={styles.tagText}>fragile</Text>
                     </TouchableOpacity>
-
                     <TouchableOpacity
                         style={styles.tag}>
-                        <Text style={styles.tagText}>Tag 2</Text>
+                        <Text style={styles.tagText}>smears</Text>
                     </TouchableOpacity>
-
                     <TouchableOpacity
                         style={styles.tag}>
-                        <Text style={styles.tagText}>Tag 3</Text>
+                        <Text style={styles.tagText}>tag 3</Text>
                     </TouchableOpacity>
-                </View>
+                    <TouchableOpacity
+                        style={styles.tag}>
+                        <Text style={styles.tagText}>tag 4</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.tag}>
+                        <Text style={styles.tagText}>tag 5</Text>
+                    </TouchableOpacity>
+                </ScrollView>
             </View>
             <View style={styles.formContainer}>
                 <Text> Brand </Text>
@@ -176,7 +222,9 @@ const styles = StyleSheet.create({
         backgroundColor: 'darkgrey',
         textAlign: 'center',
         paddingVertical: 5,
-        paddingHorizontal: 25,
+        paddingHorizontal: 30,
+        marginHorizontal: 10,
+        marginVertical: 5,
         borderWidth: 2,
         borderRadius: 10,
     },

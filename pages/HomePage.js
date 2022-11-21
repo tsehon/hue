@@ -16,7 +16,11 @@ export default function HomePage({ navigation }) {
       <ScrollView contentContainerStyle={styles.page}>
         <SearchBar
           style={styles.searchbar}
-          onFocus={() => navigation.navigate('Search')}
+          onChangeText={(input) => {
+              navigation.navigate('Search', {
+                  text: { input }
+              })
+          }}
           placeholder="Search"
           platform='ios'
         />
