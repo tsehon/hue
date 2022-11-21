@@ -10,6 +10,7 @@ import HomePageSection from '../components/HomePageSection';
 import CategoryButton, { CategoryButtonScrollView } from '../components/CategoryButtons';
 import CategoryButtonGrid from '../components/CategoryButtons';
 import ProductButton, { ProductScrollView } from '../components/ProductDisplay';
+import ReviewButton, { ReviewScrollView } from '../components/ReviewDisplay';
 
 export default function ExplorePage({ navigation, route }) {
     return (
@@ -28,13 +29,18 @@ export default function ExplorePage({ navigation, route }) {
                 <HomePageSection
                     title="Trending Reviews"
                 >
-                    <CategoryButtonGrid title="Beauty"></CategoryButtonGrid>
+                    <ReviewScrollView>
+                        <ReviewButton title="Yeezy Boost"></ReviewButton>
+                        <ReviewButton title="Yeezy Boost"></ReviewButton>
+                        <ReviewButton title="Yeezy Boost"></ReviewButton>
+                    </ReviewScrollView>
                 </HomePageSection>
                 <HomePageSection
                     title="Trending Products"
                 >
                     <ProductScrollView>
                         <ProductButton title="Yeezy Boost"></ProductButton>
+                        <ProductButton title="Logitech Monitor"></ProductButton>
                         <ProductButton title="Logitech Monitor"></ProductButton>
                     </ProductScrollView>
                 </HomePageSection>

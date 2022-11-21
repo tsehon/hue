@@ -1,6 +1,6 @@
 import { StyleSheet, View, Text, TouchableOpacity, Button, ScrollView } from 'react-native'
 
-export default function ProductButton(props) {
+export default function ReviewButton(props) {
     return (
         <TouchableOpacity
             style={styles.button}
@@ -10,7 +10,7 @@ export default function ProductButton(props) {
     );
 }
 
-export function ProductScrollView(props) {
+export function ReviewScrollView(props) {
     return (
         <ScrollView horizontal>
             { props.children }
@@ -18,7 +18,7 @@ export function ProductScrollView(props) {
     );
 }
 
-export function ProductGrid(props) {
+export function ReviewGrid(props) {
     return (
         <ProductButton title={props.title}></ProductButton>
     );
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     button: {
         backgroundColor: '#EDEDED',
         width: 174,
-        height: 84,
+        height: 300,
         margin: 10,
         borderRadius: 10,
         paddingTop: 10,

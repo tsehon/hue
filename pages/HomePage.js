@@ -24,25 +24,11 @@ export default function HomePage({ navigation }) {
           placeholder="Search"
           platform='ios'
         />
-        <Button onPress={() => navigation.navigate('Product',)}>
-        </Button>
         <HomePageSection
           title="Trending Categories"
         >
           <CategoryButtonGrid title="Beauty"></CategoryButtonGrid>
         </HomePageSection>
-        <View style={styles.container}>
-          <Text>where the categories go</Text>
-          <StatusBar style="auto" />
-        </View>
-        <View style={styles.container}>
-          <Text>where the products go</Text>
-          <StatusBar style="auto" />
-        </View>
-        <View style={styles.feed}>
-          <Text>discover feed</Text>
-          <StatusBar style="auto" />
-        </View>
       </ScrollView>
     </SafeAreaView>
   );
