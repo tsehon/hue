@@ -17,11 +17,7 @@ export default function HomePage({ navigation }) {
       <ScrollView>
         <SearchBar
           style={styles.searchbar}
-          onChangeText={(input) => {
-              navigation.navigate('Search', {
-                  text: { input }
-              })
-          }}
+          onPressIn={() => navigation.navigate('Search')}
           placeholder="Search"
           platform='ios'
         />

@@ -18,11 +18,7 @@ export default function ExplorePage({ navigation, route }) {
             <ScrollView contentContainerStyle={styles.page}>
                 <SearchBar
                     style={styles.searchbar}
-                    onChangeText={(input) => {
-                        navigation.navigate('Search', {
-                            text: { input }
-                        })
-                    }}
+                    onPressIn={() => navigation.navigate('Search')}
                     placeholder="Search"
                     platform='ios'
                 />

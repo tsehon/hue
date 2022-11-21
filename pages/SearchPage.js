@@ -62,7 +62,6 @@ export default function SearchPage({ navigation, route }) {
     const filterResults = (input) => {
         console.log("called: filterResults");
 
-        input = input.toLowerCase();
         setQuery(input);
 
         if (input.trim()) {
@@ -70,7 +69,7 @@ export default function SearchPage({ navigation, route }) {
                 let item = itemDict[id];
                 console.log(item);
                 const name = item.name ? item.name.toLowerCase() : ''.toLowerCase();
-                return name.indexOf(input) > -1;
+                return name.indexOf(input.toLowerCase()) > -1;
             });
 
             setItems(results);
@@ -118,6 +117,7 @@ export default function SearchPage({ navigation, route }) {
                     value={query}
                     placeholder="Search for a product or category..."
                     platform='ios'
+                    autoFocus={true}
                 />
             </SafeAreaView>
             <FlatList
@@ -125,6 +125,7 @@ export default function SearchPage({ navigation, route }) {
                 keyExtractor={(item) => item}
                 extraData={query}
                 renderItem={renderSearchItem}
+                keyboardShouldPersistTaps='handled'
             />
         </SafeAreaView>
     );
