@@ -4,6 +4,7 @@ import { StyleSheet } from "react-native";
 import { Keyboard } from 'react-native';
 import { ScrollView, ActivityIndicator, Image, Text, TextInput, TouchableOpacity, View } from 'react-native'
 
+import Stars from '../components/Stars';
 import { Feather } from '@expo/vector-icons'
 import { StackActions } from '@react-navigation/native';
 
@@ -55,25 +56,33 @@ export default function UploadReviewPage({ navigation, route }) {
                     source={{ uri: route.params.source }}
                 />
             </View>
-            <View style={styles.formContainer}>
-                <TextInput
-                    style={styles.inputText}
-                    maxLength={30}
-                    onChangeText={(text) => setProductName(text.trim())}
-                    placeholder="Rating"
-                />
+            <View style={styles.ratingBoxContainer}>
+                <Text style={{ marginBottom: 1 }}> Rate {productName} </Text>
+                <View style={[{ flex: 1, flexDirection: 'row', justifyContent: 'space-evenly' }, styles.star]}>
+                    <Stars
+                        rating={rating}
+                        starSize={50}
+                        disabled={false}
+                        alignSelf={'flex-end'}
+                    />
+                </View>
             </View>
-            <View style={styles.formContainer}>
-                <Text> Tags </Text>
+            <View style={styles.tagBoxContainer}>
+                <Text style={{ marginBottom: 10 }}> Tags </Text>
                 <View style={styles.tagsContainer}>
                     <TouchableOpacity
                         style={styles.tag}>
-                        <Text style={styles.cancelButtonText}>Cancel</Text>
+                        <Text style={styles.tagText}>Tag 1</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity
                         style={styles.tag}>
-                        <Text style={styles.postButtonText}>Post</Text>
+                        <Text style={styles.tagText}>Tag 2</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        style={styles.tag}>
+                        <Text style={styles.tagText}>Tag 3</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -121,23 +130,32 @@ const styles = StyleSheet.create({
     },
     spacer: {
         flex: 1,
-        backgroundColor: 'grey',
     },
     topSpacer: {
         padding: 20,
         flexDirection: 'row',
-        backgroundColor: 'lightgrey',
     },
     formContainer: {
         padding: 20,
         flexDirection: 'row',
-        backgroundColor: 'lightgrey',
-        borderBottomWidth: 2,
+        borderBottomColor: 'lightgrey',
+        borderBottomWidth: 1,
+    },
+    tagBoxContainer: {
+        padding: 20,
+        borderBottomColor: 'lightgrey',
+        borderBottomWidth: 1,
+    },
+    ratingBoxContainer: {
+        padding: 20,
+        borderBottomColor: 'lightgrey',
+        borderBottomWidth: 1,
     },
     tagsContainer: {
         flexDirection: 'row',
-        paddingTop: 20,
-        paddingBottom: 10,
+        flex: 1,
+        justifyContent: 'space-evenly',
+        marginVertical: 5,
     },
     buttonsContainer: {
         flexDirection: 'row',
@@ -155,7 +173,16 @@ const styles = StyleSheet.create({
     },
     tag: {
         flexDirection: 'row',
-        padding: 5,
+        backgroundColor: 'darkgrey',
+        textAlign: 'center',
+        paddingVertical: 5,
+        paddingHorizontal: 25,
+        borderWidth: 2,
+        borderRadius: 10,
+    },
+    star: {
+        paddingTop: 5,
+        paddingBottom: 5,
     },
     cancelButton: {
         alignItems: 'center',
@@ -179,6 +206,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         borderRadius: 4,
         marginRight: 10
+    },
+    tagText: {
+        marginLeft: 5,
+        color: 'white',
+        fontSize: 16
     },
     cancelButtonText: {
         marginLeft: 5,

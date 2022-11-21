@@ -11,18 +11,22 @@ alignSelf: if set to 'flex-end', will override alignSelf: 'flex-start' (presumab
 */
 const Stars = (props) => {
     const [rating, setRating] = useState(0);
+    const [size, setSize] = useState(16);
+    const [isDisabled, setIsDisabled] = useState(true);
 
     useEffect(() => {
-        setRating(props.rating)
+        setRating(props.rating);
+        setSize(props.starSize);
+        setIsDisabled(!props.disabled);
     });
 
     return (
         <StarRating
             rating={rating}
-            onChange={(props.disabled) ? (() => {}) : setRating}
-            animationConfig={(props.disabled) ? {scale: 1, duration: 0} : {scale: 1.1, duration: 200, delay: 200}}
-            starSize={16}
-            style={{alignSelf: props.alignSelf}}
+            onChange={(isDisabled) ? (() => { }) : setRating}
+            animationConfig={(isDisabled) ? { scale: 1, duration: 0 } : { scale: 1.1, duration: 200, delay: 200 }}
+            starSize={size}
+            style={{ alignSelf: props.alignSelf }}
             color={'#040404'}
             emptyColor={'#B0B0B0'}
         />
