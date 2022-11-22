@@ -80,7 +80,7 @@ export default function ExplorePage({ navigation, route }) {
                     title="Trending Products"
                 >
                     <ProductScrollView>
-                        <ProductButton productName="Greenworks Lawnmower" productId="g8CN9lm5cxXeZ1BhwYN2"></ProductButton>
+                        <ProductButton productName="Greenworks Lawnmower" title="g8CN9lm5cxXeZ1BhwYN2"></ProductButton>
                         <ProductButton productName="Logitech Monitor"></ProductButton>
                         <ProductButton productName="Logitech Monitor"></ProductButton>
                     </ProductScrollView>

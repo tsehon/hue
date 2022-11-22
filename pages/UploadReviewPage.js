@@ -60,7 +60,7 @@ export default function UploadReviewPage({ navigation, route }) {
         }
 
         const uploadTask = uploadBytesResumable(uploadRef, video, metadata);
-        console.log("uploading");
+        console.log("uploading...");
 
         uploadTask.on('state_changed',
             (snapshot) => {

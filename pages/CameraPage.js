@@ -52,13 +52,13 @@ export default function CameraPage({ navigation, route }) {
     const recordVideo = async () => {
         if (cameraRef) {
             try {
-                const options = { maxDuration: 60, quality: Camera.Constants.VideoQuality['480'] }
+                const options = { maxDuration: 600, quality: Camera.Constants.VideoQuality['480'] }
                 const videoRecordPromise = cameraRef.recordAsync(options)
                 if (videoRecordPromise) {
                     const data = await videoRecordPromise;
                     const source = data.uri
-                    // let sourceThumb = await generateThumbnail(source)
-                    navigation.navigate('Upload', { source: source })
+                    let sourceThumb = await generateThumbnail(source)
+                    navigation.navigate('Upload', { source: source, sourceThumb })
                 }
             } catch (error) {
                 console.warn(error)
@@ -85,7 +85,7 @@ export default function CameraPage({ navigation, route }) {
         if (!result.canceled) {
             setVideo(result.assets[0].uri);
             const uri = result.assets[0].uri;
-            // let sourceThumb = await generateThumbnail(video);
+            let sourceThumb = await generateThumbnail(video);
             console.log(uri);
             navigation.navigate('Upload', {
                 source: uri,
