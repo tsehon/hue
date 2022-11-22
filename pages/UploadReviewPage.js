@@ -90,9 +90,9 @@ export default function UploadReviewPage({ navigation, route }) {
 
     const postReview = async () => {
         const res = await addDoc(collection(db, "reviews"), {
-            productName: { productName },
-            description: { description },
-            rating: { rating },
+            productName: productName,
+            description: description,
+            rating: rating,
         });
 
         download_url = postVideo(res.id);
