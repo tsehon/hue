@@ -1,11 +1,18 @@
 import { StyleSheet, View, Text, TouchableOpacity, Button, ScrollView } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
 
 export default function ProductButton(props) {
+    const productId = props.productId;
+    const navigation = useNavigation();
+
     return (
         <TouchableOpacity
             style={styles.button}
+            onPress={() => navigation.navigate('Product', {
+                productId: { productId },
+            })}
         >
-            <Text style={styles.buttonText}>{props.title}</Text>
+            <Text style={styles.buttonText}>{props.productID}</Text>
         </TouchableOpacity>
     );
 }
@@ -13,7 +20,7 @@ export default function ProductButton(props) {
 export function ProductScrollView(props) {
     return (
         <ScrollView horizontal>
-            { props.children }
+            {props.children}
         </ScrollView>
     );
 }

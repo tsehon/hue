@@ -15,18 +15,20 @@ import { Feather } from '@expo/vector-icons'
 export default function CameraPage({ navigation, route }) {
     navigation.setOptions({ tabBarStyle: { display: 'none' } });
 
-    const [hasCameraPermissions, setHasCameraPermissions] = useState(false)
-    const [hasAudioPermissions, setHasAudioPermissions] = useState(false)
-    const [hasGalleryPermissions, setHasGalleryPermissions] = useState(false)
+    const [video, setVideo] = useState(null);
 
-    const [galleryItems, setGalleryItems] = useState([])
+    const [hasCameraPermissions, setHasCameraPermissions] = useState(false);
+    const [hasAudioPermissions, setHasAudioPermissions] = useState(false);
+    const [hasGalleryPermissions, setHasGalleryPermissions] = useState(false);
 
-    const [cameraRef, setCameraRef] = useState(null)
-    const [cameraType, setCameraType] = useState(Camera.Constants.Type.back)
-    const [cameraFlash, setCameraFlash] = useState(Camera.Constants.FlashMode.off)
+    const [galleryItems, setGalleryItems] = useState([]);
 
-    const [isCameraReady, setIsCameraReady] = useState(false)
-    const isFocused = useIsFocused()
+    const [cameraRef, setCameraRef] = useState(null);
+    const [cameraType, setCameraType] = useState(Camera.Constants.Type.back);
+    const [cameraFlash, setCameraFlash] = useState(Camera.Constants.FlashMode.off);
+
+    const [isCameraReady, setIsCameraReady] = useState(false);
+    const isFocused = useIsFocused();
 
     useEffect(() => {
         (async () => {
@@ -55,8 +57,8 @@ export default function CameraPage({ navigation, route }) {
                 if (videoRecordPromise) {
                     const data = await videoRecordPromise;
                     const source = data.uri
-                    let sourceThumb = await generateThumbnail(source)
-                    navigation.navigate('Upload', { source, sourceThumb })
+                    // let sourceThumb = await generateThumbnail(source)
+                    navigation.navigate('Upload', { source: source })
                 }
             } catch (error) {
                 console.warn(error)
@@ -76,10 +78,18 @@ export default function CameraPage({ navigation, route }) {
             allowsEditing: true,
             aspect: [16, 9],
             quality: 1
-        })
+        });
+
+        console.log(result);
+
         if (!result.canceled) {
-            let sourceThumb = await generateThumbnail(result.assets[0].uri)
-            navigation.navigate('Upload', { source: result.assets[0].uri, sourceThumb })
+            setVideo(result.assets[0].uri);
+            const uri = result.assets[0].uri;
+            // let sourceThumb = await generateThumbnail(video);
+            console.log(uri);
+            navigation.navigate('Upload', {
+                source: uri,
+            });
         }
     }
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { StyleSheet } from "react-native";
 import { Keyboard } from 'react-native';
@@ -8,9 +8,11 @@ import Stars from '../components/Stars';
 import { Feather } from '@expo/vector-icons'
 import { StackActions } from '@react-navigation/native';
 
-import { storage } from '../config/firebase';
-import { ref, uploadBytes } from 'firebase/storage';
 import db from '../config/firebase';
+import { storage } from '../config/firebase';
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { doc, collection, addDoc, updateDoc } from "firebase/firestore";
+import CameraPage from './CameraPage';
 
 const videosRef = ref(storage, 'videos');
 
@@ -20,20 +22,36 @@ export default function UploadReviewPage({ navigation, route }) {
     const [rating, setRating] = useState(0.0);
     const [reviewID, setReviewID] = useState('');
 
+    const [videoURI, setVideoURI] = useState(null);
+    const [videoDownloadURL, setVideoDownloadURL] = useState(null);
+
     const [requestRunning, setRequestRunning] = useState(false);
 
     const handlePost = () => {
+        setVideoURI(route.params.source);
+        console.log("handling post");
+
+        if (route.params.source == null) {
+            navigation.goBack();
+            return;
+        }
+
         setRequestRunning(true);
         postReview();
-        postVideo();
-        // StackActions.popToTop();
         setRequestRunning(false);
+
+        navigation.navigate('Camera');
     }
 
-    const postVideo = () => {
-        /*
-        const video = route.source;
-        const uploadRef = ref(storage, `videos/${reviewID}.mp4`);
+    const postVideo = (id) => {
+        const video = route.params.source;
+        console.log("video URI: " + video);
+        console.log("posting video...");
+
+        const storageURI = (String)(id) + ".mp4";
+        console.log("to be stored at : " + storageURI);
+
+        const uploadRef = ref(storage, storageURI);
 
         const metadata = {
             productName: { productName },
@@ -41,25 +59,52 @@ export default function UploadReviewPage({ navigation, route }) {
             rating: { rating }
         }
 
-        fetch(video)
-            .then((response) => response.blob())
-            .then((blob) => uploadBytes(uploadRef, blob, metadata))
-            .then((snapshot) => { });
-        */
+        const uploadTask = uploadBytesResumable(uploadRef, video, metadata);
+        console.log("uploading");
+
+        uploadTask.on('state_changed',
+            (snapshot) => {
+                switch (snapshot.state) {
+                    case 'paused':
+                        console.log('Upload is paused');
+                        break;
+                    case 'running':
+                        console.log('Upload is running');
+                        break;
+                }
+                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                console.log('Upload is ' + progress + '% done');
+            },
+            (error) => {
+                // Handle unsuccessful uploads
+            },
+            () => {
+                // Handle successful uploads on complete
+                getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                    console.log('File available at', downloadURL);
+                    setVideoDownloadURL(downloadURL);
+                });
+            }
+        );
     }
 
-    const postReview = () => {
-        /*
-        db.collection("reviews").add({
+    const postReview = async () => {
+        const res = await addDoc(collection(db, "reviews"), {
             productName: { productName },
             description: { description },
-            rating: { rating }
-        }).then((docRef) => {
-            setReviewID(docRef.id);
-        }).catch((error) => {
-            console.error("error addding review: ", error);
-        })
-        */
+            rating: { rating },
+        });
+
+        postVideo(res.id);
+
+        setReviewID(res.id);
+        const docRef = doc(db, "reviews", reviewID);
+        const data = {
+            videoDownloadURL: { videoDownloadURL },
+        }
+
+        updateDoc(docRef, data);
+        console.log("review posted with ID: " + res.id);
     }
 
     if (requestRunning) {
