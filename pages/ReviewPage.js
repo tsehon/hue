@@ -43,7 +43,6 @@ const VideoSingle = forwardRef((props, parentRef) => {
         }
     }
 
-
     return (
         <Video
             ref={ref}
@@ -51,7 +50,7 @@ const VideoSingle = forwardRef((props, parentRef) => {
             resizeMode='cover'
             shouldPlay={false}
             isLooping
-            source={{uri: 'https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4'}}
+            source={{uri: props.item}}
         />
     );
 })
@@ -69,11 +68,16 @@ export default function ReviewFeed({ navigation }) {
         })
     })
 
-    const array = [1,2,3,4,5,6];
+    const array = [
+        'https://test-videos.co.uk/vids/jellyfish/mp4/h264/1080/Jellyfish_1080_10s_2MB.mp4',
+        'https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_2MB.mp4',
+        'https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
+        'https://test-videos.co.uk/vids/sintel/mp4/h264/1080/Sintel_1080_10s_2MB.mp4'
+    ];
     // Should update height to dynamically get bottom tab bar height or smth
     const renderItem = ({item, index}) => {
         return (
-            <View style={[{flex: 1, height: Dimensions.get('window').height-88}, index % 2 ? {backgroundColor: 'blue'} : {backgroundColor: 'red'}]}>
+            <View style={{flex: 1, height: Dimensions.get('window').height-88}}>
                 <VideoSingle item={item} ref={VideoSingleRef => (refs.current[item] = VideoSingleRef)}/>
             </View>
         )

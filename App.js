@@ -3,6 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import HomeNav from './nav/HomeNav';
 import CreateNav from './nav/CreateNav';
 import ExploreNav from './nav/ExploreNav';
+import ReviewFeed from './pages/ReviewPage';
 
 import { Feather } from '@expo/vector-icons';
 
@@ -95,6 +96,20 @@ export default function MainDirectory() {
           component={ExploreNav}
           options={{
             tabBarLabel: "Explore",
+            tabBarIcon: ({ color }) => (
+              <Feather
+                name="search"
+                size={24}
+                color={color}
+              />
+            )
+          }}
+        />
+        <Tab.Screen
+          name="ReviewFeed"
+          component={ReviewFeed}
+          options={{
+            tabBarLabel: "Reviews",
             tabBarIcon: ({ color }) => (
               <Feather
                 name="search"

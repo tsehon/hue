@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import SearchBar from 'react-native-elements/dist/searchbar/SearchBar-ios';
 
 import { StatusBar } from 'expo-status-bar';

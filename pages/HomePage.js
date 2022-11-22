@@ -39,7 +39,7 @@ export default function HomePage({ navigation }) {
         >
           <ScrollView horizontal>
             <Thumbnail uri='https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4' style={{width:200, height:300}}></Thumbnail>
-            <Thumbnail uri='https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4' style={{width:200, height:300}}></Thumbnail>
+            <Thumbnail uri='https://test-videos.co.uk/vids/jellyfish/mp4/h264/1080/Jellyfish_1080_10s_2MB.mp4' style={{marginLeft: 10, width:200, height:300}}></Thumbnail>
           </ScrollView>
         </HomePageSection>
 
@@ -81,6 +81,7 @@ export default function HomePage({ navigation }) {
 const styles = StyleSheet.create({
   page: {
     flex: 1,
+    backgroundColor: 'white',
   },
   container: {
     padding: 30,
