@@ -53,13 +53,17 @@ export default function CameraPage({ navigation, route }) {
     const recordVideo = async () => {
         if (cameraRef) {
             try {
-                const options = { maxDuration: 600, quality: Camera.Constants.VideoQuality['480'] }
+                const options = { maxDuration: 60, quality: Camera.Constants.VideoQuality['720p'] }
                 const videoRecordPromise = cameraRef.recordAsync(options)
                 if (videoRecordPromise) {
                     const data = await videoRecordPromise;
                     const source = data.uri
                     let sourceThumb = await generateThumbnail(source)
-                    navigation.navigate('Upload', { source: source, sourceThumb })
+
+                    console.log('thumbnail at ' + sourceThumb);
+                    console.log('navigating to upload page.');
+
+                    navigation.navigate('Upload', { source, sourceThumb })
                 }
             } catch (error) {
                 console.warn(error)
@@ -99,7 +103,7 @@ export default function CameraPage({ navigation, route }) {
             const { uri } = await VideoThumbnails.getThumbnailAsync(
                 source,
                 {
-                    time: 100,
+                    time: 10,
                 }
             );
             return uri;
@@ -119,14 +123,16 @@ export default function CameraPage({ navigation, route }) {
             {isFocused ?
                 <Camera
                     ref={ref => setCameraRef(ref)}
+                    onCameraReady={() => setIsCameraReady(true)}
+                    defaultVideoQuality={Camera.Constants.VideoQuality['480p']}
                     style={styles.camera}
                     ratio={'16:9'}
                     type={cameraType}
                     flashMode={cameraFlash}
-                    onCameraReady={() => setIsCameraReady(true)}
                 />
-                : null}
-
+                :
+                null
+            }
             <View style={styles.sideBarContainer}>
                 <TouchableOpacity
                     style={styles.sideBarButton}
@@ -196,8 +202,8 @@ const styles = StyleSheet.create({
     },
     recordButton: {
         borderWidth: 8,
-        borderColor: '#ffffffaa',
-        backgroundColor: 'black',
+        borderColor: '#ff404087',
+        backgroundColor: '#ff4040',
         borderRadius: 100,
         height: 80,
         width: 80,
