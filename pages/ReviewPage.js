@@ -46,6 +46,7 @@ const VideoSingle = forwardRef((props, parentRef) => {
 
     return (
         <Video
+            ref={ref}
             style={{flex: 1}}
             resizeMode='cover'
             shouldPlay={false}
@@ -59,13 +60,8 @@ export default function ReviewFeed({ navigation }) {
     const refs = useRef([])
 
     const onViewableItemsChanged = useRef(({changed}) => {
-        // these are never logged idk why this won't fire when scrolling
-        console.log('hi')
-        console.log(changed)
         changed.forEach(element => {
-            console.log(refs.current)
             const cell = refs.current[element.key];
-            console.log(cell)
             if (cell) {
                 if (element.isViewable) cell.play();
                 else cell.stop();
@@ -73,18 +69,12 @@ export default function ReviewFeed({ navigation }) {
         })
     })
 
-    const array = [0,1,2,3,4,5,6];
+    const array = [1,2,3,4,5,6];
     // Should update height to dynamically get bottom tab bar height or smth
     const renderItem = ({item, index}) => {
-        console.log(refs)
         return (
-            <View style={[{height: Dimensions.get('window').height-88}, index % 2 ? {backgroundColor: 'blue'} : {backgroundColor: 'red'}]}>
-                <VideoSingle item={item} ref={VideoSingleRef => {
-                    // console.log(refs);
-                    // console.log(item);
-                    // console.log(VideoSingleRef);
-                    (refs.current[item] = VideoSingleRef)
-                    }}/>
+            <View style={[{flex: 1, height: Dimensions.get('window').height-88}, index % 2 ? {backgroundColor: 'blue'} : {backgroundColor: 'red'}]}>
+                <VideoSingle item={item} ref={VideoSingleRef => (refs.current[item] = VideoSingleRef)}/>
             </View>
         )
     }
@@ -98,7 +88,7 @@ export default function ReviewFeed({ navigation }) {
                 maxToRenderPerBatch={2}
                 removeClippedSubviews
                 viewabilityConfig={{
-                    itemVisiblePercentThreshold: 0,
+                    itemVisiblePercentThreshold: 100,
                 }}
                 renderItem={renderItem}
                 pagingEnabled
