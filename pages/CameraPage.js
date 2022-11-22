@@ -13,7 +13,6 @@ import { useIsFocused } from '@react-navigation/core'
 import { Feather } from '@expo/vector-icons'
 
 export default function CameraPage({ navigation, route }) {
-    navigation.setOptions({ tabBarStyle: { display: 'none' } });
 
     const [video, setVideo] = useState(null);
 
@@ -32,6 +31,8 @@ export default function CameraPage({ navigation, route }) {
 
     useEffect(() => {
         (async () => {
+            navigation.setOptions({ tabBarStyle: { display: 'none' } });
+
             const cameraStatus = await Camera.requestCameraPermissionsAsync()
             setHasCameraPermissions(cameraStatus.status == 'granted')
 
@@ -98,7 +99,7 @@ export default function CameraPage({ navigation, route }) {
             const { uri } = await VideoThumbnails.getThumbnailAsync(
                 source,
                 {
-                    time: 5000,
+                    time: 100,
                 }
             );
             return uri;

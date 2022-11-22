@@ -17,7 +17,7 @@ export default function HomeNav({ navigation, route }) {
             <Stack.Screen name="Home" component={HomePage} />
             <Stack.Screen name="Search" component={SearchPage}
                 options={{
-                    animation: 'none'
+                    animation: 'fade',
                 }}
             />
             <Stack.Screen name="Product" component={ProductPage} />

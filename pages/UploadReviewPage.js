@@ -95,10 +95,10 @@ export default function UploadReviewPage({ navigation, route }) {
             rating: { rating },
         });
 
-        postVideo(res.id);
+        download_url = postVideo(res.id);
 
         setReviewID(res.id);
-        const docRef = doc(db, "reviews", reviewID);
+        const docRef = doc(db, "reviews", );
         const data = {
             videoDownloadURL: { videoDownloadURL },
         }

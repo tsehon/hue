@@ -14,31 +14,31 @@ const VideoSingle = forwardRef((props, parentRef) => {
         return () => unload();
     }, [])
 
-    const play = async() => {
+    const play = async () => {
         if (ref.current == null) return;
         const status = await ref.current.getStatusAsync();
         if (status?.isPlaying) return;
         try {
             await ref.current.playAsync();
-        } catch(e) {
+        } catch (e) {
             console.log(e);
         }
     }
-    const stop = async() => {
+    const stop = async () => {
         if (ref.current == null) return;
         const status = await ref.current.getStatusAsync();
         if (!status?.isPlaying) return;
         try {
             await ref.current.stopAsync();
-        } catch(e) {
+        } catch (e) {
             console.log(e);
         }
     }
-    const unload = async() => {
+    const unload = async () => {
         if (ref.current == null) return;
         try {
             await ref.current.unloadAsync();
-        } catch(e) {
+        } catch (e) {
             console.log(e);
         }
     }
@@ -46,19 +46,19 @@ const VideoSingle = forwardRef((props, parentRef) => {
     return (
         <Video
             ref={ref}
-            style={{flex: 1}}
+            style={{ flex: 1 }}
             resizeMode='cover'
             shouldPlay={false}
             isLooping
-            source={{uri: props.item}}
+            source={{ uri: props.item }}
         />
     );
 })
 
-export default function ReviewFeed({ navigation }) {
+export default function ReviewFeed({ navigation, route }) {
     const refs = useRef([])
 
-    const onViewableItemsChanged = useRef(({changed}) => {
+    const onViewableItemsChanged = useRef(({ changed }) => {
         changed.forEach(element => {
             const cell = refs.current[element.key];
             if (cell) {
@@ -75,10 +75,10 @@ export default function ReviewFeed({ navigation }) {
         'https://test-videos.co.uk/vids/sintel/mp4/h264/1080/Sintel_1080_10s_2MB.mp4'
     ];
     // Should update height to dynamically get bottom tab bar height or smth
-    const renderItem = ({item, index}) => {
+    const renderItem = ({ item, index }) => {
         return (
-            <View style={{flex: 1, height: Dimensions.get('window').height-88}}>
-                <VideoSingle item={item} ref={VideoSingleRef => (refs.current[item] = VideoSingleRef)}/>
+            <View style={{ flex: 1, height: Dimensions.get('window').height - 88 }}>
+                <VideoSingle item={item} ref={VideoSingleRef => (refs.current[item] = VideoSingleRef)} />
             </View>
         )
     }
@@ -106,5 +106,5 @@ export default function ReviewFeed({ navigation }) {
 const styles = StyleSheet.create({
     page: {
         flex: 1,
-      },
+    },
 });

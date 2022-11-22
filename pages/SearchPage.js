@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
     backButton: {
         fill: 1,
         paddingLeft: 20,
-        paddingVertical: 30,
+        marginTop: 25,
     },
     searchbar: {
         width: 325

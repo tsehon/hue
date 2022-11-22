@@ -17,7 +17,7 @@ const Stars = (props) => {
     useEffect(() => {
         setRating(props.rating);
         setSize(props.starSize);
-        setIsDisabled(!props.disabled);
+        setIsDisabled(props.disabled);
     });
 
     return (

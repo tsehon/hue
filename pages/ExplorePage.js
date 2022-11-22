@@ -12,6 +12,8 @@ import CategoryButtonGrid from '../components/CategoryButtons';
 import ProductButton, { ProductScrollView } from '../components/ProductDisplay';
 import ReviewButton, { ReviewScrollView } from '../components/ReviewDisplay';
 
+import { collection, getDocs } from "firebase/firestore";
+
 export default function ExplorePage({ navigation, route }) {
     const [data, setData] = useState([]);
     const [items, setItems] = useState([]);
@@ -22,6 +24,7 @@ export default function ExplorePage({ navigation, route }) {
     }, []);
 
     const fetchData = async () => {
+        /*
         const snapshot_products = await getDocs(collection(db, 'products').withConverter(itemConverter));
         const snapshot_categories = await getDocs(collection(db, 'categories').withConverter(itemConverter));
         console.log("fetching data..");
@@ -44,6 +47,7 @@ export default function ExplorePage({ navigation, route }) {
 
         setData(idList);
         setItemDict(Object.fromEntries(newData.map(({ id, ...rest }) => ([id, rest]))));
+        */
     }
 
     const itemConverter = {
