@@ -55,9 +55,9 @@ export default function UploadReviewPage({ navigation, route }) {
     const postReview = async () => {
         setRequestRunning(true);
         const res = await addDoc(collection(db, "reviews"), {
-            productName: { productName },
-            description: { description },
-            rating: { rating },
+            productName: productName,
+            description: description,
+            rating: rating,
         });
 
         const docRef = doc(db, "reviews", res.id);

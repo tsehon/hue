@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomePage from '../pages/HomePage.js';
 import SearchPage from '../pages/SearchPage.js';
 import ProductPage from '../pages/ProductPage.js';
+import ReviewFeed from '../pages/ReviewPage.js';
 
 const Stack = createNativeStackNavigator();
 
@@ -21,6 +22,7 @@ export default function HomeNav({ navigation, route }) {
                 }}
             />
             <Stack.Screen name="Product" component={ProductPage} />
+            <Stack.Screen name="ReviewFeed" component={ReviewFeed} />
         </Stack.Navigator>
     );
 }

@@ -1,7 +1,28 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Button, View, Image, Text } from 'react-native';
+import { StyleSheet, Button, View, Image, Text, TouchableOpacity } from 'react-native';
 import * as VideoThumbnails from 'expo-video-thumbnails';
 
+
+export default function VideoPreview(props) {
+    return (
+        <TouchableOpacity
+            style={props.style}
+            onPress={() => {
+                props.navigation.push('ReviewFeed', {
+                    startIndex: props.startIndex,
+                    searchType: props.searchType,
+                    searchQuery: props.searchQuery,
+                    firstID: props.firstID,
+                });
+            }}
+        >
+            <Thumbnail
+                style={props.style}
+                uri={props.uri}
+            />
+        </TouchableOpacity>
+    )
+}
 
 // Pass in video uri as a prop and this will return a thumbnail of the video
 // Pass in style as prop
@@ -29,5 +50,3 @@ const Thumbnail = (props) => {
             <Image source={{ uri: image }} style={props.style} />
       );
 }
-
-export default Thumbnail;

@@ -1,15 +1,12 @@
 import React, { useState } from 'react';
 import SearchBar from 'react-native-elements/dist/searchbar/SearchBar-ios';
 
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
-import { Button } from 'react-native-elements';
+import { StyleSheet, Text, View, ScrollView, Button } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import HomePageSection from '../components/HomePageSection';
-import CategoryButton from '../components/CategoryButtons';
 import CategoryButtonGrid from '../components/CategoryButtons';
-import Thumbnail from '../components/Videos';
+import VideoPreview from '../components/VideoPreviews';
 
 export default function HomePage({ navigation }) {
   return (
@@ -25,21 +22,26 @@ export default function HomePage({ navigation }) {
         <HomePageSection
           title="Reviews For You"
         >
-
         </HomePageSection>
 
         <HomePageSection
           title="Trending Categories"
         >
-          <CategoryButtonGrid categories={["Beauty", "Lawnmowers", "Tech", "Skincare"]}></CategoryButtonGrid>
+          <CategoryButtonGrid categories={["Beauty", "Lawnmowers", "Tech", "Skincare"]} navigation={navigation}/>
         </HomePageSection>
 
         <HomePageSection
           title="Trending in Beauty"
         >
           <ScrollView horizontal>
-            <Thumbnail uri='https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4' style={{width:200, height:300}}></Thumbnail>
-            <Thumbnail uri='https://test-videos.co.uk/vids/jellyfish/mp4/h264/1080/Jellyfish_1080_10s_2MB.mp4' style={{marginLeft: 10, width:200, height:300}}></Thumbnail>
+            <VideoPreview
+              style={{width: 137, height: 222, borderRadius: 10}}
+              navigation={navigation}
+              searchType='categoryName'
+              searchQuery='Beauty'
+              firstID='MXILb6SdiK9Sq5ZjIzZU'
+              uri='https://test-videos.co.uk/vids/jellyfish/mp4/h264/1080/Jellyfish_1080_10s_2MB.mp4'
+            />
           </ScrollView>
         </HomePageSection>
 
