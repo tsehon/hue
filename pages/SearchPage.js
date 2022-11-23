@@ -13,9 +13,12 @@ import BackButton from '../components/BackButton';
 
 export default function SearchPage({ navigation, route }) {
     const [query, setQuery] = useState(route.text);
+
     const [data, setData] = useState([]);
     const [items, setItems] = useState([]);
     const [itemDict, setItemDict] = useState({});
+
+    const [recentlyViewed, setRecentlyViewed] = useState([]);
 
     useEffect(() => {
         fetchData();
@@ -24,7 +27,6 @@ export default function SearchPage({ navigation, route }) {
     const fetchData = async () => {
         const snapshot_products = await getDocs(collection(db, 'products').withConverter(itemConverter));
         const snapshot_categories = await getDocs(collection(db, 'categories').withConverter(itemConverter));
-        console.log("fetching data..");
 
         const newData = [];
         const idList = [];
@@ -60,14 +62,11 @@ export default function SearchPage({ navigation, route }) {
     };
 
     const filterResults = (input) => {
-        console.log("called: filterResults");
-
         setQuery(input);
 
         if (input.trim()) {
             const results = data.filter((id) => {
                 let item = itemDict[id];
-                console.log(item);
                 const name = item.name ? item.name.toLowerCase() : ''.toLowerCase();
                 return name.indexOf(input.toLowerCase()) > -1;
             });
@@ -76,8 +75,6 @@ export default function SearchPage({ navigation, route }) {
         } else {
             setItems([]);
         }
-
-        console.log("query matched items: " + items);
     }
 
     const renderSearchItem = ({ item }) => {
@@ -87,20 +84,35 @@ export default function SearchPage({ navigation, route }) {
             console.log("rendering item WITH ID: " + item + " and NAME: " + name);
 
             return (
-                <Text
-                    style={styles.dropdownitem}
-                    onPress={() => navigation.navigate('Product', {
-                        productId: item
-                    })}>
-                    {name}
-                </Text>
+                <View style={styles.searchItemContainer}>
+                    <Text
+                        style={styles.searchItemText}
+                        onPress={() => {
+                            const recents = recentlyViewed;
+                            var index = recents.indexOf(item);
+                            if (index > -1) {
+                                recents.splice(index, 1);
+                            }
+                            recents.push(item);
+                            console.log("recents: ");
+                            console.log(recents);
+
+                            setRecentlyViewed(recents);
+                    
+                            navigation.navigate('Product', {
+                                productId: item
+                            });
+                        }}>
+                        {name}
+                    </Text>
+                </View>
             );
         }
     }
 
     return (
-        <SafeAreaView>
-            <SafeAreaView style={styles.container}>
+        <SafeAreaView style={styles.container}>
+            <SafeAreaView style={styles.searchContainer}>
                 <TouchableOpacity
                     style={styles.backButton}
                     onPress={() => { navigation.goBack() }}
@@ -121,7 +133,8 @@ export default function SearchPage({ navigation, route }) {
                 />
             </SafeAreaView>
             <FlatList
-                data={items}
+                style={styles.dropdownContainer}
+                data={ query ? items : recentlyViewed }
                 keyExtractor={(item) => item}
                 extraData={query}
                 renderItem={renderSearchItem}
@@ -134,7 +147,13 @@ export default function SearchPage({ navigation, route }) {
 const styles = StyleSheet.create({
     container: {
         fill: 1,
+    },
+    searchContainer: {
+        fill: 1,
         flexDirection: 'row',
+    },
+    dropdownContainer: {
+        fill: 1,
     },
     backButton: {
         fill: 1,
@@ -144,7 +163,16 @@ const styles = StyleSheet.create({
     searchbar: {
         width: 325
     },
-    dropdownitem: {
+    searchItemContainer: {
+        fill: 1,
+        borderColor: 'light grey',
+        borderWidth: 0.5,
+        borderRadius: 10,
+        marginVertical: 2,
+        marginHorizontal: 10,
+        padding: 3,
+    },
+    searchItemText: {
         paddingLeft: 15,
         marginTop: 15,
         paddingBottom: 15,

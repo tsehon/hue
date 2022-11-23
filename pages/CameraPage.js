@@ -58,8 +58,9 @@ export default function CameraPage({ navigation, route }) {
                 if (videoRecordPromise) {
                     const data = await videoRecordPromise;
                     const source = data.uri
-                    let sourceThumb = await generateThumbnail(source)
+                    const sourceThumb = await generateThumbnail(source)
 
+                    console.log('video at' + source);
                     console.log('thumbnail at ' + sourceThumb);
                     console.log('navigating to upload page.');
 
@@ -89,12 +90,14 @@ export default function CameraPage({ navigation, route }) {
 
         if (!result.canceled) {
             setVideo(result.assets[0].uri);
-            const uri = result.assets[0].uri;
-            let sourceThumb = await generateThumbnail(video);
-            console.log(uri);
-            navigation.navigate('Upload', {
-                source: uri,
-            });
+            const source = result.assets[0].uri;
+            const sourceThumb = await generateThumbnail(video);
+
+            console.log('video at' + source);
+            console.log('thumbnail at ' + sourceThumb);
+            console.log('navigating to upload page.');
+
+            navigation.navigate('Upload', { source, sourceThumb });
         }
     }
 

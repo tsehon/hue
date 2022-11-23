@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import ImgCarousel from '../components/ImgCarousel';
 import Stars from '../components/Stars';
-import { StyleSheet, TextInput, Text, View, ScrollView } from 'react-native';
+import { StyleSheet, TouchableOpacity, TextInput, Text, View, ScrollView } from 'react-native';
+
+import { Feather } from '@expo/vector-icons';
+
 // import { useFonts } from 'expo-font';
 import { doc, getDoc, getDocs, collection } from "firebase/firestore";
 import db from '../config/firebase';
@@ -62,6 +65,16 @@ export default function ProductPage({ navigation, route }) {
     <ScrollView
       style={styles.page}
     >
+      <TouchableOpacity
+        style={styles.backButton}
+        onPress={() => { navigation.goBack() }}
+      >
+        <Feather
+          name="arrow-left"
+          size={24}
+          color="black"
+        />
+      </TouchableOpacity>
       <View
         style={styles.centered}
       >
@@ -127,6 +140,11 @@ const styles = StyleSheet.create({
     padding: 20,
     paddingTop: 10,
     flex: 1,
+  },
+  backButton: {
+    fill: 1,
+    paddingLeft: 20,
+    marginTop: 25,
   },
   title: {
     fontSize: 24,

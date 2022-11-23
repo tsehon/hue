@@ -3,6 +3,9 @@ import { StyleSheet, View } from 'react-native';
 import HomeNav from './nav/HomeNav';
 import CreateNav from './nav/CreateNav';
 import ExploreNav from './nav/ExploreNav';
+import SavedNav from './nav/SavedNav';
+import ProfileNav from './nav/ProfileNav';
+
 import ReviewFeed from './pages/ReviewPage';
 
 import { Feather } from '@expo/vector-icons';
@@ -78,20 +81,6 @@ export default function MainDirectory() {
           }}
         />
         <Tab.Screen
-          name="CreateNav"
-          component={CreateNav}
-          options={{
-            tabBarLabel: "Create",
-            tabBarIcon: ({ color }) => (
-              <Feather
-                name="plus-square"
-                size={24}
-                color={color}
-              />
-            )
-          }}
-        />
-        <Tab.Screen
           name="ExploreNav"
           component={ExploreNav}
           options={{
@@ -106,13 +95,41 @@ export default function MainDirectory() {
           }}
         />
         <Tab.Screen
-          name="ReviewFeed"
-          component={ReviewFeed}
+          name="CreateNav"
+          component={CreateNav}
           options={{
-            tabBarLabel: "Reviews",
+            tabBarLabel: "Create",
             tabBarIcon: ({ color }) => (
               <Feather
-                name="search"
+                name="plus-square"
+                size={24}
+                color={color}
+              />
+            )
+          }}
+        />
+        <Tab.Screen
+          name="SavedNav"
+          component={SavedNav}
+          options={{
+            tabBarLabel: "Saved",
+            tabBarIcon: ({ color }) => (
+              <Feather
+                name="bookmark"
+                size={24}
+                color={color}
+              />
+            )
+          }}
+        />
+        <Tab.Screen
+          name="ProfileNav"
+          component={ProfileNav}
+          options={{
+            tabBarLabel: "Profile",
+            tabBarIcon: ({ color }) => (
+              <Feather
+                name="user"
                 size={24}
                 color={color}
               />
