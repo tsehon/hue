@@ -1,6 +1,73 @@
 import { Video } from 'expo-av';
 import React, { useState, useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
-import { StyleSheet, Text, View, ScrollView, FlatList, Dimensions } from 'react-native';
+import { StyleSheet, View, FlatList, Dimensions } from 'react-native';
+import { getDocs, collection, where, query } from "firebase/firestore";
+import db from '../config/firebase';
+
+/**
+ * 
+ * @param {integer} startIndex - The video at which to start the feed scrolled to
+ * (if 3 was passed in, the user would see video 3 first, with the option) to scroll up to video 2 or down to video 4, etc.
+ * @param {string} searchType - Which Firebase review property to search by (productName, category, etc.)
+ * @param {string} searchQuery - The query to search Firebase with (pulling all data where searchType contents == searchQuery)
+ * @param {string} firstID - A specific review ID from the query results to put at the front of the data array
+ * Unlike with startIndex, the firstID video will be the very first item in the FlatList
+ * @returns 
+ */
+export default function ReviewFeed( { route } ) {
+    const [videos, setVideos] = useState([]);
+    const flatListRef = useRef(null);
+    const refs = useRef([]);
+
+    const vidHeight = Dimensions.get('window').height - 88;
+
+    useEffect(() => {
+        getFeed(route.params.searchType, route.params.searchQuery, route.params.firstID).then(setVideos);
+    }, []);
+
+    const onViewableItemsChanged = useRef(({ changed }) => {
+        changed.forEach(element => {
+            const cell = refs.current[element.key];
+            if (cell) {
+                if (element.isViewable) cell.play();
+                else cell.stop();
+            }
+        })
+    })
+
+    // Should update height to dynamically get bottom tab bar height or smth
+    const renderItem = ({ item }) => {
+        return (
+            <View style={{ flex: 1, height: vidHeight }}>
+                <VideoSingle item={item} ref={VideoSingleRef => (refs.current[item.id] = VideoSingleRef)} />
+            </View>
+        )
+    }
+
+    return (
+        <View style={styles.page}>
+            <FlatList
+                ref={flatListRef}
+                getItemLayout={(data, index) => (
+                    {length: vidHeight, offset: vidHeight * index, index}
+                  )}
+                initialScrollIndex={(typeof route.params.startIndex != 'undefined') ? route.params.startIndex : null}
+                data={videos}
+                windowSize={4}
+                initialNumToRender={0}
+                maxToRenderPerBatch={2}
+                removeClippedSubviews
+                viewabilityConfig={{
+                    itemVisiblePercentThreshold: 100,
+                }}
+                renderItem={renderItem}
+                pagingEnabled
+                keyExtractor={item => item.id}
+                onViewableItemsChanged={onViewableItemsChanged.current}
+            />
+        </View>
+    )
+}
 
 const VideoSingle = forwardRef((props, parentRef) => {
     const ref = useRef(null);
@@ -50,57 +117,26 @@ const VideoSingle = forwardRef((props, parentRef) => {
             resizeMode='cover'
             shouldPlay={false}
             isLooping
-            source={{ uri: props.item }}
+            source={{ uri: props.item.videoDownloadURL }}
         />
     );
 })
 
-export default function ReviewFeed({ navigation, route }) {
-    const refs = useRef([])
+const getFeed = async (type, searchTerm, firstID) => {
+    // type should be 'productName' or 'category' or later some tags implementation
+    const q = query(collection(db, 'reviews'), where(type, '==', searchTerm));
 
-    const onViewableItemsChanged = useRef(({ changed }) => {
-        changed.forEach(element => {
-            const cell = refs.current[element.key];
-            if (cell) {
-                if (element.isViewable) cell.play();
-                else cell.stop();
-            }
-        })
-    })
+    const querySnapshot = await getDocs(q);
 
-    const array = [
-        'https://test-videos.co.uk/vids/jellyfish/mp4/h264/1080/Jellyfish_1080_10s_2MB.mp4',
-        'https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_2MB.mp4',
-        'https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
-        'https://test-videos.co.uk/vids/sintel/mp4/h264/1080/Sintel_1080_10s_2MB.mp4'
-    ];
-    // Should update height to dynamically get bottom tab bar height or smth
-    const renderItem = ({ item, index }) => {
-        return (
-            <View style={{ flex: 1, height: Dimensions.get('window').height - 88 }}>
-                <VideoSingle item={item} ref={VideoSingleRef => (refs.current[item] = VideoSingleRef)} />
-            </View>
-        )
-    }
+    const arr = [];
 
-    return (
-        <View style={styles.page}>
-            <FlatList
-                data={array}
-                windowSize={4}
-                initialNumToRender={0}
-                maxToRenderPerBatch={2}
-                removeClippedSubviews
-                viewabilityConfig={{
-                    itemVisiblePercentThreshold: 100,
-                }}
-                renderItem={renderItem}
-                pagingEnabled
-                keyExtractor={item => item}
-                onViewableItemsChanged={onViewableItemsChanged.current}
-            />
-        </View>
-    )
+    querySnapshot.forEach((doc) => {
+        const id = doc.id;
+        const data = doc.data();
+        if (typeof firstID != 'undefined' && id == firstID) arr.unshift({id, ...data});
+        else arr.push({id, ...data});
+    });
+    return arr;
 }
 
 const styles = StyleSheet.create({
