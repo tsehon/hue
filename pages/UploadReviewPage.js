@@ -129,6 +129,7 @@ export default function UploadReviewPage({ navigation, route }) {
                         starSize={50}
                         disabled={false}
                         alignSelf={'flex-end'}
+                        onChange={setRating}
                     />
                 </View>
             </View>
