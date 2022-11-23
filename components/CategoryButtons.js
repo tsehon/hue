@@ -4,6 +4,12 @@ function CategoryButton(props) {
     return (
         <TouchableOpacity
             style={styles.button}
+            onPress={() => {
+                props.navigation.push('ReviewFeed', {
+                    searchType: 'categoryName',
+                    searchQuery: props.title,
+                });
+            }}
         >
             <Text style={styles.buttonText}>{props.title}</Text>
         </TouchableOpacity>
@@ -26,6 +32,7 @@ export default function CategoryButtonGrid(props) {
                     <CategoryButton
                         key={index}
                         title={element}
+                        navigation={props.navigation}
                     />
                 </View>
             ))}

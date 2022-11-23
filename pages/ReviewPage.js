@@ -64,6 +64,7 @@ export default function ReviewFeed( { route } ) {
                 pagingEnabled
                 keyExtractor={item => item.id}
                 onViewableItemsChanged={onViewableItemsChanged.current}
+                showsVerticalScrollIndicator={false}
             />
         </View>
     )
