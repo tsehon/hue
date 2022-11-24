@@ -1,10 +1,10 @@
 import { Video } from 'expo-av';
 import React, { useState, useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
 import { StyleSheet, View, FlatList, Dimensions, TouchableOpacity, Text } from 'react-native';
-import { getDocs, collection, where, query } from "firebase/firestore";
+import { getDocs, collection, where, query, doc, updateDoc, getDoc} from "firebase/firestore";
 import db from '../config/firebase';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Ionicons, Feather } from '@expo/vector-icons';
+import { Ionicons, Feather, MaterialIcons } from '@expo/vector-icons';
 import ReadMore from '@fawazahmed/react-native-read-more';
 
 import BackButton from '../components/BackButton';
@@ -91,6 +91,13 @@ export default function ReviewFeed( { route, navigation } ) {
 
 const VideoSingle = forwardRef((props, parentRef) => {
     const ref = useRef(null);
+    const docRef = doc(db, 'reviews', props.item.id);
+    const [upvotes, setUpvotes] = useState(props.item.upvotes);
+    const [downvotes, setDownvotes] = useState(props.item.downvotes);
+    const [upvoted, setUpvoted] = useState(false);
+    const [downvoted, setDownvoted] = useState(false);
+    const [saved, setSaved] = useState(false);
+
     useImperativeHandle(parentRef, () => ({
         play,
         stop,
@@ -130,6 +137,23 @@ const VideoSingle = forwardRef((props, parentRef) => {
         }
     }
 
+    // Should use the existing firestore increment functionality but I simply cannot get it working
+    // This could probably still get confused if a lot of users are voting at the same time
+    const increment = async(item, incrementVal) => {
+        // Fetch the most recent number of up/downvotes, as it could have been up/downvoted by other
+        // users since the page was loaded and we don't want to lose their votes
+        const docSnap = await getDoc(docRef);
+        const mostRecent = docSnap.data()[item];
+        const newVal = mostRecent+incrementVal;
+        await updateDoc(docRef, {[item]: newVal});
+        if (item == 'upvotes') {
+            await updateDoc(docRef, {upvotesMinusDownvotes: newVal-docSnap.data().downvotes});
+        } else if (item == 'downvotes') {
+            setDownvotes(newVal);
+            await updateDoc(docRef, {upvotesMinusDownvotes: docSnap.data().upvotes-downvotes});
+        }
+    }
+
     return (
         <View style={styles.page}>
             <Video
@@ -140,19 +164,58 @@ const VideoSingle = forwardRef((props, parentRef) => {
                 isLooping
                 source={{ uri: props.item.videoDownloadURL }}
             />
-            <View style={{position: 'absolute', left: 0, right: 0, bottom: 0, padding: 10, paddingBottom: 15}}>
+            <View style={{position: 'absolute', left: 0, right: 0, bottom: 0, padding: 10, paddingBottom: 15, paddingRight: 45}}>
                 <View style={{position: 'absolute', right: 0, bottom: 90, padding: 10, alignItems: 'center'}}>
-                    <Feather name='thumbs-up' size={28} color='white'/>
-                    <Text style={[styles.text, {fontSize: 12}]}>{props.item.upvotes}</Text>
-                    <Feather name='thumbs-down' size={28} color='white' style={{marginTop: 20}}/>
-                    <Text style={[styles.text, {fontSize: 12}]}>{props.item.downvotes}</Text>
-                    <Feather name='bookmark' size={28} color='white' style={{marginTop: 20}}/>
+                    <TouchableOpacity
+                        onPress={() => {
+                            if (!upvoted) {
+                                setUpvotes(upvotes+1); // This is just the user-side display of upvote count, so it's okay to separate from actual database value
+                                increment('upvotes', 1);
+                                setUpvoted(true);
+                            } else {
+                                setUpvotes(upvotes-1);
+                                increment('upvotes', -1);
+                                setUpvoted(false);
+                            }
+                        }}
+                        style={{alignItems: 'center'}}
+                    >
+                        <MaterialIcons name={upvoted ? 'thumb-up-alt' : 'thumb-up-off-alt'} size={28} color='white' iconStyle={{backgroundColor: 'white'}}/>
+                        <Text style={[styles.text, {fontSize: 12}]}>{upvotes}</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => {
+                            if (!downvoted) {
+                                setDownvotes(downvotes+1);
+                                increment('downvotes', 1);
+                                setDownvoted(true);
+                            } else {
+                                setDownvotes(downvotes-1);
+                                increment('downvotes', -1);
+                                setDownvoted(false);
+                            }
+                        }}
+                        style={{marginTop: 20, alignItems: 'center'}}
+                    >
+                        <MaterialIcons name={downvoted ? 'thumb-down-alt': 'thumb-down-off-alt'} size={28} color='white'/>
+                        <Text style={[styles.text, {fontSize: 12}]}>{downvotes}</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                    onPress={() => {
+                        if (!saved) setSaved(true);
+                        else setSaved(false);
+                    }}
+                        style={{marginTop: 20, alignItems: 'center'}}
+                    >
+                        <Ionicons name={saved ? 'bookmark' : 'bookmark-outline'} size={28} color='white'/>
+                    </TouchableOpacity>
                 </View>
                 <Text style={[styles.text, {fontSize: 16}]}>{props.item.userName}</Text>
                 <Text
                     // Reviews don't currently include the corresponding product ID
                     // onPress={() => props.navigation.navigate('Product', {productId: props.item.productID})}
                     style={[styles.text, {fontSize: 20, marginBottom: 9, marginTop: 11}]}
+                    numberOfLines={2}
                 >
                     {props.item.productName}
                 </Text>
