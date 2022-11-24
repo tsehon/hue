@@ -37,28 +37,34 @@ export default function UploadReviewPage({ navigation, route }) {
     const postMedia = async (storageURI, media, docRef, typeURI) => {
         const uploadRef = ref(storage, storageURI);
 
-        await fetch(media)
-            .then(response =>
-                response.blob()
-            )
+        const promise = new Promise(function(resolve, reject) {
+            fetch(media)
+            .then(response => response.blob())
             .then(videoblob => {
                 const uploadTask = uploadBytesResumable(uploadRef, videoblob)
                 uploadTask.on('state_changed',
                     (snapshot) => {
-                        console.log(snapshot.bytesTransferred + ' / ' + snapshot.totalBytes)
+                        console.log(snapshot.bytesTransferred + ' / ' + snapshot.totalBytes);
                     },
-                    (error) => console.log('postMedia error: ' + error),
+                    (error) => {
+                        console.log('postMedia error: ' + error);
+                        reject(error);
+                    },
                     () => {
                         // Upload completed successfully, now we can get the download URL and add to document
+                        videoblob.close();
                         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
                             console.log('File available at', downloadURL);
                             updateDoc(docRef, {[typeURI]: downloadURL});
+                            resolve();
                         });
-                        videoblob.close();
+                        
                     }
                 )
             })
-        return uploadRef;
+        });
+
+        return await promise;
     }
 
     const postReview = async () => {
