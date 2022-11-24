@@ -97,6 +97,7 @@ export default function ExplorePage({ navigation, route }) {
 const styles = StyleSheet.create({
     page: {
         flex: 1,
+        backgroundColor: 'white',
     },
     container: {
         padding: 30,

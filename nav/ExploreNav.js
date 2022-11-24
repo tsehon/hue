@@ -18,7 +18,7 @@ export default function ExploreNav({ navigation, route }) {
             <Stack.Screen name="Explore" component={ExplorePage} />
             <Stack.Screen name="Search" component={SearchPage}
                 options={{
-                    animation: 'fade',
+                    animation: 'none',
                 }}
             />
             <Stack.Screen name="Product" component={ProductPage} />
