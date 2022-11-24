@@ -110,7 +110,8 @@ export default function ProductPage({ navigation, route }) {
               <Stars
                 rating={productRating}
                 disabled={true}
-                alignSelf={'flex-end'}
+                style={{alignSelf: 'flex-end'}}
+                // alignSelf={'flex-end'}
               />
               <Text styles={styles.text}>({productRating})</Text>
             </View>

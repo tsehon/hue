@@ -1,18 +1,23 @@
-import { Feather } from '@expo/vector-icons';
-import { View, TouchableOpacity } from 'react-native-elements';
+import { MaterialIcons   } from '@expo/vector-icons';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 
-export default function BackButton(props) {
+export default function BackButton({ navigation }) {
     return (
-        <View>
-            <TouchableOpacity
-                onPress={() => { props.onPress() }}
-            >
-                <Feather
-                    name="arrow-left"
-                    size={24}
-                    color="black"
-                />
-            </TouchableOpacity>
-        </View>
+        <TouchableOpacity
+            style={styles.backButton}
+            onPress={() => navigation.goBack()}
+        >
+            <MaterialIcons
+                name="chevron-left"
+                size={48}
+                color="white"
+            />
+        </TouchableOpacity>
     );
 }
+
+const styles = StyleSheet.create({
+    backButton: {
+        fill: 1,
+      },
+})
