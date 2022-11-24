@@ -34,54 +34,53 @@ export default function UploadReviewPage({ navigation, route }) {
         postReview();
     }
 
-    const postMedia = async (storageURI, media) => {
+    const postMedia = async (storageURI, media, docRef, typeURI) => {
         const uploadRef = ref(storage, storageURI);
 
-        fetch(media)
+        await fetch(media)
             .then(response =>
                 response.blob()
             )
             .then(videoblob => {
-                uploadBytesResumable(uploadRef, videoblob)
-                videoblob.close();
-            }).then(() => {
-                console.log("............");
-                console.log(".......");
-                console.log("....");
-                console.log("upload complete.");
-            });
+                const uploadTask = uploadBytesResumable(uploadRef, videoblob)
+                uploadTask.on('state_changed',
+                    (snapshot) => {
+                        console.log(snapshot.bytesTransferred + ' / ' + snapshot.totalBytes)
+                    },
+                    (error) => console.log('postMedia error: ' + error),
+                    () => {
+                        // Upload completed successfully, now we can get the download URL and add to document
+                        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                            console.log('File available at', downloadURL);
+                            updateDoc(docRef, {[typeURI]: downloadURL});
+                        });
+                        videoblob.close();
+                    }
+                )
+            })
+        return uploadRef;
     }
 
     const postReview = async () => {
         setRequestRunning(true);
-        const res = await addDoc(collection(db, "reviews"), {
+        const reviewRef = await addDoc(collection(db, "reviews"), {
             productName: productName,
             description: description,
             rating: rating,
+            upvotes: 0,
+            downvotes: 0,
+            upvotesMinusDownvotes: 0,
         });
 
-        const docRef = doc(db, "reviews", res.id);
-
-        const videoURI = (String)(res.id) + ".mp4";
-        await postMedia(videoURI, route.params.source);
-        const video_download_url = await getDownloadURL(ref(storage, videoURI));
+        const videoURI = (String)(reviewRef.id) + ".mp4";
+        await postMedia(videoURI, route.params.source, reviewRef, 'videoDownloadURL');
 
         if (route.params.sourceThumb) {
-            const thumbnailURI = (String)(res.id) + ".jpg";
-            await postMedia(thumbnailURI, route.params.sourceThumb)
-            const thumbnail_download_url = await getDownloadURL(ref(storage, thumbnailURI));
-
-            updateDoc(docRef, {
-                videoDownloadURL: video_download_url,
-                thumbnailDownloadURL: thumbnail_download_url,
-            });
-        } else {
-            updateDoc(docRef, {
-                videoDownloadURL: video_download_url,
-            });
+            const thumbnailURI = (String)(reviewRef.id) + ".jpg";
+            await postMedia(thumbnailURI, route.params.sourceThumb, reviewRef, 'thumbnailDownloadURL');
         }
 
-        console.log("review posted with ID: " + res.id);
+        console.log("review posted with ID: " + reviewRef.id);
         setRequestRunning(false);
 
         navigation.goBack();
@@ -118,7 +117,7 @@ export default function UploadReviewPage({ navigation, route }) {
                 />
                 <Image
                     style={styles.mediaPreview}
-                    source={{ uri: route.params.source }}
+                    source={{ uri: route.params.sourceThumb }}
                 />
             </View>
             <View style={styles.ratingBoxContainer}>
