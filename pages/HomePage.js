@@ -7,6 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import HomePageSection from '../components/HomePageSection';
 import CategoryButtonGrid from '../components/CategoryButtons';
 import VideoPreview from '../components/VideoPreviews';
+import { ReviewCarousel } from '../components/ImgCarousel';
 
 export default function HomePage({ navigation }) {
   return (
@@ -21,7 +22,24 @@ export default function HomePage({ navigation }) {
 
         <HomePageSection
           title="Reviews For You"
+          escapeStyle={{marginLeft: -10, marginRight: -10}}
         >
+          <ReviewCarousel
+            data={[
+              {
+                categoryName: 'Beauty',
+                firstID:'MXILb6SdiK9Sq5ZjIzZU',
+                videoURI:'https://test-videos.co.uk/vids/jellyfish/mp4/h264/1080/Jellyfish_1080_10s_2MB.mp4',
+              },
+              {
+                categoryName: 'Beauty',
+                firstID:'2DtUlonFdbiimC0LNB18',
+                videoURI:'https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_2MB.mp4',
+              }
+            ]}
+            style={{ width: '100%' }}
+            navigation={navigation}
+          />
         </HomePageSection>
 
         <HomePageSection
