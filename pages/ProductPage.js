@@ -1,19 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import ImgCarousel from '../components/ImgCarousel';
 import Stars from '../components/Stars';
-import { StyleSheet, TouchableOpacity, TextInput, Text, View, ScrollView } from 'react-native';
+import { StyleSheet, TouchableOpacity, Text, View, ScrollView } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { Feather } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 
-// import { useFonts } from 'expo-font';
+import BackButton from '../components/BackButton';
+import ProductReviewsGrid from '../components/ProductReviewsGrid';
+
 import { doc, getDoc, getDocs, collection } from "firebase/firestore";
 import db from '../config/firebase';
 
 export default function ProductPage({ navigation, route }) {
-  // const [fontsLoaded] = useFonts({
-  //   'Inter': require('../assets/fonts/Inter.ttf'),
-  // });
-
   const { productId } = route.params;
   const [productName, setProductName] = useState('');
   const [productPrice, setProductPrice] = useState(0);
@@ -22,6 +21,7 @@ export default function ProductPage({ navigation, route }) {
   const [productRating, setProductRating] = useState(0.0);
   const [productNumRatings, setNumRatings] = useState(0);
   const [productImages, setProductImages] = useState([]);
+  const [saved, setSaved] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -46,100 +46,76 @@ export default function ProductPage({ navigation, route }) {
     setProductImages(imageArr);
   }
 
-  // const itemConverter = {
-  //     toFirestore: (item) => {
-  //         return {
-  //             name: item.name,
-  //         };
-  //     },
-  //     fromFirestore: (snapshot, options) => {
-  //       const data = snapshot.data(options);
-  //       const id = snapshot.id;
-
-  //       return new Product(id, data.name, data.price, data.brand,
-  //         data.link, data.rating);
-  //     }
-  // };
-
   return (
-    <ScrollView
-      style={styles.page}
-    >
-      <TouchableOpacity
-        style={styles.backButton}
-        onPress={() => { navigation.goBack() }}
-      >
-        <Feather
-          name="arrow-left"
-          size={24}
-          color="black"
-        />
-      </TouchableOpacity>
-      <View
-        style={styles.centered}
-      >
-        <ImgCarousel
-          images={productImages}
-          style={{ width: 390 - 40 }}
-        />
-      </View>
-      <View
-        style={styles.infoSection}
-      >
-        <Text style={styles.title} numberOfLines={2}>{productName}</Text>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingTop: 4 }}>
-          <View
-            style={{ width: '40%' }}
-          >
-            <Text
-              numberOfLines={1}
-              style={[styles.info, styles.text]}
-            >
-              {productBrand}
-            </Text>
-            <Text
-              style={[styles.info, styles.text]}
-            >
-              {productPrice}
-            </Text>
-          </View>
-          <View
-            style={[{ width: '60%' }, styles.rightAlign]}
-          >
-            <View style={[{ flex: 1, flexDirection: 'row', alignItems: 'flex-end' }, styles.info]}>
-              <Stars
-                rating={productRating}
-                disabled={true}
-                style={{alignSelf: 'flex-end'}}
-                // alignSelf={'flex-end'}
-              />
-              <Text styles={styles.text}>({productRating})</Text>
-            </View>
-            <Text
-              style={[styles.info, styles.text]}
-            >
-              {productNumRatings} reviews
-            </Text>
-          </View>
+    <SafeAreaView style={styles.page} edges={['top', 'left', 'right']}>
+      <ScrollView>
+        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', padding: 12, marginBottom: 18 }}>
+          <BackButton navigation={navigation} size={30} color={'black'} style={{position: 'absolute', left: 12}}></BackButton>
+          <Text style={[styles.title, {lineHeight: 23}]}>{productBrand}</Text>
         </View>
-      </View>
-    </ScrollView>
+        <View
+          style={styles.centered}
+        >
+          <ImgCarousel
+            images={productImages}
+            style={{ width: '100%' }}
+          />
+        </View>
+        <View
+          style={styles.infoSection}
+        >
+          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+            <Text style={styles.title} numberOfLines={2}>{productName}</Text>
+            <TouchableOpacity onPress={() => setSaved(!saved)}>
+              <Ionicons name={saved ? 'bookmark' : 'bookmark-outline'} size={28} color='black'/>
+            </TouchableOpacity>
+          </View>
+          <Text
+            style={[styles.info, styles.title]}
+          >
+            ${productPrice}
+          </Text>
+          <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
+            <Stars
+              rating={productRating}
+              disabled={true}
+              style={{alignSelf: 'center'}}
+            />
+            <Text
+              style={[styles.semiBold]}
+            >
+              {productRating}
+            </Text>
+            <Text
+              style={[styles.text, {color: '#B0B0B0', marginLeft: 8}]}
+            >
+              ({productNumRatings} {productNumRatings == 1 ? 'review' : 'reviews'})
+            </Text>
+          </View>
+          <TouchableOpacity style={{backgroundColor: '#D9D9D9', borderRadius: 9, height: 52, marginTop: 25, alignItems: 'center', justifyContent: 'center'}}>
+            <Text style={styles.semiBold}>Purchase</Text>
+          </TouchableOpacity>
+          <Text style={[styles.semiBold, {fontSize: 20, marginTop: 36}]}>Tagged Reviews</Text>
+        </View>
+        <ProductReviewsGrid productName={productName} navigation={navigation}/>
+      </ScrollView>
+    </SafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
   page: {
-    height: '100%',
-    paddingTop: 60,
-    flex: 1
+    flex: 1,
+    backgroundColor: 'white',
   },
   centered: {
     alignItems: 'center',
     justifyContent: 'center',
   },
   infoSection: {
-    padding: 20,
+    padding: 15,
     paddingTop: 10,
+    paddingBottom: 10,
     flex: 1,
   },
   backButton: {
@@ -148,19 +124,22 @@ const styles = StyleSheet.create({
     marginTop: 25,
   },
   title: {
-    fontSize: 24,
-    // fontFamily: 'Inter',
-    fontWeight: '700',
+    fontSize: 20,
+    fontFamily: 'PlusJakartaSans-Bold',
   },
   info: {
-    paddingTop: 5,
-    paddingBottom: 5,
+    paddingTop: 12,
+    paddingBottom: 12,
   },
   rightAlign: {
     alignItems: 'flex-end'
   },
   text: {
     fontSize: 16,
-    // fontFamily: 'Inter',
+    fontFamily: 'Plus-Jakarta-Sans',
+  },
+  semiBold: {
+    fontFamily: 'PlusJakartaSans-SemiBold',
+    fontSize: 16,
   }
 });

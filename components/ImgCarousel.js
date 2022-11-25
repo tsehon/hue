@@ -15,7 +15,7 @@ const ImgCarousel = (props) => {
     }
 
       return (
-          <View style={{width: width+40, height: width+40, flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <View style={{width: width, height: width+8+11, flex: 1, justifyContent: 'center', alignItems: 'center'}}>
               <Carousel
                   loop
                   width={width}
@@ -45,11 +45,11 @@ const ImgCarousel = (props) => {
                   )}
               />
             <View
-                style={{alignItems: 'center', justifyContent: 'center', height: 24}}
+                style={{alignItems: 'center', justifyContent: 'center', height: 8, marginTop: 11}}
             >
                 <Pagination
                     data={props.images}
-                    size={12}
+                    size={8}
                     activeIndex={activeIndex}
                  />
             </View>
@@ -66,11 +66,12 @@ const ImgCarousel = (props) => {
                 <View
                     key={index}
                     style={{
-                        margin: props.size/2,
+                        marginLeft: props.size/2,
+                        marginRight: props.size/2,
                         borderRadius: props.size,
                         width: props.size,
                         height: props.size,
-                        backgroundColor: (props.activeIndex == index) ? 'black' : 'grey'
+                        backgroundColor: (props.activeIndex == index) ? '#5F5F5F' : '#A3A3A3'
                     }}
                 />
             ))}

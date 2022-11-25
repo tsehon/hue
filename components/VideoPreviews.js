@@ -18,7 +18,8 @@ export default function VideoPreview(props) {
         >
             <Thumbnail
                 style={props.style}
-                uri={props.uri}
+                videoURI={props.videoURI}
+                imgURI={props.imgURI}
             />
         </TouchableOpacity>
     )
@@ -31,7 +32,7 @@ const Thumbnail = (props) => {
     const [viduri, setVidUri] = useState(null);
 
     useEffect(() => {
-        setVidUri(props.uri);
+        typeof props.ImgURI !== 'undefined' ? setImage(props.imgURI) : setVidUri(props.videoURI);
         if (image == null && viduri != null) generateThumbnail();
     });
 

@@ -1,7 +1,7 @@
 import { Video } from 'expo-av';
 import React, { useState, useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
 import { StyleSheet, View, FlatList, Dimensions, TouchableOpacity, Text } from 'react-native';
-import { getDocs, collection, where, query, doc, updateDoc, getDoc} from "firebase/firestore";
+import { getDocs, collection, where, query, doc, updateDoc, getDoc, orderBy } from "firebase/firestore";
 import db from '../config/firebase';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons, Feather, MaterialIcons } from '@expo/vector-icons';
@@ -73,7 +73,7 @@ export default function ReviewFeed( { route, navigation } ) {
                 showsVerticalScrollIndicator={false}
             />
             <SafeAreaView style={[styles.absolute, styles.topmostButtons]}>
-                <BackButton navigation={navigation}/>
+                <BackButton navigation={navigation} color='white' size={48}/>
                 <TouchableOpacity
                     style={[styles.button, {paddingTop: 6, paddingRight: 12}]}
                     onPress={() => navigation.navigate('Search')}
@@ -247,8 +247,9 @@ const VideoSingle = forwardRef((props, parentRef) => {
 })
 
 const getFeed = async (type, searchTerm, firstID) => {
-    // type should be 'productName' or 'category' or later some tags implementation
-    const q = query(collection(db, 'reviews'), where(type, '==', searchTerm));
+    let q;
+    if (type == 'productName') q = query(collection(db, 'reviews'), where(type, '==', searchTerm), orderBy('upvotesMinusDownvotes', 'desc'));
+    else q = query(collection(db, 'reviews'), where(type, '==', searchTerm));
 
     const querySnapshot = await getDocs(q);
 

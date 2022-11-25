@@ -40,7 +40,7 @@ export default function HomePage({ navigation }) {
               searchType='categoryName'
               searchQuery='Beauty'
               firstID='MXILb6SdiK9Sq5ZjIzZU'
-              uri='https://test-videos.co.uk/vids/jellyfish/mp4/h264/1080/Jellyfish_1080_10s_2MB.mp4'
+              videoURI='https://test-videos.co.uk/vids/jellyfish/mp4/h264/1080/Jellyfish_1080_10s_2MB.mp4'
             />
           </ScrollView>
         </HomePageSection>
