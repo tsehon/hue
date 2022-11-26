@@ -9,6 +9,7 @@ import CategoryButtonGrid from '../components/CategoryButtons';
 import VideoPreview from '../components/VideoPreviews';
 import { ReviewCarousel } from '../components/ImgCarousel';
 import FocusAwareStatusBar from '../components/FocusAwareStatusBar';
+import ProductsGrid from '../components/ProductsGrid';
 
 export default function HomePage({ navigation }) {
   return (
@@ -74,7 +75,17 @@ export default function HomePage({ navigation }) {
         <HomePageSection
           title="Products For You"
         >
-          
+          <ProductsGrid
+            navigation={navigation}
+            products={[
+              'g8CN9lm5cxXeZ1BhwYN2',
+              'M9CDo9l429QwsrzCepYv',
+              'IjOmRS0ZvwjmhUUcUbI1',
+              'X0J19ZzbHByWJHBGMzzv',
+              'OBbjTcEtoglR2IdMAjna',
+              'QroHZmWNVW5ggcauHzlG',
+            ]}
+          />
         </HomePageSection>
 
         <HomePageSection

@@ -36,7 +36,8 @@ export default function ProductPage({ navigation, route }) {
 
     const item = docSnap.data();
     setProductName(item.name);
-    setProductPrice(item.price);
+    if (item.price%1==0) setProductPrice(item.price);
+    else setProductPrice(item.price.toFixed(2));
     setProductBrand(item.brand);
     setProductLink(item.link);
     setProductRating(item.avgRating);
