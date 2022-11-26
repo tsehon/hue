@@ -170,14 +170,26 @@ const VideoSingle = forwardRef((props, parentRef) => {
                 <View style={{ position: 'absolute', right: 0, bottom: 90, padding: 10, alignItems: 'center' }}>
                     <TouchableOpacity
                         onPress={() => {
-                            if (!upvoted) {
-                                setUpvotes(upvotes + 1); // This is just the user-side display of upvote count, so it's okay to separate from actual database value
-                                increment('upvotes', 1);
-                                setUpvoted(true);
+                            if (downvoted) {
+                                if (!upvoted) {
+                                    setDownvotes(downvotes - 1);
+                                    increment('downvotes', -1);
+                                    setDownvoted(false);
+
+                                    setUpvotes(upvotes + 1); // This is just the user-side display of upvote count, so it's okay to separate from actual database value
+                                    increment('upvotes', 1);
+                                    setUpvoted(true);
+                                }
                             } else {
-                                setUpvotes(upvotes - 1);
-                                increment('upvotes', -1);
-                                setUpvoted(false);
+                                if (!upvoted) {
+                                    setUpvotes(upvotes + 1); // This is just the user-side display of upvote count, so it's okay to separate from actual database value
+                                    increment('upvotes', 1);
+                                    setUpvoted(true);
+                                } else {
+                                    setUpvotes(upvotes - 1);
+                                    increment('upvotes', -1);
+                                    setUpvoted(false);
+                                }
                             }
                         }}
                         style={{ alignItems: 'center' }}
@@ -187,14 +199,26 @@ const VideoSingle = forwardRef((props, parentRef) => {
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => {
-                            if (!downvoted) {
-                                setDownvotes(downvotes + 1);
-                                increment('downvotes', 1);
-                                setDownvoted(true);
+                            if (upvoted) {
+                                if (!downvoted) {
+                                    setUpvotes(upvotes - 1);
+                                    increment('upvotes', -1);
+                                    setUpvoted(false);
+
+                                    setDownvotes(downvotes + 1);
+                                    increment('downvotes', 1);
+                                    setDownvoted(true);
+                                }
                             } else {
-                                setDownvotes(downvotes - 1);
-                                increment('downvotes', -1);
-                                setDownvoted(false);
+                                if (!downvoted) {
+                                    setDownvotes(downvotes + 1);
+                                    increment('downvotes', 1);
+                                    setDownvoted(true);
+                                } else {
+                                    setDownvotes(downvotes - 1);
+                                    increment('downvotes', -1);
+                                    setDownvoted(false);
+                                }
                             }
                         }}
                         style={{ marginTop: 20, alignItems: 'center' }}
