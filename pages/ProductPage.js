@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Stars from '../components/Stars';
-import { StyleSheet, TouchableOpacity, Text, View, ScrollView } from 'react-native';
+import { StyleSheet, TouchableOpacity, Text, View, ScrollView, Linking } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Ionicons } from '@expo/vector-icons';
@@ -68,7 +68,7 @@ export default function ProductPage({ navigation, route }) {
           style={styles.infoSection}
         >
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-            <Text style={styles.title} numberOfLines={2}>{productName}</Text>
+            <Text style={[styles.title, {width: '90%'}]} numberOfLines={2}>{productName}</Text>
             <TouchableOpacity onPress={() => setSaved(!saved)}>
               <Ionicons name={saved ? 'bookmark' : 'bookmark-outline'} size={28} color='black'/>
             </TouchableOpacity>
@@ -95,7 +95,10 @@ export default function ProductPage({ navigation, route }) {
               ({productNumRatings} {productNumRatings == 1 ? 'review' : 'reviews'})
             </Text>
           </View>
-          <TouchableOpacity style={{backgroundColor: '#D9D9D9', borderRadius: 9, height: 52, marginTop: 25, alignItems: 'center', justifyContent: 'center'}}>
+          <TouchableOpacity
+            style={{backgroundColor: '#D9D9D9', borderRadius: 9, height: 52, marginTop: 25, alignItems: 'center', justifyContent: 'center'}}
+            onPress={() => Linking.openURL(productLink)}
+          >
             <Text style={styles.semiBold}>Purchase</Text>
           </TouchableOpacity>
           <Text style={[styles.semiBold, {fontSize: 20, marginTop: 36}]}>Tagged Reviews</Text>

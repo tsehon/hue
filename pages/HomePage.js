@@ -10,6 +10,7 @@ import VideoPreview from '../components/VideoPreviews';
 import { ReviewCarousel } from '../components/ImgCarousel';
 import FocusAwareStatusBar from '../components/FocusAwareStatusBar';
 import ProductsGrid from '../components/ProductsGrid';
+import ProductsList from '../components/ProductsList';
 
 export default function HomePage({ navigation }) {
   return (
@@ -91,7 +92,15 @@ export default function HomePage({ navigation }) {
         <HomePageSection
           title="Trending Products"
         >
-          
+          <ProductsList
+            navigation={navigation}
+            products={[
+              'g8CN9lm5cxXeZ1BhwYN2',
+              'M9CDo9l429QwsrzCepYv',
+              'X0J19ZzbHByWJHBGMzzv',
+              'OBbjTcEtoglR2IdMAjna',
+            ]}
+          />
         </HomePageSection>
 
         <HomePageSection
