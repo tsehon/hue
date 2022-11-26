@@ -11,6 +11,7 @@ import CategoryButton, { CategoryButtonScrollView } from '../components/Category
 import CategoryButtonGrid from '../components/CategoryButtons';
 import ProductButton, { ProductScrollView } from '../components/ProductDisplay';
 import ReviewButton, { ReviewScrollView } from '../components/ReviewDisplay';
+import FocusAwareStatusBar from '../components/FocusAwareStatusBar';
 
 import { collection, getDocs } from "firebase/firestore";
 
@@ -64,6 +65,7 @@ export default function ExplorePage({ navigation, route }) {
     };
     return (
         <SafeAreaView style={styles.page}>
+            <FocusAwareStatusBar barStyle='dark-content'/>
             <ScrollView contentContainerStyle={styles.page}>
                 <SearchBar
                     style={styles.searchbar}

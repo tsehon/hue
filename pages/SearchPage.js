@@ -10,6 +10,7 @@ import db from '../config/firebase';
 
 import SearchItem from '../lib/SearchItem';
 import BackButton from '../components/BackButton';
+import FocusAwareStatusBar from '../components/FocusAwareStatusBar';
 
 export default function SearchPage({ navigation, route }) {
     const [query, setQuery] = useState(route.text);
@@ -112,6 +113,7 @@ export default function SearchPage({ navigation, route }) {
 
     return (
         <SafeAreaView style={styles.container}>
+            <FocusAwareStatusBar barStyle='dark-content'/>
             <SafeAreaView style={styles.searchContainer}>
                 <TouchableOpacity
                     style={styles.backButton}

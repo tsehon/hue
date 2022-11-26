@@ -8,10 +8,12 @@ import HomePageSection from '../components/HomePageSection';
 import CategoryButtonGrid from '../components/CategoryButtons';
 import VideoPreview from '../components/VideoPreviews';
 import { ReviewCarousel } from '../components/ImgCarousel';
+import FocusAwareStatusBar from '../components/FocusAwareStatusBar';
 
 export default function HomePage({ navigation }) {
   return (
     <SafeAreaView style={styles.page} edges={['top', 'left', 'right']}>
+      <FocusAwareStatusBar barStyle='dark-content'/>
       <ScrollView>
         <SearchBar
           style={styles.searchbar}

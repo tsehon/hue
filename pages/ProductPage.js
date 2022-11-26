@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import ImgCarousel from '../components/ImgCarousel';
 import Stars from '../components/Stars';
 import { StyleSheet, TouchableOpacity, Text, View, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -8,6 +7,8 @@ import { Ionicons } from '@expo/vector-icons';
 
 import BackButton from '../components/BackButton';
 import ProductReviewsGrid from '../components/ProductReviewsGrid';
+import FocusAwareStatusBar from '../components/FocusAwareStatusBar';
+import { ImgCarousel } from '../components/ImgCarousel';
 
 import { doc, getDoc, getDocs, collection } from "firebase/firestore";
 import db from '../config/firebase';
@@ -48,6 +49,7 @@ export default function ProductPage({ navigation, route }) {
 
   return (
     <SafeAreaView style={styles.page} edges={['top', 'left', 'right']}>
+      <FocusAwareStatusBar barStyle='dark-content'/>
       <ScrollView>
         <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', padding: 12, marginBottom: 18 }}>
           <BackButton navigation={navigation} size={30} color={'black'} style={{position: 'absolute', left: 12}}></BackButton>

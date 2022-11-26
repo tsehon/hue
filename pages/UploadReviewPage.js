@@ -13,6 +13,7 @@ import { storage } from '../config/firebase';
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { doc, collection, addDoc, updateDoc } from "firebase/firestore";
 import CameraPage from './CameraPage';
+import FocusAwareStatusBar from '../components/FocusAwareStatusBar';
 
 const videosRef = ref(storage, 'videos');
 
@@ -95,6 +96,7 @@ export default function UploadReviewPage({ navigation, route }) {
     if (requestRunning) {
         return (
             <View style={styles.uploadingContainer}>
+                <FocusAwareStatusBar barStyle='light-content'/>
                 <ActivityIndicator color='red' size='large' />
             </View>
         )
@@ -102,6 +104,7 @@ export default function UploadReviewPage({ navigation, route }) {
 
     return (
         <ScrollView containerStyle={styles.container}>
+            <FocusAwareStatusBar barStyle='light-content'/>
             <View style={styles.topSpacer}>
             </View>
             <View style={styles.formContainer}>

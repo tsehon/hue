@@ -9,6 +9,7 @@ import ReadMore from '@fawazahmed/react-native-read-more';
 
 import BackButton from '../components/BackButton';
 import Stars from '../components/Stars';
+import FocusAwareStatusBar from '../components/FocusAwareStatusBar';
 
 /**
  * 
@@ -52,6 +53,7 @@ export default function ReviewFeed( { route, navigation } ) {
 
     return (
         <View style={styles.page}>
+            <FocusAwareStatusBar barStyle='light-content'/>
             <FlatList
                 ref={flatListRef}
                 getItemLayout={(data, index) => (

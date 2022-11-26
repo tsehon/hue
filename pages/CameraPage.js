@@ -12,6 +12,8 @@ import * as VideoThumbnails from 'expo-video-thumbnails';
 import { useIsFocused } from '@react-navigation/core'
 import { Feather } from '@expo/vector-icons'
 
+import FocusAwareStatusBar from '../components/FocusAwareStatusBar';
+
 export default function CameraPage({ navigation, route }) {
 
     const [video, setVideo] = useState(null);
@@ -123,6 +125,7 @@ export default function CameraPage({ navigation, route }) {
 
     return (
         <View style={styles.container}>
+            <FocusAwareStatusBar barStyle='light-content'/>
             {isFocused ?
                 <Camera
                     ref={ref => setCameraRef(ref)}
