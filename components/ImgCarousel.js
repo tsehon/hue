@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Dimensions, View, Image } from 'react-native';
 import Carousel from 'react-native-reanimated-carousel';
 import VideoPreview from './VideoPreviews';
@@ -23,10 +23,13 @@ export const ImgCarousel = (props) => {
 }
 
 export const ReviewCarousel = (props) => {
+  const [canPress, setCanPress] = useState(true);
+
   return (
     <PaginatedCarousel
       data={props.data}
       style={props.style}
+      pressState={setCanPress}
       content={(index) => (
         <VideoPreview
           style={{
@@ -39,6 +42,8 @@ export const ReviewCarousel = (props) => {
           firstID={props.data[index].firstID}
           imgURI={props.data[index].imgURI}
           videoURI={props.data[index].videoURI}
+          disabled={!canPress}
+          activeOpacity={1}
         />
       )}
     />
@@ -47,6 +52,7 @@ export const ReviewCarousel = (props) => {
 
 const PaginatedCarousel = (props) => {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [canPress, setCanPress] = useState(true);
 
   // Set height and width of carousel based on style input,
   // handling either pixels or percentages
@@ -55,6 +61,10 @@ const PaginatedCarousel = (props) => {
   else if (typeof props.style.width == 'string') {
     width = Dimensions.get('window').width * parseInt(props.style.width)/100;
   }
+
+  useEffect(() => {
+    if (typeof props.pressState !== 'undefined') props.pressState(canPress)
+  }, [canPress])
 
   return (
       <View style={{width: width, height: width+8+11, flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -65,7 +75,13 @@ const PaginatedCarousel = (props) => {
               autoPlay={false}
               data={props.data}
               scrollAnimationDuration={300}
-              onScrollEnd={(index) => setActiveIndex(index)}
+              onProgressChange={(offsetProgress, absoluteProgress) => {
+                if (absoluteProgress % 1 != 0) setCanPress(false)
+              }}
+              onScrollEnd={(index) => {
+                setActiveIndex(index);
+                setCanPress(true);
+              }}
               panGestureHandlerProps={{
                 activeOffsetX: [-10, 10],
               }}

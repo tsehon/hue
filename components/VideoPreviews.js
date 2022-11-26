@@ -7,8 +7,9 @@ export default function VideoPreview(props) {
     return (
         <TouchableOpacity
             style={props.style}
+            activeOpacity={typeof props.activeOpacity !== 'undefined' ? props.activeOpacity : 0.2}
             onPress={() => {
-                props.navigation.push('ReviewFeed', {
+                if (!props.disabled) props.navigation.push('ReviewFeed', {
                     startIndex: props.startIndex,
                     searchType: props.searchType,
                     searchQuery: props.searchQuery,

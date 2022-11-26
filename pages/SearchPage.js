@@ -4,7 +4,7 @@ import SearchBar from 'react-native-elements/dist/searchbar/SearchBar-ios';
 import { StyleSheet, Text, View, SafeAreaView, FlatList, ScrollView, TouchableOpacity } from 'react-native';
 import { collection, getDocs } from "firebase/firestore";
 
-import { Feather } from '@expo/vector-icons';
+import { Feather, FontAwesome5 , Ionicons } from '@expo/vector-icons';
 
 import db from '../config/firebase';
 
@@ -85,34 +85,44 @@ export default function SearchPage({ navigation, route }) {
             console.log("rendering item WITH ID: " + item + " and NAME: " + name);
 
             return (
-                <View style={styles.searchItemContainer}>
-                    <Text
-                        style={styles.searchItemText}
-                        onPress={() => {
-                            const recents = recentlyViewed;
-                            var index = recents.indexOf(item);
-                            if (index > -1) {
-                                recents.splice(index, 1);
-                            }
-                            recents.push(item);
-                            console.log("recents: ");
-                            console.log(recents);
+                <TouchableOpacity
+                    style={styles.searchItemContainer}
+                    onPress={() => {
+                        const recents = recentlyViewed;
+                        var index = recents.indexOf(item);
+                        if (index > -1) {
+                            recents.splice(index, 1);
+                        }
+                        recents.push(item);
+                        console.log("recents: ");
+                        console.log(recents);
 
-                            setRecentlyViewed(recents);
-                    
-                            navigation.navigate('Product', {
-                                productId: item
-                            });
-                        }}>
+                        setRecentlyViewed(recents);
+                
+                        if (itemData.type == 'product') navigation.navigate('Product', {productId: item});
+                        else if (itemData.type == 'category') {
+                            navigation.push('ReviewFeed', {
+                                searchType: 'categoryName',
+                                searchQuery: name,
+                            })
+                        }
+                    }}
+                >
+                    <Ionicons
+                        name='ios-search'
+                        size={20}
+                        color='black'
+                    />
+                    <Text style={[styles.text, {marginLeft: 15}]}>
                         {name}
                     </Text>
-                </View>
+                </TouchableOpacity>
             );
         }
     }
 
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
             <FocusAwareStatusBar barStyle='dark-content'/>
             <SafeAreaView style={styles.searchContainer}>
                 <TouchableOpacity
@@ -135,7 +145,6 @@ export default function SearchPage({ navigation, route }) {
                 />
             </SafeAreaView>
             <FlatList
-                style={styles.dropdownContainer}
                 data={ query ? items : recentlyViewed }
                 keyExtractor={(item) => item}
                 extraData={query}
@@ -148,7 +157,8 @@ export default function SearchPage({ navigation, route }) {
 
 const styles = StyleSheet.create({
     container: {
-        fill: 1,
+        flex: 1,
+        backgroundColor: 'white'
     },
     searchContainer: {
         fill: 1,
@@ -166,20 +176,15 @@ const styles = StyleSheet.create({
         width: 325
     },
     searchItemContainer: {
-        fill: 1,
-        borderColor: 'light grey',
-        borderWidth: 0.5,
-        borderRadius: 10,
-        marginVertical: 2,
-        marginHorizontal: 10,
-        padding: 3,
+        paddingTop: 17,
+        paddingBottom: 17,
+        paddingLeft: 38,
+        paddingRight: 38,
+        flexDirection: 'row',
+        alignItems: 'center',
     },
-    searchItemText: {
-        paddingLeft: 15,
-        marginTop: 15,
-        paddingBottom: 15,
-        fontSize: 20,
-        borderBottomColor: '#26a69a',
-        borderBottomWidth: 1
-    }
+    text: {
+        fontFamily: 'Plus-Jakarta-Sans',
+        fontSize: 16,
+    },
 });
