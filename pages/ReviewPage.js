@@ -21,7 +21,7 @@ import FocusAwareStatusBar from '../components/FocusAwareStatusBar';
  * Unlike with startIndex, the firstID video will be the very first item in the FlatList
  * @returns 
  */
-export default function ReviewFeed( { route, navigation } ) {
+export default function ReviewFeed({ route, navigation }) {
     const [videos, setVideos] = useState([]);
     const flatListRef = useRef(null);
     const refs = useRef([]);
@@ -53,12 +53,12 @@ export default function ReviewFeed( { route, navigation } ) {
 
     return (
         <View style={styles.page}>
-            <FocusAwareStatusBar barStyle='light-content'/>
+            <FocusAwareStatusBar barStyle='light-content' />
             <FlatList
                 ref={flatListRef}
                 getItemLayout={(data, index) => (
-                    {length: vidHeight, offset: vidHeight * index, index}
-                  )}
+                    { length: vidHeight, offset: vidHeight * index, index }
+                )}
                 initialScrollIndex={(typeof route.params.startIndex != 'undefined') ? route.params.startIndex : null}
                 data={videos}
                 windowSize={4}
@@ -75,12 +75,12 @@ export default function ReviewFeed( { route, navigation } ) {
                 showsVerticalScrollIndicator={false}
             />
             <SafeAreaView style={[styles.absolute, styles.topmostButtons]}>
-                <BackButton navigation={navigation} color='white' size={48}/>
+                <BackButton navigation={navigation} color='white' size={48} />
                 <TouchableOpacity
-                    style={[styles.button, {paddingTop: 6, paddingRight: 12}]}
+                    style={[styles.button, { paddingTop: 6, paddingRight: 12 }]}
                     onPress={() => navigation.navigate('Search')}
                 >
-                    <Ionicons 
+                    <Ionicons
                         name="search"
                         size={32}
                         color="white"
@@ -141,18 +141,18 @@ const VideoSingle = forwardRef((props, parentRef) => {
 
     // Should use the existing firestore increment functionality but I simply cannot get it working
     // This could probably still get confused if a lot of users are voting at the same time
-    const increment = async(item, incrementVal) => {
+    const increment = async (item, incrementVal) => {
         // Fetch the most recent number of up/downvotes, as it could have been up/downvoted by other
         // users since the page was loaded and we don't want to lose their votes
         const docSnap = await getDoc(docRef);
         const mostRecent = docSnap.data()[item];
-        const newVal = mostRecent+incrementVal;
-        await updateDoc(docRef, {[item]: newVal});
+        const newVal = mostRecent + incrementVal;
+        await updateDoc(docRef, { [item]: newVal });
         if (item == 'upvotes') {
-            await updateDoc(docRef, {upvotesMinusDownvotes: newVal-docSnap.data().downvotes});
+            await updateDoc(docRef, { upvotesMinusDownvotes: newVal - docSnap.data().downvotes });
         } else if (item == 'downvotes') {
-            setDownvotes(newVal);
-            await updateDoc(docRef, {upvotesMinusDownvotes: docSnap.data().upvotes-downvotes});
+            // setDownvotes(newVal); <- double counting
+            await updateDoc(docRef, { upvotesMinusDownvotes: docSnap.data().upvotes - downvotes });
         }
     }
 
@@ -166,57 +166,57 @@ const VideoSingle = forwardRef((props, parentRef) => {
                 isLooping
                 source={{ uri: props.item.videoDownloadURL }}
             />
-            <View style={{position: 'absolute', left: 0, right: 0, bottom: 0, padding: 10, paddingBottom: 15, paddingRight: 45}}>
-                <View style={{position: 'absolute', right: 0, bottom: 90, padding: 10, alignItems: 'center'}}>
+            <View style={{ position: 'absolute', left: 0, right: 0, bottom: 0, padding: 10, paddingBottom: 15, paddingRight: 45 }}>
+                <View style={{ position: 'absolute', right: 0, bottom: 90, padding: 10, alignItems: 'center' }}>
                     <TouchableOpacity
                         onPress={() => {
                             if (!upvoted) {
-                                setUpvotes(upvotes+1); // This is just the user-side display of upvote count, so it's okay to separate from actual database value
+                                setUpvotes(upvotes + 1); // This is just the user-side display of upvote count, so it's okay to separate from actual database value
                                 increment('upvotes', 1);
                                 setUpvoted(true);
                             } else {
-                                setUpvotes(upvotes-1);
+                                setUpvotes(upvotes - 1);
                                 increment('upvotes', -1);
                                 setUpvoted(false);
                             }
                         }}
-                        style={{alignItems: 'center'}}
+                        style={{ alignItems: 'center' }}
                     >
-                        <MaterialIcons name={upvoted ? 'thumb-up-alt' : 'thumb-up-off-alt'} size={28} color='white' iconStyle={{backgroundColor: 'white'}}/>
-                        <Text style={[styles.text, {fontSize: 12}]}>{upvotes}</Text>
+                        <MaterialIcons name={upvoted ? 'thumb-up-alt' : 'thumb-up-off-alt'} size={28} color='white' iconStyle={{ backgroundColor: 'white' }} />
+                        <Text style={[styles.text, { fontSize: 12 }]}>{upvotes}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => {
                             if (!downvoted) {
-                                setDownvotes(downvotes+1);
+                                setDownvotes(downvotes + 1);
                                 increment('downvotes', 1);
                                 setDownvoted(true);
                             } else {
-                                setDownvotes(downvotes-1);
+                                setDownvotes(downvotes - 1);
                                 increment('downvotes', -1);
                                 setDownvoted(false);
                             }
                         }}
-                        style={{marginTop: 20, alignItems: 'center'}}
+                        style={{ marginTop: 20, alignItems: 'center' }}
                     >
-                        <MaterialIcons name={downvoted ? 'thumb-down-alt': 'thumb-down-off-alt'} size={28} color='white'/>
-                        <Text style={[styles.text, {fontSize: 12}]}>{downvotes}</Text>
+                        <MaterialIcons name={downvoted ? 'thumb-down-alt' : 'thumb-down-off-alt'} size={28} color='white' />
+                        <Text style={[styles.text, { fontSize: 12 }]}>{downvotes}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                    onPress={() => {
-                        if (!saved) setSaved(true);
-                        else setSaved(false);
-                    }}
-                        style={{marginTop: 20, alignItems: 'center'}}
+                        onPress={() => {
+                            if (!saved) setSaved(true);
+                            else setSaved(false);
+                        }}
+                        style={{ marginTop: 20, alignItems: 'center' }}
                     >
-                        <Ionicons name={saved ? 'bookmark' : 'bookmark-outline'} size={28} color='white'/>
+                        <Ionicons name={saved ? 'bookmark' : 'bookmark-outline'} size={28} color='white' />
                     </TouchableOpacity>
                 </View>
-                <Text style={[styles.text, {fontSize: 16}]}>{props.item.userName}</Text>
+                <Text style={[styles.text, { fontSize: 16 }]}>{props.item.userName}</Text>
                 <Text
                     // Reviews don't currently include the corresponding product ID
                     // onPress={() => props.navigation.navigate('Product', {productId: props.item.productID})}
-                    style={[styles.text, {fontSize: 20, marginBottom: 9, marginTop: 11}]}
+                    style={[styles.text, { fontSize: 20, marginBottom: 9, marginTop: 11 }]}
                     numberOfLines={2}
                 >
                     {props.item.productName}
@@ -226,14 +226,14 @@ const VideoSingle = forwardRef((props, parentRef) => {
                         rating={props.item.rating}
                         starSize={16}
                         color='white'
-                        style={{alignSelf: 'center', marginLeft: -6, marginRight: -6, paddingRight: 7}}
+                        style={{ alignSelf: 'center', marginLeft: -6, marginRight: -6, paddingRight: 7 }}
                         alignSelf='center'
                         marginSubtract={-5}
                     />
-                    <Text style={[styles.text, {fontSize: 16}]}>{props.item.rating}</Text>
+                    <Text style={[styles.text, { fontSize: 16 }]}>{props.item.rating}</Text>
                 </View>
                 <ReadMore
-                    style={[styles.text, {fontSize: 16, marginTop: 24}]}
+                    style={[styles.text, { fontSize: 16, marginTop: 24 }]}
                     numberOfLines={2}
                     seeMoreText='more'
                     seeMoreStyle={styles.moreLess}
@@ -260,8 +260,8 @@ const getFeed = async (type, searchTerm, firstID) => {
     querySnapshot.forEach((doc) => {
         const id = doc.id;
         const data = doc.data();
-        if (typeof firstID != 'undefined' && id == firstID) arr.unshift({id, ...data});
-        else arr.push({id, ...data});
+        if (typeof firstID != 'undefined' && id == firstID) arr.unshift({ id, ...data });
+        else arr.push({ id, ...data });
     });
     return arr;
 }
