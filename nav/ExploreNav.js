@@ -1,13 +1,13 @@
 import * as React from 'react';
 
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createStackNavigator } from '@react-navigation/stack';
 
 import ExplorePage from '../pages/ExplorePage.js';
 import SearchPage from '../pages/SearchPage.js';
 import ProductPage from '../pages/ProductPage.js';
 import ReviewFeed from '../pages/ReviewPage.js';
 
-const Stack = createNativeStackNavigator();
+const Stack = createStackNavigator();
 
 export default function ExploreNav({ navigation, route }) {
     return (
@@ -18,7 +18,7 @@ export default function ExploreNav({ navigation, route }) {
             <Stack.Screen name="Explore" component={ExplorePage} />
             <Stack.Screen name="Search" component={SearchPage}
                 options={{
-                    animation: 'none',
+                    animationEnabled: false,
                 }}
             />
             <Stack.Screen name="Product" component={ProductPage} />

@@ -164,9 +164,8 @@ export default function UploadReviewPage({ navigation, route }) {
                 />
                 <View style={styles.buttonsContainer}>
                     <TouchableOpacity
-                        // onPress={() => navigation.goBack()}
+                        onPress={() => navigation.goBack()}
                         style={styles.cancelButton}>
-                        {/* <Feather name="x" size={24} color="black" /> */}
                         <Text style={styles.cancelButtonText}>Draft</Text>
                     </TouchableOpacity>
 
@@ -289,7 +288,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         justifyContent: 'center',
         borderRadius: 5,
-        marginRight: 10
     },
     tagText: {
         marginLeft: 5,

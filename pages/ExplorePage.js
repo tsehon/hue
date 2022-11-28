@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import SearchBar from 'react-native-elements/dist/searchbar/SearchBar-ios';
 
 import { StatusBar } from 'expo-status-bar';
@@ -16,8 +16,11 @@ import ProductsList from '../components/ProductsList';
 import VideoPreview from '../components/VideoPreviews';
 
 import { collection, getDocs } from "firebase/firestore";
+import { ref } from 'firebase/storage';
 
 export default function ExplorePage({ navigation, route }) {
+    const searchRef = useRef(null);
+
     const [data, setData] = useState([]);
     const [items, setItems] = useState([]);
     const [itemDict, setItemDict] = useState({});
@@ -27,8 +30,10 @@ export default function ExplorePage({ navigation, route }) {
             <FocusAwareStatusBar barStyle='dark-content'/>
             <ScrollView>
                 <SearchBar
+                    ref={searchRef}
                     style={styles.searchbar}
                     onPressIn={() => navigation.navigate('Search')}
+                    onFocus={() => searchRef.current.blur()}
                     placeholder="Search"
                     platform='ios'
                 />
