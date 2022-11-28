@@ -17,13 +17,6 @@ export default function HomePage({ navigation }) {
     <SafeAreaView style={styles.page} edges={['top', 'left', 'right']}>
       <FocusAwareStatusBar barStyle='dark-content'/>
       <ScrollView>
-        <SearchBar
-          style={styles.searchbar}
-          onPressIn={() => navigation.navigate('Search')}
-          placeholder="Search"
-          platform='ios'
-        />
-
         <HomePageSection
           title="Reviews For You"
           escapeStyle={{marginLeft: -10, marginRight: -10}}
@@ -64,13 +57,54 @@ export default function HomePage({ navigation }) {
               firstID='MXILb6SdiK9Sq5ZjIzZU'
               videoURI='https://test-videos.co.uk/vids/jellyfish/mp4/h264/1080/Jellyfish_1080_10s_2MB.mp4'
             />
+            <VideoPreview
+              style={{width: 137, height: 222, borderRadius: 10, marginLeft: 10}}
+              navigation={navigation}
+              searchType='categoryName'
+              searchQuery='Beauty'
+              firstID='2DtUlonFdbiimC0LNB18'
+              videoURI='https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_2MB.mp4'
+            />
+            <VideoPreview
+              style={{width: 137, height: 222, borderRadius: 10, marginLeft: 10}}
+              navigation={navigation}
+              searchType='categoryName'
+              searchQuery='Beauty'
+              firstID='izG3zce88U4wsXUvBqFM'
+              videoURI='https://test-videos.co.uk/vids/sintel/mp4/h264/1080/Sintel_1080_10s_2MB.mp4'
+            />
           </ScrollView>
         </HomePageSection>
 
         <HomePageSection
           title="Trending in Lawnmowers"
         >
-          
+          <ScrollView horizontal>
+            <VideoPreview
+              style={{width: 137, height: 222, borderRadius: 10}}
+              navigation={navigation}
+              searchType='categoryName'
+              searchQuery='Beauty'
+              firstID='MXILb6SdiK9Sq5ZjIzZU'
+              videoURI='https://test-videos.co.uk/vids/jellyfish/mp4/h264/1080/Jellyfish_1080_10s_2MB.mp4'
+            />
+            <VideoPreview
+              style={{width: 137, height: 222, borderRadius: 10, marginLeft: 10}}
+              navigation={navigation}
+              searchType='categoryName'
+              searchQuery='Beauty'
+              firstID='2DtUlonFdbiimC0LNB18'
+              videoURI='https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_2MB.mp4'
+            />
+            <VideoPreview
+              style={{width: 137, height: 222, borderRadius: 10, marginLeft: 10}}
+              navigation={navigation}
+              searchType='categoryName'
+              searchQuery='Beauty'
+              firstID='izG3zce88U4wsXUvBqFM'
+              videoURI='https://test-videos.co.uk/vids/sintel/mp4/h264/1080/Sintel_1080_10s_2MB.mp4'
+            />
+          </ScrollView>
         </HomePageSection>
 
         <HomePageSection
@@ -106,13 +140,63 @@ export default function HomePage({ navigation }) {
         <HomePageSection
           title="Trending in Tech"
         >
-          
+          <ScrollView horizontal>
+            <VideoPreview
+              style={{width: 137, height: 222, borderRadius: 10}}
+              navigation={navigation}
+              searchType='categoryName'
+              searchQuery='Beauty'
+              firstID='MXILb6SdiK9Sq5ZjIzZU'
+              videoURI='https://test-videos.co.uk/vids/jellyfish/mp4/h264/1080/Jellyfish_1080_10s_2MB.mp4'
+            />
+            <VideoPreview
+              style={{width: 137, height: 222, borderRadius: 10, marginLeft: 10}}
+              navigation={navigation}
+              searchType='categoryName'
+              searchQuery='Beauty'
+              firstID='2DtUlonFdbiimC0LNB18'
+              videoURI='https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_2MB.mp4'
+            />
+            <VideoPreview
+              style={{width: 137, height: 222, borderRadius: 10, marginLeft: 10}}
+              navigation={navigation}
+              searchType='categoryName'
+              searchQuery='Beauty'
+              firstID='izG3zce88U4wsXUvBqFM'
+              videoURI='https://test-videos.co.uk/vids/sintel/mp4/h264/1080/Sintel_1080_10s_2MB.mp4'
+            />
+          </ScrollView>
         </HomePageSection>
 
         <HomePageSection
           title="Trending in Skincare"
         >
-          
+          <ScrollView horizontal>
+            <VideoPreview
+              style={{width: 137, height: 222, borderRadius: 10}}
+              navigation={navigation}
+              searchType='categoryName'
+              searchQuery='Beauty'
+              firstID='MXILb6SdiK9Sq5ZjIzZU'
+              videoURI='https://test-videos.co.uk/vids/jellyfish/mp4/h264/1080/Jellyfish_1080_10s_2MB.mp4'
+            />
+            <VideoPreview
+              style={{width: 137, height: 222, borderRadius: 10, marginLeft: 10}}
+              navigation={navigation}
+              searchType='categoryName'
+              searchQuery='Beauty'
+              firstID='2DtUlonFdbiimC0LNB18'
+              videoURI='https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_2MB.mp4'
+            />
+            <VideoPreview
+              style={{width: 137, height: 222, borderRadius: 10, marginLeft: 10}}
+              navigation={navigation}
+              searchType='categoryName'
+              searchQuery='Beauty'
+              firstID='izG3zce88U4wsXUvBqFM'
+              videoURI='https://test-videos.co.uk/vids/sintel/mp4/h264/1080/Sintel_1080_10s_2MB.mp4'
+            />
+          </ScrollView>
         </HomePageSection>
 
       </ScrollView>

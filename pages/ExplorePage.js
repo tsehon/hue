@@ -44,6 +44,22 @@ export default function ExplorePage({ navigation, route }) {
                             firstID='MXILb6SdiK9Sq5ZjIzZU'
                             videoURI='https://test-videos.co.uk/vids/jellyfish/mp4/h264/1080/Jellyfish_1080_10s_2MB.mp4'
                         />
+                        <VideoPreview
+                            style={{width: 137, height: 222, borderRadius: 10, marginLeft: 10}}
+                            navigation={navigation}
+                            searchType='categoryName'
+                            searchQuery='Beauty'
+                            firstID='2DtUlonFdbiimC0LNB18'
+                            videoURI='https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_2MB.mp4'
+                        />
+                        <VideoPreview
+                            style={{width: 137, height: 222, borderRadius: 10, marginLeft: 10}}
+                            navigation={navigation}
+                            searchType='categoryName'
+                            searchQuery='Beauty'
+                            firstID='izG3zce88U4wsXUvBqFM'
+                            videoURI='https://test-videos.co.uk/vids/sintel/mp4/h264/1080/Sintel_1080_10s_2MB.mp4'
+                        />
                     </ScrollView>
                 </HomePageSection>
                 <HomePageSection

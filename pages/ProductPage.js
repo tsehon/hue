@@ -9,6 +9,7 @@ import BackButton from '../components/BackButton';
 import ProductReviewsGrid from '../components/ProductReviewsGrid';
 import FocusAwareStatusBar from '../components/FocusAwareStatusBar';
 import { ImgCarousel } from '../components/ImgCarousel';
+import Header from '../components/Header';
 
 import { doc, getDoc, getDocs, collection } from "firebase/firestore";
 import db from '../config/firebase';
@@ -52,10 +53,7 @@ export default function ProductPage({ navigation, route }) {
     <SafeAreaView style={styles.page} edges={['top', 'left', 'right']}>
       <FocusAwareStatusBar barStyle='dark-content'/>
       <ScrollView>
-        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', padding: 12, marginBottom: 18 }}>
-          <BackButton navigation={navigation} size={30} color={'black'} style={{position: 'absolute', left: 12}}></BackButton>
-          <Text style={[styles.title, {lineHeight: 23}]}>{productBrand}</Text>
-        </View>
+        <Header navigation={navigation} title={productBrand} style={{marginBottom: 18}}/>
         <View
           style={styles.centered}
         >

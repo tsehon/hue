@@ -13,6 +13,8 @@ import { storage } from '../config/firebase';
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { doc, collection, addDoc, updateDoc } from "firebase/firestore";
 import CameraPage from './CameraPage';
+import Header from '../components/Header';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import FocusAwareStatusBar from '../components/FocusAwareStatusBar';
 
 const videosRef = ref(storage, 'videos');
@@ -96,111 +98,101 @@ export default function UploadReviewPage({ navigation, route }) {
     if (requestRunning) {
         return (
             <View style={styles.uploadingContainer}>
-                <FocusAwareStatusBar barStyle='light-content'/>
+                <FocusAwareStatusBar barStyle='dark-content'/>
                 <ActivityIndicator color='red' size='large' />
             </View>
         )
     }
 
     return (
-        <ScrollView containerStyle={styles.container}>
-            <FocusAwareStatusBar barStyle='light-content'/>
-            <View style={styles.topSpacer}>
-            </View>
-            <View style={styles.formContainer}>
-                <TextInput
-                    style={styles.inputText}
-                    maxLength={30}
-                    onChangeText={(text) => setProductName(text.trim())}
-                    placeholder="Product Name"
-                />
-            </View>
-            <View style={styles.formContainer}>
-                <TextInput
-                    style={styles.inputText}
-                    maxLength={150}
-                    multiline
-                    onChangeText={(text) => setDescription(text.trim())}
-                    placeholder="Write your review"
-                    onSubmitEditing={Keyboard.dismiss}
-                />
-                <Image
-                    style={styles.mediaPreview}
-                    source={{ uri: route.params.sourceThumb }}
-                />
-            </View>
-            <View style={styles.ratingBoxContainer}>
-                <Text style={{ marginBottom: 1 }}> Rate {productName} </Text>
-                <View style={[{ flex: 1, flexDirection: 'row', justifyContent: 'space-evenly' }, styles.star]}>
+        <SafeAreaView style={styles.page} edges={['top', 'left', 'right']}>
+            <FocusAwareStatusBar barStyle='dark-content'/>
+            <View style={styles.container}>
+                <Header navigation={navigation} title='Post a review' style={{marginBottom: 8}}/>
+                <View style={[styles.formContainer, {borderTopColor: 'lightgrey', borderTopWidth: 1,}]}>
+                    <TextInput
+                        style={[styles.inputText, styles.text]}
+                        maxLength={30}
+                        onChangeText={(text) => setProductName(text.trim())}
+                        placeholder="Product Name"
+                        returnKeyType='done'
+                    />
+                </View>
+                <View style={[styles.formContainer, {alignItems: 'flex-start'}]}>
+                    <TextInput
+                        style={[styles.inputText, styles.text]}
+                        maxLength={180}
+                        onChangeText={(text) => setDescription(text.trim())}
+                        placeholder="Write your review"
+                        returnKeyType='done'
+                    />
+                    <TouchableOpacity>
+                        <Image
+                            style={styles.mediaPreview}
+                            source={{ uri: route.params.sourceThumb }}
+                        />
+                        <Text style={styles.mediaPreviewOverlay}>Set Cover</Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.bottomFormContainer}>
+                    <Text style={styles.text}> Rating </Text>
                     <Stars
                         rating={rating}
-                        starSize={50}
+                        starSize={32}
                         disabled={false}
-                        alignSelf={'flex-end'}
                         onChange={setRating}
                     />
                 </View>
-            </View>
-            <View style={styles.tagBoxContainer}>
-                <Text style={{ marginBottom: 10 }}> Tags </Text>
-                <ScrollView horizontal containerStyle={styles.tagsContainer}>
-                    <TouchableOpacity
-                        style={styles.tag}>
-                        <Text style={styles.tagText}>fragile</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={styles.tag}>
-                        <Text style={styles.tagText}>smears</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={styles.tag}>
-                        <Text style={styles.tagText}>tag 3</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={styles.tag}>
-                        <Text style={styles.tagText}>tag 4</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={styles.tag}>
-                        <Text style={styles.tagText}>tag 5</Text>
-                    </TouchableOpacity>
-                </ScrollView>
-            </View>
-            <View style={styles.formContainer}>
-                <Text> Brand </Text>
-            </View>
-            <View style={styles.formContainer}>
-                <Text> Category </Text>
-            </View>
-            <View style={styles.formContainer}>
-                <Text> Link </Text>
-            </View>
-            <View style={styles.spacer}
-                onClick={() => null}
-            />
-            <View style={styles.buttonsContainer}>
-                <TouchableOpacity
-                    onPress={() => navigation.goBack()}
-                    style={styles.cancelButton}>
-                    <Feather name="x" size={24} color="black" />
-                    <Text style={styles.cancelButtonText}>Cancel</Text>
+                <TouchableOpacity style={styles.bottomFormContainer}>
+                    <Text style={styles.text}> Tags </Text>
+                    <Feather name="plus" size={24} color="black" />
                 </TouchableOpacity>
+                <TouchableOpacity style={styles.bottomFormContainer}>
+                    <Text style={styles.text}> Brand </Text>
+                    <Feather name="plus" size={24} color="black" />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.bottomFormContainer}>
+                    <Text style={styles.text}> Category </Text>
+                    <Feather name="plus" size={24} color="black" />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.bottomFormContainer}>
+                    <Text style={styles.text}> Link </Text>
+                    <Feather name="plus" size={24} color="black" />
+                </TouchableOpacity>
+                <View style={styles.spacer}
+                    onClick={() => null}
+                />
+                <View style={styles.buttonsContainer}>
+                    <TouchableOpacity
+                        // onPress={() => navigation.goBack()}
+                        style={styles.cancelButton}>
+                        {/* <Feather name="x" size={24} color="black" /> */}
+                        <Text style={styles.cancelButtonText}>Draft</Text>
+                    </TouchableOpacity>
 
-                <TouchableOpacity
-                    onPress={() => handlePost()}
-                    style={styles.postButton}>
-                    <Feather name="corner-left-up" size={24} color="white" />
-                    <Text style={styles.postButtonText}>Post</Text>
-                </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => handlePost()}
+                        style={styles.postButton}>
+                        <Feather name="corner-left-up" size={24} color="black" />
+                        <Text style={styles.postButtonText}>Post review</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
-        </ScrollView>
+        </SafeAreaView>
     )
 }
 
 const styles = StyleSheet.create({
+    page: {
+        flex: 1,
+        backgroundColor: 'white',
+    },
+    text: {
+        fontSize: 14,
+        fontFamily: 'Plus-Jakarta-Sans',
+    },
     container: {
         flex: 1,
-        paddingTop: 30,
         backgroundColor: 'white'
     },
     uploadingContainer: {
@@ -217,19 +209,19 @@ const styles = StyleSheet.create({
     },
     formContainer: {
         padding: 20,
+        paddingTop: 15,
+        paddingBottom: 15,
         flexDirection: 'row',
         borderBottomColor: 'lightgrey',
         borderBottomWidth: 1,
     },
-    tagBoxContainer: {
+    bottomFormContainer: {
         padding: 20,
-        borderBottomColor: 'lightgrey',
-        borderBottomWidth: 1,
-    },
-    ratingBoxContainer: {
-        padding: 20,
-        borderBottomColor: 'lightgrey',
-        borderBottomWidth: 1,
+        paddingTop: 15,
+        paddingBottom: 15,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
     },
     tagsContainer: {
         flexDirection: 'row',
@@ -249,7 +241,18 @@ const styles = StyleSheet.create({
     mediaPreview: {
         aspectRatio: 9 / 16,
         backgroundColor: 'black',
-        width: 60
+        width: 90
+    },
+    mediaPreviewOverlay: {
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        padding: 7,
+        textAlign: 'center',
+        backgroundColor: '#7D7D7D',
+        fontSize: 12,
+        fontFamily: 'Plus-Jakarta-Sans',
     },
     tag: {
         flexDirection: 'row',
@@ -268,25 +271,24 @@ const styles = StyleSheet.create({
     },
     cancelButton: {
         alignItems: 'center',
-        flex: 1,
-        borderColor: 'lightgray',
-        borderWidth: 1,
+        flexGrow: 1,
+        backgroundColor: '#EDEDED',
         flexDirection: 'row',
         paddingVertical: 10,
         paddingHorizontal: 20,
         justifyContent: 'center',
-        borderRadius: 4,
-        marginRight: 10
+        borderRadius: 5,
+        marginRight: 5,
     },
     postButton: {
         alignItems: 'center',
-        flex: 1,
-        backgroundColor: '#ff4040',
+        flexGrow: 2,
+        backgroundColor: '#B3B3B3',
         flexDirection: 'row',
         paddingVertical: 10,
         paddingHorizontal: 20,
         justifyContent: 'center',
-        borderRadius: 4,
+        borderRadius: 5,
         marginRight: 10
     },
     tagText: {
@@ -296,14 +298,12 @@ const styles = StyleSheet.create({
     },
     cancelButtonText: {
         marginLeft: 5,
-        color: 'black',
-        fontWeight: 'bold',
+        fontFamily: 'Plus-Jakarta-Sans',
         fontSize: 16
     },
     postButtonText: {
         marginLeft: 5,
-        color: 'white',
-        fontWeight: 'bold',
+        fontFamily: 'PlusJakartaSans-SemiBold',
         fontSize: 16
     }
 });

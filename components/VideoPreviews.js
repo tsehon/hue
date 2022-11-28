@@ -18,7 +18,7 @@ export default function VideoPreview(props) {
             }}
         >
             <Thumbnail
-                style={props.style}
+                style={[props.style, {marginLeft: 0, marginRight: 0, marginTop: 0, marginBottom: 0}]}
                 videoURI={props.videoURI}
                 imgURI={props.imgURI}
             />
