@@ -17,6 +17,8 @@ import { Feather } from '@expo/vector-icons'
 
 import FocusAwareStatusBar from '../components/FocusAwareStatusBar';
 
+let lastPress = 0;
+
 export default function CameraPage({ navigation, route }) {
 
     const [video, setVideo] = useState(null);
@@ -52,6 +54,18 @@ export default function CameraPage({ navigation, route }) {
             }
         })()
     }, [])
+
+    // flip the camera on a double tap
+    const handleClick = (event) => {
+        const time = new Date().getTime();
+        const delta = time - lastPress;
+
+        const DOUBLE_PRESS_DELAY = 400;
+        if (delta < DOUBLE_PRESS_DELAY) {
+            setCameraType(cameraType === Camera.Constants.Type.back ? Camera.Constants.Type.front : Camera.Constants.Type.back);
+        }
+        lastPress = time;
+    };
 
     const recordVideo = async () => {
         if (cameraRef) {
@@ -145,7 +159,9 @@ export default function CameraPage({ navigation, route }) {
 
 
     return (
-        <View style={styles.container}>
+        <View style={styles.container}
+            onStartShouldSetResponder={(event) => handleClick(event)}
+        >
             <FocusAwareStatusBar barStyle='light-content' />
             {isFocused ?
                 <Camera

@@ -244,7 +244,8 @@ const styles = StyleSheet.create({
     mediaPreview: {
         aspectRatio: 9 / 16,
         backgroundColor: 'black',
-        width: 90
+        width: 90,
+        borderRadius: 10,
     },
     mediaPreviewOverlay: {
         position: 'absolute',
