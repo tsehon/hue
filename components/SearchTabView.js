@@ -9,18 +9,22 @@ const Tab = createMaterialTopTabNavigator();
 export default function SearchTabView({ data, dict, navigation }) {
     const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
+    const [reviews, setReviews] = useState([]);
 
     useEffect(() => {
         const prods = [];
         const cats = [];
+        const revs = [];
 
         for (e of data) {
             if (dict[e].type == 'product') prods.push(e);
             else if (dict[e].type == 'category') cats.push(dict[e].name);
+            else if (dict[e].type == 'review') revs.push(dict[e]);
         }
 
         setProducts(prods);
         setCategories(cats);
+        setReviews(revs);
     }, [])
 
     return (
