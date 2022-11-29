@@ -19,7 +19,7 @@ export default function HomePage({ navigation }) {
       <ScrollView>
         <HomePageSection
           title="Reviews For You"
-          escapeStyle={{marginLeft: -10, marginRight: -10}}
+          escapeStyle={{marginLeft: -10, marginRight: -10, alignItems: 'center'}}
         >
           <ReviewCarousel
             data={[
@@ -34,7 +34,7 @@ export default function HomePage({ navigation }) {
                 videoURI:'https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_2MB.mp4',
               }
             ]}
-            style={{ width: '100%' }}
+            style={ styles.reviewdisplay }
             navigation={navigation}
           />
         </HomePageSection>
@@ -231,4 +231,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  reviewdisplay: {
+    width: '100%',
+    alignSelf: 'center',
+  }
 });

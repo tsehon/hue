@@ -9,13 +9,10 @@ import { clearModal } from '../redux/actions/commentModal';
 import { commentListener, addComment, clearCommentListener } from '../services/comments';
 
 const CommentItem = ({ item }) => {
-    const user = useUser(item.creator).data
-    console.log(user)
-
     return (
         <View style={styles.itemcontainer}>
             <View style={styles.containerText}>
-                <Text style={styles.displayName}>{user ? user.displayName : "user"}</Text>
+                <Text style={styles.displayName}>{item.creator}</Text>
                 <Text>{item.comment}</Text>
             </View>
         </View>
@@ -24,19 +21,22 @@ const CommentItem = ({ item }) => {
 
 const CommentSubModal = ({ post }) => {
     const [comment, setComment] = useState('')
-    const [commentList, setCommentList] = useState('')
+    const [commentList, setCommentList] = useState([])
 
     useEffect(() => {
-        // commentListener(post.id, setCommentList);
-        // return () => clearCommentListener();
+        console.log("id is " + post.id);
+        commentListener(post.id, setCommentList);
+        return () => clearCommentListener();
     }, [])
 
     const handleCommentSend = () => {
         if (comment.length == 0) {
             return;
         }
-        // setComment('')
-        // addComment(post.id, currentUser.uid, comment)
+        setComment('')
+        addComment(post.id, 'username', comment)
+        console.log("comment is " + comment);
+        commentListener(post.id, setCommentList);
     }
 
     const renderItem = ({ item }) => {
@@ -76,6 +76,7 @@ export default function CommentModal({ navigation, route }) {
     }, [modalState])
 
     const renderContent = () => {
+        console.log(modalState.data);
         switch (modalState.modalType) {
             case 0:
                 return (<CommentSubModal post={modalState.data} />)
@@ -103,7 +104,8 @@ export default function CommentModal({ navigation, route }) {
 
 const styles = StyleSheet.create({
     itemcontainer: {
-        padding: 20,
+        paddingHorizontal: 20,
+        paddingVertical: 10,
         flexDirection: 'row',
         flex: 1,
     },
