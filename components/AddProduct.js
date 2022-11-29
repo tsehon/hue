@@ -16,7 +16,7 @@ import FocusAwareStatusBar from '../components/FocusAwareStatusBar';
 import * as ImagePicker from 'expo-image-picker'
 import * as MediaLibrary from 'expo-media-library'
 
-export default function AddProduct({navigation}) {
+export default function AddProduct({navigation, route}) {
     const [productName, setProductName] = useState('');
     const [brand, setBrand] = useState('');
     const [category, setCategory] = useState('');
@@ -63,7 +63,7 @@ export default function AddProduct({navigation}) {
             category: category,
             link: link,
             price: price,
-            avgRating: Math.random()*1.5 + 3.5,
+            avgRating: Math.round((Math.random()*1.5 + 3.5) * 10)/10,
             numRatings: 0,
         });
 
@@ -73,7 +73,15 @@ export default function AddProduct({navigation}) {
 
         console.log('product upload complete')
         setRequestRunning(false);
-        navigation.goBack();
+        if (!route.params.fromUpload) navigation.goBack();
+        else {
+            navigation.navigate('Upload', {
+                id: (String)(docRef.id),
+                productName: productName,
+                productBrand: brand,
+                productCategory: category,
+            })
+        }
     }
 
     const postMedia = async (docID, media, i) => {
