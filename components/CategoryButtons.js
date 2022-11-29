@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, TouchableOpacity, Button, ScrollView } from 're
 function CategoryButton(props) {
     return (
         <TouchableOpacity
-            style={styles.button}
+            style={[styles.button, {width: props.buttonWidth}]}
             onPress={() => {
                 props.navigation.push('ReviewFeed', {
                     searchType: 'categoryName',
@@ -32,6 +32,7 @@ export default function CategoryButtonGrid(props) {
                     <CategoryButton
                         key={index}
                         title={element}
+                        buttonWidth={props.buttonWidth}
                         navigation={props.navigation}
                     />
                 </View>
@@ -44,8 +45,7 @@ export default function CategoryButtonGrid(props) {
 const styles = StyleSheet.create({
     button: {
         backgroundColor: '#EDEDED',
-        // width: 174,
-        width: 180,
+        // width: 180,
         height: 84,
         borderRadius: 10,
         paddingTop: 10,

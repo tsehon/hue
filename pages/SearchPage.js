@@ -4,13 +4,14 @@ import SearchBar from 'react-native-elements/dist/searchbar/SearchBar-ios';
 import { StyleSheet, Text, View, SafeAreaView, FlatList, ScrollView, TouchableOpacity } from 'react-native';
 import { collection, getDocs } from "firebase/firestore";
 
-import { Feather, FontAwesome5 , Ionicons } from '@expo/vector-icons';
+import { Feather, MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 
 import db from '../config/firebase';
 
 import SearchItem from '../lib/SearchItem';
 import BackButton from '../components/BackButton';
 import FocusAwareStatusBar from '../components/FocusAwareStatusBar';
+import SearchTabView from '../components/SearchTabView';
 
 export default function SearchPage({ navigation, route }) {
     const [query, setQuery] = useState(route.text);
@@ -20,6 +21,8 @@ export default function SearchPage({ navigation, route }) {
     const [itemDict, setItemDict] = useState({});
 
     const [recentlyViewed, setRecentlyViewed] = useState([]);
+
+    const [submitted, setSubmitted] = useState(false);
 
     useEffect(() => {
         fetchData();
@@ -63,6 +66,7 @@ export default function SearchPage({ navigation, route }) {
     };
 
     const filterResults = (input) => {
+        setSubmitted(false);
         setQuery(input);
 
         if (input.trim()) {
@@ -108,11 +112,8 @@ export default function SearchPage({ navigation, route }) {
                         }
                     }}
                 >
-                    <Ionicons
-                        name='ios-search'
-                        size={20}
-                        color='black'
-                    />
+                    {query ? <Ionicons name='ios-search' size={20} color='black' /> : 
+                        <MaterialCommunityIcons name="clock-time-four-outline" size={20} color="black" />}
                     <Text style={[styles.text, {marginLeft: 15}]}>
                         {name}
                     </Text>
@@ -138,19 +139,23 @@ export default function SearchPage({ navigation, route }) {
                 <SearchBar
                     containerStyle={styles.searchbar}
                     onChangeText={filterResults}
+                    onSubmitEditing={() => setSubmitted(true)}
                     value={query}
                     placeholder="Search for a product or category..."
+                    returnKeyType='search'
                     platform='ios'
                     autoFocus={true}
                 />
             </SafeAreaView>
-            <FlatList
-                data={ query ? items : recentlyViewed }
-                keyExtractor={(item) => item}
-                extraData={query}
-                renderItem={renderSearchItem}
-                keyboardShouldPersistTaps='handled'
-            />
+            { !submitted ?
+                <FlatList
+                    data={ query ? items : recentlyViewed }
+                    keyExtractor={(item) => item}
+                    extraData={query}
+                    renderItem={renderSearchItem}
+                    keyboardShouldPersistTaps='handled'
+                /> : <SearchTabView data={items} dict={itemDict} navigation={navigation}/>
+            }
         </SafeAreaView>
     );
 }

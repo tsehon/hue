@@ -42,7 +42,7 @@ export default function HomePage({ navigation }) {
         <HomePageSection
           title="Trending Categories"
         >
-          <CategoryButtonGrid categories={["Beauty", "Lawnmowers", "Tech", "Skincare"]} navigation={navigation}/>
+          <CategoryButtonGrid categories={["Beauty", "Lawnmowers", "Tech", "Skincare"]} buttonWidth={180} navigation={navigation}/>
         </HomePageSection>
 
         <HomePageSection

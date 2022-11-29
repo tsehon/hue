@@ -139,6 +139,8 @@ export default function UploadReviewPage({ navigation, route }) {
                     <Stars
                         rating={rating}
                         starSize={32}
+                        color='#FFB800'
+                        emptyColor='#FFB800'
                         disabled={false}
                         onChange={setRating}
                     />

@@ -42,13 +42,15 @@ function Product(props) {
         >
             <Image style={{width: 172, height: 172, borderRadius: 10}} source={{uri: productImage}} />
             <Text style={[styles.text, {marginTop: 9}]} numberOfLines={1}>{productName}</Text>
-            <Text style={[styles.text, {marginTop: 3, marginBottom: 9}]}>${productPrice}</Text>
+            <Text style={[styles.text, {marginTop: 3, marginBottom: 1}]}>${productPrice}</Text>
             <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
                 <Stars
                     rating={productRating}
                     disabled={true}
                     starSize={14}
-                    style={{alignSelf: 'center'}}
+                    style={{alignSelf: 'center', marginLeft: -6}}
+                    color='#FFB800'
+                    emptyColor='#FFB800'
                 />
                 <Text
                     style={styles.subtext}
