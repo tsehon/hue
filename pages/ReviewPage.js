@@ -66,7 +66,7 @@ export default function ReviewFeed({ navigation, route }) {
                 maxToRenderPerBatch={2}
                 removeClippedSubviews
                 viewabilityConfig={{
-                    itemVisiblePercentThreshold: 100,
+                    itemVisiblePercentThreshold: 50,
                 }}
                 renderItem={renderItem}
                 pagingEnabled

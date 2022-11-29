@@ -10,7 +10,7 @@ function Product(props) {
     // const productId = props.id;
     const [productId, setproductId] = useState('');
     const [productName, setProductName] = useState('');
-    const [productPrice, setProductPrice] = useState(0);
+    // const [productPrice, setProductPrice] = useState(0);
     const [productBrand, setProductBrand] = useState('');
     const [productCategory, setProductCategory] = useState('');
     const [productRating, setProductRating] = useState(0.0);
@@ -32,8 +32,8 @@ function Product(props) {
 
         const item = docSnap.data();
         setProductName(item.name);
-        if (item.price%1==0) setProductPrice(item.price);
-        else setProductPrice(item.price.toFixed(2));
+        // if (item.price%1==0) setProductPrice(item.price);
+        // else setProductPrice(item.price.toFixed(2));
         setProductBrand(item.brand);
         setProductCategory(item.category);
         setProductRating(item.avgRating);
