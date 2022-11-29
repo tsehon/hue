@@ -21,7 +21,7 @@ import FocusAwareStatusBar from '../components/FocusAwareStatusBar';
  * Unlike with startIndex, the firstID video will be the very first item in the FlatList
  * @returns 
  */
-export default function ReviewFeed({ route, navigation }) {
+export default function ReviewFeed({ navigation, route }) {
     const [videos, setVideos] = useState([]);
     const flatListRef = useRef(null);
     const refs = useRef([]);
@@ -139,6 +139,10 @@ const VideoSingle = forwardRef((props, parentRef) => {
         }
     }
 
+    const handleProductClick = ({ item }) => {
+        props.navigation.navigate('Product', { productId: item });
+    }
+
     // Should use the existing firestore increment functionality but I simply cannot get it working
     // This could probably still get confused if a lot of users are voting at the same time
     const increment = async (item, incrementVal) => {
@@ -151,7 +155,6 @@ const VideoSingle = forwardRef((props, parentRef) => {
         if (item == 'upvotes') {
             await updateDoc(docRef, { upvotesMinusDownvotes: newVal - docSnap.data().downvotes });
         } else if (item == 'downvotes') {
-            // setDownvotes(newVal); <- double counting
             await updateDoc(docRef, { upvotesMinusDownvotes: docSnap.data().upvotes - downvotes });
         }
     }
@@ -242,6 +245,7 @@ const VideoSingle = forwardRef((props, parentRef) => {
                     // onPress={() => props.navigation.navigate('Product', {productId: props.item.productID})}
                     style={[styles.text, { fontSize: 20, marginBottom: 9, marginTop: 11 }]}
                     numberOfLines={2}
+                    onPress={() => handleProductClick( props.item ) }
                 >
                     {props.item.productName}
                 </Text>
