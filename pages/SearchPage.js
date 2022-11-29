@@ -168,7 +168,7 @@ export default function SearchPage({ navigation, route, productsOnly }) {
                     placeholder="Search for a product or category..."
                     returnKeyType='search'
                     platform='ios'
-                    autoFocus={true}
+                    autoFocus={productsOnly ? false : true}
                 />
             </SafeAreaView>
             { !productsOnly ?

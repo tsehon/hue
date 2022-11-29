@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 
 import { StyleSheet } from "react-native";
 import { Keyboard } from 'react-native';
@@ -31,6 +31,8 @@ export default function UploadReviewPage({ navigation, route }) {
     const [sourceThumb, setSourceThumb] = useState('');
 
     const [requestRunning, setRequestRunning] = useState(false);
+
+    const searchRef = useRef(null);
 
     useEffect(() => {
         if (route.params.source) setSource(route.params.source);
@@ -134,9 +136,13 @@ export default function UploadReviewPage({ navigation, route }) {
                 <Header navigation={navigation} title='Post a review' style={{marginBottom: 8}}/>
                 <View style={[styles.formContainer, {borderTopColor: 'lightgrey', borderTopWidth: 1,}]}>
                     <TextInput
+                        ref={searchRef}
                         style={[styles.inputText, styles.text]}
                         maxLength={30}
-                        onFocus={() => navigation.navigate('UploadSearch')}
+                        onFocus={() => {
+                            navigation.navigate('UploadSearch')
+                            searchRef.current.blur()
+                        }}
                         placeholder="Product Name"
                         value={productName}
                         returnKeyType='done'
@@ -305,7 +311,7 @@ const styles = StyleSheet.create({
     postButton: {
         alignItems: 'center',
         flexGrow: 2,
-        backgroundColor: '#B3B3B3',
+        backgroundColor: '#ff6868',
         flexDirection: 'row',
         paddingVertical: 10,
         paddingHorizontal: 20,

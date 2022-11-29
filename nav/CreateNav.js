@@ -1,13 +1,13 @@
 import * as React from 'react';
 
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createStackNavigator } from '@react-navigation/stack';
 
 import CameraPage from '../pages/CameraPage.js';
 import UploadReviewPage from '../pages/UploadReviewPage.js';
 import UploadReviewSearch from '../components/UploadReviewSearch.js';
 import AddProduct from '../components/AddProduct.js';
 
-const Stack = createNativeStackNavigator();
+const Stack = createStackNavigator();
 
 export default function CreateNav({ navigation, route }) {
     return (

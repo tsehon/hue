@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-import { StyleSheet } from "react-native";
+import { Keyboard, StyleSheet } from "react-native";
 import { ScrollView, ActivityIndicator, Image, Text, TextInput, TouchableOpacity, View } from 'react-native'
 
 import { Feather, MaterialIcons } from '@expo/vector-icons'
@@ -181,7 +181,10 @@ export default function AddProduct({navigation, route}) {
                         returnKeyType='done'
                     />
                 </View>
-                <TouchableOpacity style={styles.bottomFormContainer} onPress={() => pickFromGallery()}>
+                <TouchableOpacity style={styles.bottomFormContainer} onPress={() => {
+                    Keyboard.dismiss()
+                    pickFromGallery()
+                }}>
                     <Text style={styles.text}> Images </Text>
                     <Feather name="plus" size={24} color="black" />
                 </TouchableOpacity>
