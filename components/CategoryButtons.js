@@ -1,5 +1,5 @@
 import { StyleSheet, View, Text, TouchableOpacity, Button, ScrollView } from 'react-native'
-import { Ionicons, Feather, MaterialIcons } from '@expo/vector-icons';
+import { Ionicons, Feather, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 
 const colors = {
     'Beauty': '#fddfdf',
@@ -9,10 +9,10 @@ const colors = {
 };
 
 const icons = {
-    'Beauty': 'diamond',
-    'Lawnmowers': 'eco',
-    'Tech': 'computer',
-    'Skincare': 'pink',
+    'Beauty': <Feather fill={0} name={'heart'} size={28}/>,
+    'Lawnmowers': <Ionicons fill={0} name={'leaf-outline'} size={28}/>,
+    'Tech': <MaterialIcons fill={0} name={'computer'} size={28}/>,
+    'Skincare': <MaterialCommunityIcons fill={0} name={'face-man-shimmer-outline'} size={28}/>,
 };
 
 function CategoryButton(props) {
@@ -24,7 +24,7 @@ function CategoryButton(props) {
                 left: '70%',
                 bottom: '-5%',
             }}>
-                <MaterialIcons fill={0} name={icons[title]} size={28}  />
+                { icons[title]}
             </View>
         );
     }
