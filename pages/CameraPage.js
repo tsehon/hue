@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+
 import { Camera } from 'expo-camera';
 import { Audio } from 'expo-av'
 import { StyleSheet } from 'react-native';
@@ -9,7 +10,9 @@ import * as ImagePicker from 'expo-image-picker'
 import * as MediaLibrary from 'expo-media-library'
 import * as VideoThumbnails from 'expo-video-thumbnails';
 
-import { useIsFocused } from '@react-navigation/core'
+import CircularProgress from 'react-native-circular-progress-indicator';
+
+import { CurrentRenderContext, useIsFocused } from '@react-navigation/core'
 import { Feather } from '@expo/vector-icons'
 
 import FocusAwareStatusBar from '../components/FocusAwareStatusBar';
@@ -29,12 +32,11 @@ export default function CameraPage({ navigation, route }) {
     const [cameraFlash, setCameraFlash] = useState(Camera.Constants.FlashMode.off);
 
     const [isCameraReady, setIsCameraReady] = useState(false);
+    const [isRecording, setIsRecording] = useState(false);
     const isFocused = useIsFocused();
 
     useEffect(() => {
         (async () => {
-            navigation.setOptions({ tabBarStyle: { display: 'none' } });
-
             const cameraStatus = await Camera.requestCameraPermissionsAsync()
             setHasCameraPermissions(cameraStatus.status == 'granted')
 
@@ -51,14 +53,31 @@ export default function CameraPage({ navigation, route }) {
         })()
     }, [])
 
-
     const recordVideo = async () => {
         if (cameraRef) {
+            setIsRecording(true);
             try {
                 const options = { maxDuration: 60, quality: Camera.Constants.VideoQuality['720p'] }
                 const videoRecordPromise = cameraRef.recordAsync(options)
+
+
                 if (videoRecordPromise) {
                     const data = await videoRecordPromise;
+                    setIsRecording(false);
+
+                    /*
+                    var count = 0;
+                    var timer = setInterval(function () {
+                        count += 1;
+                        timerValue = count / 60.0;
+                        console.log(timerValue);
+                        if (timerValue >= 1 || data) {
+                            clearInterval(timer)
+                        };
+                    }, 1000);
+                    timerValue = 0;
+                    */
+
                     const source = data.uri
                     const sourceThumb = await generateThumbnail(source)
 
@@ -123,9 +142,11 @@ export default function CameraPage({ navigation, route }) {
         )
     }
 
+
+
     return (
         <View style={styles.container}>
-            <FocusAwareStatusBar barStyle='light-content'/>
+            <FocusAwareStatusBar barStyle='light-content' />
             {isFocused ?
                 <Camera
                     ref={ref => setCameraRef(ref)}
@@ -165,8 +186,41 @@ export default function CameraPage({ navigation, route }) {
                         disabled={!isCameraReady}
                         onLongPress={() => recordVideo()}
                         onPressOut={() => stopVideo()}
-                        style={styles.recordButton}
-                    />
+                        style={{ zIndex: 3 }}
+                    >
+                        {isRecording ?
+                            <View style={styles.recordButtonSubcontainer}
+                            >
+                                <View style={styles.recordButtonWhenOn} />
+                                <View style={styles.progressBar}>
+                                    <CircularProgress
+                                        value={60}
+                                        maxValue={60}
+                                        initialValue={0}
+                                        radius={55}
+                                        activeStrokeWidth={7}
+                                        duration={60000}
+                                        onAnimationComplete={() => stopVideo()}
+                                        strokeLinecap='butt'
+                                        progressValueColor="transparent"
+                                        inActiveStrokeOpacity={0.3}
+                                        inActiveStrokeWidth={5}
+                                        activeStrokeColor="#ff0000"
+                                        activeStrokeSecondaryColor="#ffffff55"
+                                        inActiveStrokeColor="black"
+                                        dashedStrokeConfig={{
+                                            count: 60,
+                                            width: 4,
+                                        }}
+                                    />
+                                </View>
+                            </View>
+                            :
+                            <View style={styles.recordButtonSubcontainer}>
+                                <View style={styles.recordButtonOff}/>
+                            </View>
+                        }
+                    </TouchableOpacity>
                 </View>
                 <View style={{ flex: 1 }}>
                     <TouchableOpacity
@@ -204,18 +258,45 @@ const styles = StyleSheet.create({
     },
     recordButtonContainer: {
         flex: 1,
-        marginHorizontal: 30,
+        marginLeft: 30,
+        marginBottom: 20,
     },
-    recordButton: {
+    recordButtonSubcontainer: {
+        flex: 1,
+        height: 70,
+        marginLeft: 10,
+        width: 70,
+        zIndex: 1,
+    },
+    recordButtonWhenOn: {
+        alignSelf: 'center',
+        zIndex: 2,
         borderWidth: 8,
-        borderColor: '#ff404087',
-        backgroundColor: '#ff4040',
+        borderColor: '#ff000022',
+        backgroundColor: '#ff000033',
         borderRadius: 100,
-        height: 80,
-        width: 80,
-        alignSelf: 'center'
+        height: 85,
+        width: 85,
+        top: -5,
+        alignSelf: 'center',
+    },
+    progressBar: {
+        alignSelf: 'center',
+        top: -102,
+        zIndex: 1,
+    },
+    recordButtonOff: {
+        borderWidth: 8,
+        borderColor: '#ff000099',
+        backgroundColor: '#ff0000aa',
+        borderRadius: 100,
+        height: 85,
+        width: 85,
+        top: -5,
+        alignSelf: 'center',
     },
     galleryButton: {
+        marginLeft: 20,
         borderWidth: 2,
         borderColor: 'white',
         borderRadius: 10,
