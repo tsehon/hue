@@ -11,6 +11,9 @@ import BackButton from '../components/BackButton';
 import Stars from '../components/Stars';
 import FocusAwareStatusBar from '../components/FocusAwareStatusBar';
 
+import { useDispatch, useSelector } from "react-redux";
+import { openCommentModal } from '../redux/actions/commentModal';
+
 /**
  * 
  * @param {integer} startIndex - The video at which to start the feed scrolled to
@@ -99,6 +102,8 @@ const VideoSingle = forwardRef((props, parentRef) => {
     const [upvoted, setUpvoted] = useState(false);
     const [downvoted, setDownvoted] = useState(false);
     const [saved, setSaved] = useState(false);
+
+    const dispatch = useDispatch()
 
     useImperativeHandle(parentRef, () => ({
         play,
@@ -238,6 +243,17 @@ const VideoSingle = forwardRef((props, parentRef) => {
                     >
                         <Ionicons name={saved ? 'bookmark' : 'bookmark-outline'} size={28} color='white' />
                     </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => {
+                            dispatch(openCommentModal(true, props.item))
+                        }}
+                        style={{ marginTop: 30, alignItems: 'center' }}
+                    >
+                        <Feather name={'message-square'} size={28} color='white' />
+                    </TouchableOpacity>
+                    <Text style={styles.actionButtonText}>
+                        {props.item.commentsCount ? props.item.commentsCount : null}
+                    </Text>
                 </View>
                 <Text style={[styles.text, { fontSize: 16 }]}>{props.item.userName}</Text>
                 <Text
@@ -245,7 +261,7 @@ const VideoSingle = forwardRef((props, parentRef) => {
                     // onPress={() => props.navigation.navigate('Product', {productId: props.item.productID})}
                     style={[styles.text, { fontSize: 20, marginBottom: 9, marginTop: 11 }]}
                     numberOfLines={2}
-                    onPress={() => handleProductClick( props.item ) }
+                    onPress={() => handleProductClick(props.item)}
                 >
                     {props.item.productName}
                 </Text>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 
 import { Camera } from 'expo-camera';
 import { Audio } from 'expo-av'
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Vibration } from 'react-native';
 
 import { View, Text, TouchableOpacity, Image } from 'react-native'
 
@@ -74,23 +74,9 @@ export default function CameraPage({ navigation, route }) {
                 const options = { maxDuration: 60, quality: Camera.Constants.VideoQuality['720p'] }
                 const videoRecordPromise = cameraRef.recordAsync(options)
 
-
                 if (videoRecordPromise) {
                     const data = await videoRecordPromise;
                     setIsRecording(false);
-
-                    /*
-                    var count = 0;
-                    var timer = setInterval(function () {
-                        count += 1;
-                        timerValue = count / 60.0;
-                        console.log(timerValue);
-                        if (timerValue >= 1 || data) {
-                            clearInterval(timer)
-                        };
-                    }, 1000);
-                    timerValue = 0;
-                    */
 
                     const source = data.uri
                     const sourceThumb = await generateThumbnail(source)

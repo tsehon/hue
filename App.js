@@ -6,18 +6,36 @@ import ExploreNav from './nav/ExploreNav';
 import SavedNav from './nav/SavedNav';
 import ProfileNav from './nav/ProfileNav';
 
-import ReviewFeed from './pages/ReviewPage';
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
+import { configureStore } from '@reduxjs/toolkit'
+
+import thunk from 'redux-thunk';
+import rootReducer from './redux/reducers/reducer';
 
 import { Feather } from '@expo/vector-icons';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 
-import  { useFonts } from 'expo-font';
+import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import React, { useEffect, useCallback } from 'react';
+import CommentModal from './components/CommentModal';
 
 const Tab = createMaterialBottomTabNavigator();
+
+/*
+const store = configureStore({
+  reducer: rootReducer,
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(thunk)
+});
+*/
+
+const store = createStore(
+  rootReducer,
+  applyMiddleware(thunk)
+)
 
 export default function MainDirectory() {
   const [fontsLoaded] = useFonts({
@@ -54,90 +72,93 @@ export default function MainDirectory() {
   if (!fontsLoaded) return null;
 
   return (
-    <NavigationContainer onReady={onLayoutRootView}>
-      <Tab.Navigator
-        screenOptions={{
-          headerShown: false,
+    <Provider store={store}>
+      <NavigationContainer onReady={onLayoutRootView}>
+        <Tab.Navigator
+          screenOptions={{
+            headerShown: false,
 
-        }}
-        backBehavior={{
-          initialRoute: "home",
-        }}
-        initialRouteName="Home"
-        barStyle={{ backgroundColor: 'white' }}
-      >
-        <Tab.Screen
-          name="HomeNav"
-          component={HomeNav}
-          options={{
-            tabBarLabel: "Home",
-            tabBarIcon: ({ color }) => (
-              <Feather
-                name="home"
-                size={24}
-                color={color}
-              />
-            )
           }}
-        />
-        <Tab.Screen
-          name="ExploreNav"
-          component={ExploreNav}
-          options={{
-            tabBarLabel: "Explore",
-            tabBarIcon: ({ color }) => (
-              <Feather
-                name="search"
-                size={24}
-                color={color}
-              />
-            )
+          backBehavior={{
+            initialRoute: "home",
           }}
-        />
-        <Tab.Screen
-          name="CreateNav"
-          component={CreateNav}
-          options={{
-            tabBarLabel: "Create",
-            tabBarIcon: ({ color }) => (
-              <Feather
-                name="plus-square"
-                size={24}
-                color={color}
-              />
-            )
-          }}
-        />
-        <Tab.Screen
-          name="SavedNav"
-          component={SavedNav}
-          options={{
-            tabBarLabel: "Saved",
-            tabBarIcon: ({ color }) => (
-              <Feather
-                name="bookmark"
-                size={24}
-                color={color}
-              />
-            )
-          }}
-        />
-        <Tab.Screen
-          name="ProfileNav"
-          component={ProfileNav}
-          options={{
-            tabBarLabel: "Profile",
-            tabBarIcon: ({ color }) => (
-              <Feather
-                name="user"
-                size={24}
-                color={color}
-              />
-            )
-          }}
-        />
-      </Tab.Navigator>
-    </NavigationContainer>
+          initialRouteName="Home"
+          barStyle={{ backgroundColor: 'white' }}
+        >
+          <Tab.Screen
+            name="HomeNav"
+            component={HomeNav}
+            options={{
+              tabBarLabel: "Home",
+              tabBarIcon: ({ color }) => (
+                <Feather
+                  name="home"
+                  size={24}
+                  color={color}
+                />
+              )
+            }}
+          />
+          <Tab.Screen
+            name="ExploreNav"
+            component={ExploreNav}
+            options={{
+              tabBarLabel: "Explore",
+              tabBarIcon: ({ color }) => (
+                <Feather
+                  name="search"
+                  size={24}
+                  color={color}
+                />
+              )
+            }}
+          />
+          <Tab.Screen
+            name="CreateNav"
+            component={CreateNav}
+            options={{
+              tabBarLabel: "Create",
+              tabBarIcon: ({ color }) => (
+                <Feather
+                  name="plus-square"
+                  size={24}
+                  color={color}
+                />
+              )
+            }}
+          />
+          <Tab.Screen
+            name="SavedNav"
+            component={SavedNav}
+            options={{
+              tabBarLabel: "Saved",
+              tabBarIcon: ({ color }) => (
+                <Feather
+                  name="bookmark"
+                  size={24}
+                  color={color}
+                />
+              )
+            }}
+          />
+          <Tab.Screen
+            name="ProfileNav"
+            component={ProfileNav}
+            options={{
+              tabBarLabel: "Profile",
+              tabBarIcon: ({ color }) => (
+                <Feather
+                  name="user"
+                  size={24}
+                  color={color}
+                />
+              )
+            }}
+          />
+        </Tab.Navigator>
+        <CommentModal />
+      </NavigationContainer>
+    </Provider>
   );
 }
 
