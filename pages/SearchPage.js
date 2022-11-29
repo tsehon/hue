@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-// import { SearchBar } from 'react-native-elements';
 import SearchBar from 'react-native-elements/dist/searchbar/SearchBar-ios';
 import { StyleSheet, Text, View, SafeAreaView, FlatList, ScrollView, TouchableOpacity } from 'react-native';
 import { collection, getDocs } from "firebase/firestore";
@@ -31,19 +30,26 @@ export default function SearchPage({ navigation, route }) {
     const fetchData = async () => {
         const snapshot_products = await getDocs(collection(db, 'products').withConverter(itemConverter));
         const snapshot_categories = await getDocs(collection(db, 'categories').withConverter(itemConverter));
+        const snapshot_reviews = await getDocs(collection(db, 'reviews').withConverter(itemConverter));
 
         const newData = [];
         const idList = [];
 
         snapshot_products.forEach((doc) => {
             let item = doc.data();
-            item.setType("product");
+            item.type = 'product';
             newData.push(item);
             idList.push(item.id.toString());
         });
         snapshot_categories.forEach((doc) => {
             let item = doc.data();
-            item.setType("category");
+            item.type = 'category';
+            newData.push(item);
+            idList.push(item.id.toString());
+        });
+        snapshot_reviews.forEach((doc) => {
+            let item = doc.data();
+            item.type = 'review';
             newData.push(item);
             idList.push(item.id.toString());
         });
@@ -61,7 +67,8 @@ export default function SearchPage({ navigation, route }) {
         fromFirestore: (snapshot, options) => {
             const data = snapshot.data(options);
             const id = snapshot.id;
-            return new SearchItem(data.name, id);
+            
+            return data.name ? {name: data.name, id: id, ...data} : {id: id, ...data};
         }
     };
 
@@ -70,10 +77,21 @@ export default function SearchPage({ navigation, route }) {
         setQuery(input);
 
         if (input.trim()) {
+            const inputLower = input.toLowerCase();
             const results = data.filter((id) => {
-                let item = itemDict[id];
-                const name = item.name ? item.name.toLowerCase() : ''.toLowerCase();
-                return name.indexOf(input.toLowerCase()) > -1;
+                const item = itemDict[id];
+
+                if (item.type != 'review') {
+                    const name = item.name ? item.name.toLowerCase() : ''.toLowerCase();
+                    return name.indexOf(inputLower) > -1;
+                } else {
+                    const productName = item.productName ? item.productName.toLowerCase() : ''.toLowerCase();
+                    const categoryName = item.categoryName ? item.categoryName.toLowerCase() : ''.toLowerCase();
+                    const description = item.description ? item.description.toLowerCase() : ''.toLowerCase();
+                    const tags = item.tags ? item.tags.toLowerCase() : ''.toLowerCase();
+                    return productName.indexOf(inputLower) > -1 || categoryName.indexOf(inputLower) > -1 ||
+                        description.indexOf(inputLower) > -1 || tags.indexOf(inputLower) > -1;
+                }
             });
 
             setItems(results);
@@ -85,6 +103,7 @@ export default function SearchPage({ navigation, route }) {
     const renderSearchItem = ({ item }) => {
         if (item && itemDict[item]) {
             const itemData = itemDict[item];
+            if (itemData.type == 'review') return;
             const name = itemData["name"];
             console.log("rendering item WITH ID: " + item + " and NAME: " + name);
 
