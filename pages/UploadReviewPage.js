@@ -20,16 +20,34 @@ import FocusAwareStatusBar from '../components/FocusAwareStatusBar';
 const videosRef = ref(storage, 'videos');
 
 export default function UploadReviewPage({ navigation, route }) {
+    const [productID, setProductID] = useState('');
     const [productName, setProductName] = useState('');
+    const [productBrand, setProductBrand] = useState('');
+    const [productCategory, setProductCategory] = useState('');
     const [description, setDescription] = useState('');
     const [rating, setRating] = useState(0.0);
 
+    const [source, setSource] = useState('');
+    const [sourceThumb, setSourceThumb] = useState('');
+
     const [requestRunning, setRequestRunning] = useState(false);
+
+    useEffect(() => {
+        if (route.params.source) setSource(route.params.source);
+        if (route.params.sourceThumb) setSourceThumb(route.params.sourceThumb);
+    }, [])
+
+    useEffect(() => {
+        if (route.params.id) setProductID(route.params.id);
+        if (route.params.productName) setProductName(route.params.productName);
+        if (route.params.productBrand) setProductBrand(route.params.productBrand);
+        if (route.params.productCategory) setProductCategory(route.params.productCategory);
+    }, [route])
 
     const handlePost = () => {
         console.log("handling post");
 
-        if (route.params.source == null) {
+        if (source == null) {
             navigation.goBack();
             return;
         }
@@ -74,6 +92,9 @@ export default function UploadReviewPage({ navigation, route }) {
         setRequestRunning(true);
         const reviewRef = await addDoc(collection(db, "reviews"), {
             productName: productName,
+            productID: productID,
+            categoryName: productCategory,
+            brand: productBrand,
             description: description,
             rating: rating,
             upvotes: 0,
@@ -83,12 +104,12 @@ export default function UploadReviewPage({ navigation, route }) {
 
         const videoURI = (String)(reviewRef.id) + ".mp4";
         console.log(videoURI)
-        console.log(route.params.source)
-        await postMedia(videoURI, route.params.source, reviewRef, 'videoDownloadURL');
+        console.log(source)
+        await postMedia(videoURI, source, reviewRef, 'videoDownloadURL');
 
-        if (route.params.sourceThumb) {
+        if (sourceThumb) {
             const thumbnailURI = (String)(reviewRef.id) + ".jpg";
-            await postMedia(thumbnailURI, route.params.sourceThumb, reviewRef, 'thumbnailDownloadURL');
+            await postMedia(thumbnailURI, sourceThumb, reviewRef, 'thumbnailDownloadURL');
         }
 
         console.log("review posted with ID: " + reviewRef.id);
@@ -115,8 +136,9 @@ export default function UploadReviewPage({ navigation, route }) {
                     <TextInput
                         style={[styles.inputText, styles.text]}
                         maxLength={30}
-                        onChangeText={(text) => setProductName(text.trim())}
+                        onFocus={() => navigation.navigate('UploadSearch')}
                         placeholder="Product Name"
+                        value={productName}
                         returnKeyType='done'
                     />
                 </View>
@@ -131,7 +153,7 @@ export default function UploadReviewPage({ navigation, route }) {
                     <TouchableOpacity>
                         <Image
                             style={styles.mediaPreview}
-                            source={{ uri: route.params.sourceThumb }}
+                            source={ sourceThumb ? { uri: sourceThumb } : {}}
                         />
                         <Text style={styles.mediaPreviewOverlay}>Set Cover</Text>
                     </TouchableOpacity>
@@ -151,18 +173,14 @@ export default function UploadReviewPage({ navigation, route }) {
                     <Text style={styles.text}> Tags </Text>
                     <Feather name="plus" size={24} color="black" />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.bottomFormContainer}>
-                    <Text style={styles.text}> Brand </Text>
-                    <Feather name="plus" size={24} color="black" />
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.bottomFormContainer}>
-                    <Text style={styles.text}> Category </Text>
-                    <Feather name="plus" size={24} color="black" />
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.bottomFormContainer}>
-                    <Text style={styles.text}> Link </Text>
-                    <Feather name="plus" size={24} color="black" />
-                </TouchableOpacity>
+                <View style={styles.bottomFormContainer}>
+                    <Text style={styles.text}> Brand: </Text>
+                    <Text style={styles.text}> {productBrand} </Text>
+                </View>
+                <View style={styles.bottomFormContainer}>
+                    <Text style={styles.text}> Category: </Text>
+                    <Text style={styles.text}> {productCategory} </Text>
+                </View>
                 <View style={styles.spacer}
                     onClick={() => null}
                 />

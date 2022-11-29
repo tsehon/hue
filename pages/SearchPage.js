@@ -11,8 +11,9 @@ import SearchItem from '../lib/SearchItem';
 import BackButton from '../components/BackButton';
 import FocusAwareStatusBar from '../components/FocusAwareStatusBar';
 import SearchTabView from '../components/SearchTabView';
+import ProductsList from '../components/ProductsList';
 
-export default function SearchPage({ navigation, route }) {
+export default function SearchPage({ navigation, route, productsOnly }) {
     const [query, setQuery] = useState(route.text);
 
     const [data, setData] = useState([]);
@@ -81,10 +82,14 @@ export default function SearchPage({ navigation, route }) {
             const results = data.filter((id) => {
                 const item = itemDict[id];
 
-                if (item.type != 'review') {
+                if (item.type == 'category' && !productsOnly) {
                     const name = item.name ? item.name.toLowerCase() : ''.toLowerCase();
                     return name.indexOf(inputLower) > -1;
-                } else {
+                } else if (item.type == 'product') {
+                    const name = item.name ? item.name.toLowerCase() : ''.toLowerCase();
+                    const brand = item.brand ? item.brand.toLowerCase() : ''.toLowerCase();
+                    return name.indexOf(inputLower) > -1 || brand.indexOf(inputLower) > -1;
+                } else if (item.type == 'review'  && !productsOnly) {
                     const productName = item.productName ? item.productName.toLowerCase() : ''.toLowerCase();
                     const categoryName = item.categoryName ? item.categoryName.toLowerCase() : ''.toLowerCase();
                     const description = item.description ? item.description.toLowerCase() : ''.toLowerCase();
@@ -166,14 +171,19 @@ export default function SearchPage({ navigation, route }) {
                     autoFocus={true}
                 />
             </SafeAreaView>
-            { !submitted ?
-                <FlatList
-                    data={ query ? items : recentlyViewed }
-                    keyExtractor={(item) => item}
-                    extraData={query}
-                    renderItem={renderSearchItem}
-                    keyboardShouldPersistTaps='handled'
-                /> : <SearchTabView data={items} dict={itemDict} navigation={navigation}/>
+            { !productsOnly ?
+                (!submitted ?
+                    <FlatList
+                        data={ query ? items : recentlyViewed }
+                        keyExtractor={(item) => item}
+                        extraData={query}
+                        renderItem={renderSearchItem}
+                        keyboardShouldPersistTaps='handled'
+                    />
+                    : <SearchTabView data={items} dict={itemDict} navigation={navigation} />)
+                : <ScrollView>
+                    <ProductsList products={items} navigation={navigation} goToUpload={true} />
+                </ScrollView>
             }
         </SafeAreaView>
     );

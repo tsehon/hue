@@ -7,7 +7,8 @@ import db from '../config/firebase';
 import Stars from './Stars';
 
 function Product(props) {
-    const productId = props.id;
+    // const productId = props.id;
+    const [productId, setproductId] = useState('');
     const [productName, setProductName] = useState('');
     const [productPrice, setProductPrice] = useState(0);
     const [productBrand, setProductBrand] = useState('');
@@ -16,8 +17,12 @@ function Product(props) {
     const [productImage, setProductImage] = useState(null);
 
     useEffect(() => {
-        fetchData();
+        setproductId(props.id);
     }, []);
+
+    useEffect(() => {
+        if (productId != '') fetchData();
+    }, [productId]);
 
     const fetchData = async () => {
         const docRef = doc(db, 'products', productId);
@@ -41,7 +46,13 @@ function Product(props) {
         <TouchableOpacity
             style={styles.button}
             onPress={() => {
-                props.navigation.navigate('Product', { productId: productId });
+                if (!props.goToUpload) props.navigation.navigate('Product', { productId: productId });
+                else props.navigation.navigate('Upload', {
+                    id: productId,
+                    productName: productName,
+                    productBrand: productBrand,
+                    productCategory: productCategory,
+                })
             }}
         >
             <View style={{flexDirection: 'row'}}>
@@ -71,14 +82,21 @@ function Product(props) {
 }
 
 export default function ProductsList(props) {
+    const [products, setProducts] = useState([]);
+
+    useEffect(() => {
+        setProducts(props.products);
+    }, [props.products])
+
     return (
         <View style={styles.flexGrid}>
-            {props.products.map((element, index) => (
-                <View key={index} style={index == 0 ? {} : {borderTopWidth: 1, borderTopColor: '#EBEBEB'}}>
+            {products.map((element, index) => (
+                <View key={element} style={index == 0 ? {} : {borderTopWidth: 1, borderTopColor: '#EBEBEB'}}>
                     <Product
-                        key={index}
+                        key={element}
                         id={element}
                         navigation={props.navigation}
+                        goToUpload={props.goToUpload}
                     />
                 </View>
             ))}
