@@ -1,50 +1,87 @@
 import React, { useEffect, useState } from 'react'
 
 import { StyleSheet } from "react-native";
-import { Keyboard } from 'react-native';
 import { ScrollView, ActivityIndicator, Image, Text, TextInput, TouchableOpacity, View } from 'react-native'
 
-import Stars from '../components/Stars';
-import { Feather } from '@expo/vector-icons'
-import { StackActions } from '@react-navigation/native';
+import { Feather, MaterialIcons } from '@expo/vector-icons'
 
 import db from '../config/firebase';
 import { storage } from '../config/firebase';
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { doc, collection, addDoc, updateDoc } from "firebase/firestore";
-import CameraPage from './CameraPage';
+import { doc, collection, addDoc, setDoc, updateDoc } from "firebase/firestore";
 import Header from '../components/Header';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import FocusAwareStatusBar from '../components/FocusAwareStatusBar';
 
-const videosRef = ref(storage, 'videos');
+import * as ImagePicker from 'expo-image-picker'
+import * as MediaLibrary from 'expo-media-library'
 
-export default function UploadReviewPage({ navigation, route }) {
+export default function AddProduct({navigation}) {
     const [productName, setProductName] = useState('');
-    const [description, setDescription] = useState('');
-    const [rating, setRating] = useState(0.0);
+    const [brand, setBrand] = useState('');
+    const [price, setPrice] = useState(0);
+    const [link, setLink] = useState('');
+
+    const [hasGalleryPermissions, setHasGalleryPermissions] = useState(false);
+    const [galleryItems, setGalleryItems] = useState([]);
+    const [images, setImages] = useState([]);
 
     const [requestRunning, setRequestRunning] = useState(false);
 
-    const handlePost = () => {
-        console.log("handling post");
+    useEffect(() => {
+        (async () => {
+            const galleryStatus = await ImagePicker.requestMediaLibraryPermissionsAsync()
+            setHasGalleryPermissions(galleryStatus.status == 'granted')
 
-        if (route.params.source == null) {
-            navigation.goBack();
-            return;
+            if (galleryStatus.status == 'granted') {
+                const userGalleryMedia = await MediaLibrary.getAssetsAsync({ sortBy: ['creationTime'], mediaType: 'photo' })
+                setGalleryItems(userGalleryMedia.assets)
+            }
+        })()
+    }, [])
+
+    const pickFromGallery = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: 'Images',
+            allowsEditing: true,
+            aspect: [1, 1],
+            quality: 1
+        });
+
+        if (!result.canceled) {
+            setImages([...images, result.assets[0].uri]);
         }
-
-        postReview();
     }
 
-    const postMedia = async (storageURI, media, docRef, typeURI) => {
-        const uploadRef = ref(storage, storageURI);
+    const post = async () => {
+        setRequestRunning(true);
+
+        const docRef = await addDoc(collection(db, "products"), {
+            name: productName,
+            brand: brand,
+            link: link,
+            price: price,
+            avgRating: 4.5,
+            numRatings: 0,
+        });
+
+        for (let i = 0; i<images.length; i++) {
+            await postMedia((String)(docRef.id), images[i], i)
+        }
+
+        console.log('product upload complete')
+        setRequestRunning(false);
+        navigation.goBack();
+    }
+
+    const postMedia = async (docID, media, i) => {
+        const uploadRef = ref(storage, docID + (i+1).toString() + ".jpg");
 
         const promise = new Promise(function(resolve, reject) {
             fetch(media)
             .then(response => response.blob())
-            .then(videoblob => {
-                const uploadTask = uploadBytesResumable(uploadRef, videoblob)
+            .then(blob => {
+                const uploadTask = uploadBytesResumable(uploadRef, blob)
                 uploadTask.on('state_changed',
                     (snapshot) => {
                         console.log(snapshot.bytesTransferred + ' / ' + snapshot.totalBytes);
@@ -55,10 +92,10 @@ export default function UploadReviewPage({ navigation, route }) {
                     },
                     () => {
                         // Upload completed successfully, now we can get the download URL and add to document
-                        videoblob.close();
+                        blob.close();
                         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
                             console.log('File available at', downloadURL);
-                            updateDoc(docRef, {[typeURI]: downloadURL});
+                            setDoc(doc(db, "products", docID, 'images', (i+1).toString()), { url: downloadURL })
                             resolve();
                         });
                         
@@ -68,33 +105,6 @@ export default function UploadReviewPage({ navigation, route }) {
         });
 
         return await promise;
-    }
-
-    const postReview = async () => {
-        setRequestRunning(true);
-        const reviewRef = await addDoc(collection(db, "reviews"), {
-            productName: productName,
-            description: description,
-            rating: rating,
-            upvotes: 0,
-            downvotes: 0,
-            upvotesMinusDownvotes: 0,
-        });
-
-        const videoURI = (String)(reviewRef.id) + ".mp4";
-        console.log(videoURI)
-        console.log(route.params.source)
-        await postMedia(videoURI, route.params.source, reviewRef, 'videoDownloadURL');
-
-        if (route.params.sourceThumb) {
-            const thumbnailURI = (String)(reviewRef.id) + ".jpg";
-            await postMedia(thumbnailURI, route.params.sourceThumb, reviewRef, 'thumbnailDownloadURL');
-        }
-
-        console.log("review posted with ID: " + reviewRef.id);
-        setRequestRunning(false);
-
-        navigation.goBack();
     }
 
     if (requestRunning) {
@@ -110,7 +120,7 @@ export default function UploadReviewPage({ navigation, route }) {
         <SafeAreaView style={styles.page} edges={['top', 'left', 'right']}>
             <FocusAwareStatusBar barStyle='dark-content'/>
             <View style={styles.container}>
-                <Header navigation={navigation} title='Post a review' style={{marginBottom: 8}}/>
+                <Header navigation={navigation} title='Add a product' style={{marginBottom: 8}}/>
                 <View style={[styles.formContainer, {borderTopColor: 'lightgrey', borderTopWidth: 1,}]}>
                     <TextInput
                         style={[styles.inputText, styles.text]}
@@ -123,61 +133,63 @@ export default function UploadReviewPage({ navigation, route }) {
                 <View style={[styles.formContainer, {alignItems: 'flex-start'}]}>
                     <TextInput
                         style={[styles.inputText, styles.text]}
-                        maxLength={180}
-                        onChangeText={(text) => setDescription(text.trim())}
-                        placeholder="Write your review"
+                        maxLength={30}
+                        onChangeText={(text) => setBrand(text.trim())}
+                        placeholder="Brand"
                         returnKeyType='done'
                     />
-                    <TouchableOpacity>
-                        <Image
-                            style={styles.mediaPreview}
-                            source={{ uri: route.params.sourceThumb }}
-                        />
-                        <Text style={styles.mediaPreviewOverlay}>Set Cover</Text>
-                    </TouchableOpacity>
                 </View>
-                <View style={styles.bottomFormContainer}>
-                    <Text style={styles.text}> Rating </Text>
-                    <Stars
-                        rating={rating}
-                        starSize={32}
-                        color='#FFB800'
-                        emptyColor='#FFB800'
-                        disabled={false}
-                        onChange={setRating}
+                <View style={[styles.formContainer, {alignItems: 'flex-start'}]}>
+                    <TextInput
+                        style={[styles.inputText, styles.text]}
+                        maxLength={30}
+                        onChangeText={(text) => setPrice(text.trim()*1)}
+                        placeholder="Price"
+                        returnKeyType='done'
                     />
                 </View>
-                <TouchableOpacity style={styles.bottomFormContainer}>
-                    <Text style={styles.text}> Tags </Text>
-                    <Feather name="plus" size={24} color="black" />
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.bottomFormContainer}>
-                    <Text style={styles.text}> Brand </Text>
-                    <Feather name="plus" size={24} color="black" />
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.bottomFormContainer}>
-                    <Text style={styles.text}> Category </Text>
-                    <Feather name="plus" size={24} color="black" />
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.bottomFormContainer}>
-                    <Text style={styles.text}> Link </Text>
+                <View style={[styles.formContainer, {alignItems: 'flex-start'}]}>
+                    <TextInput
+                        style={[styles.inputText, styles.text]}
+                        maxLength={30}
+                        onChangeText={(text) => setLink(text.trim())}
+                        placeholder="Link to purchase"
+                        returnKeyType='done'
+                    />
+                </View>
+                <TouchableOpacity style={styles.bottomFormContainer} onPress={() => pickFromGallery()}>
+                    <Text style={styles.text}> Images </Text>
                     <Feather name="plus" size={24} color="black" />
                 </TouchableOpacity>
                 <View style={styles.spacer}
                     onClick={() => null}
-                />
+                >
+                    <ScrollView horizontal style={{padding: 10, flex: 1}}>
+                        {images.map((element, index) => (
+                            <View key={index} style={{width: 280, height: 280, marginRight: 10}}>
+                                <Image key={index} source={{ uri: element }} style={{flex: 1}} />
+                                <TouchableOpacity
+                                    style={{position: 'absolute', width: 30, height: 30, right: 0, top: 0, backgroundColor: 'black', alignItems: 'center', justifyContent: 'center'}}
+                                    onPress={() => setImages(images.filter((e, imgIndex) => imgIndex != index))}
+                                >
+                                    <MaterialIcons name="delete-outline" size={30} color="white" />
+                                </TouchableOpacity>
+                            </View>
+                        ))}
+                    </ScrollView>
+                </View>
                 <View style={styles.buttonsContainer}>
                     <TouchableOpacity
                         onPress={() => navigation.goBack()}
                         style={styles.cancelButton}>
-                        <Text style={styles.cancelButtonText}>Draft</Text>
+                        <Text style={styles.cancelButtonText}>Cancel</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity
-                        onPress={() => handlePost()}
+                        onPress={() => post()}
                         style={styles.postButton}>
                         <Feather name="corner-left-up" size={24} color="black" />
-                        <Text style={styles.postButtonText}>Post review</Text>
+                        <Text style={styles.postButtonText}>Add product</Text>
                     </TouchableOpacity>
                 </View>
             </View>
