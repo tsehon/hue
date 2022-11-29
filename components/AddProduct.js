@@ -19,6 +19,7 @@ import * as MediaLibrary from 'expo-media-library'
 export default function AddProduct({navigation}) {
     const [productName, setProductName] = useState('');
     const [brand, setBrand] = useState('');
+    const [category, setCategory] = useState('');
     const [price, setPrice] = useState(0);
     const [link, setLink] = useState('');
 
@@ -59,9 +60,10 @@ export default function AddProduct({navigation}) {
         const docRef = await addDoc(collection(db, "products"), {
             name: productName,
             brand: brand,
+            category: category,
             link: link,
             price: price,
-            avgRating: 4.5,
+            avgRating: Math.random()*1.5 + 3.5,
             numRatings: 0,
         });
 
@@ -124,7 +126,7 @@ export default function AddProduct({navigation}) {
                 <View style={[styles.formContainer, {borderTopColor: 'lightgrey', borderTopWidth: 1,}]}>
                     <TextInput
                         style={[styles.inputText, styles.text]}
-                        maxLength={30}
+                        maxLength={70}
                         onChangeText={(text) => setProductName(text.trim())}
                         placeholder="Product Name"
                         returnKeyType='done'
@@ -143,15 +145,29 @@ export default function AddProduct({navigation}) {
                     <TextInput
                         style={[styles.inputText, styles.text]}
                         maxLength={30}
-                        onChangeText={(text) => setPrice(text.trim()*1)}
-                        placeholder="Price"
+                        onChangeText={(text) => setCategory(text.trim())}
+                        placeholder="Category"
                         returnKeyType='done'
                     />
                 </View>
                 <View style={[styles.formContainer, {alignItems: 'flex-start'}]}>
                     <TextInput
                         style={[styles.inputText, styles.text]}
-                        maxLength={30}
+                        maxLength={8}
+                        onChangeText={(text) => {
+                            const trimmed = text.trim()
+                            const numericRegex = /^([0-9]{1,100})+([.]{0,1})([0-9]{1,2})$/
+                            if(numericRegex.test(trimmed)) setPrice(trimmed*1);
+                        }}
+                        placeholder="Price"
+                        keyboardType = 'numeric'
+                        returnKeyType='done'
+                    />
+                </View>
+                <View style={[styles.formContainer, {alignItems: 'flex-start'}]}>
+                    <TextInput
+                        style={[styles.inputText, styles.text]}
+                        maxLength={200}
                         onChangeText={(text) => setLink(text.trim())}
                         placeholder="Link to purchase"
                         returnKeyType='done'
@@ -166,7 +182,7 @@ export default function AddProduct({navigation}) {
                 >
                     <ScrollView horizontal style={{padding: 10, flex: 1}}>
                         {images.map((element, index) => (
-                            <View key={index} style={{width: 280, height: 280, marginRight: 10}}>
+                            <View key={index} style={{width: 150, height: 150, marginRight: 10}}>
                                 <Image key={index} source={{ uri: element }} style={{flex: 1}} />
                                 <TouchableOpacity
                                     style={{position: 'absolute', width: 30, height: 30, right: 0, top: 0, backgroundColor: 'black', alignItems: 'center', justifyContent: 'center'}}

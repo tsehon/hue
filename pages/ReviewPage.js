@@ -144,8 +144,8 @@ const VideoSingle = forwardRef((props, parentRef) => {
         }
     }
 
-    const handleProductClick = ({ item }) => {
-        props.navigation.navigate('Product', { productId: item });
+    const handleProductClick = ({ id }) => {
+        props.navigation.navigate('Product', { productId: id });
     }
 
     // Should use the existing firestore increment functionality but I simply cannot get it working
@@ -261,7 +261,9 @@ const VideoSingle = forwardRef((props, parentRef) => {
                     // onPress={() => props.navigation.navigate('Product', {productId: props.item.productID})}
                     style={[styles.text, { fontSize: 20, marginBottom: 9, marginTop: 11 }]}
                     numberOfLines={2}
-                    onPress={() => handleProductClick(props.item)}
+                    onPress={() => {
+                        if (props.item.productID) handleProductClick(props.item.productID);
+                    } }
                 >
                     {props.item.productName}
                 </Text>

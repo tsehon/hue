@@ -122,7 +122,14 @@ export default function HomePage({ navigation }) {
             ]}
           />
         </HomePageSection>
-
+        <VideoPreview
+              style={{width: 390, height: 390}}
+              navigation={navigation}
+              searchType='categoryName'
+              searchQuery='Beauty'
+              firstID='MXILb6SdiK9Sq5ZjIzZU'
+              videoURI='https://test-videos.co.uk/vids/jellyfish/mp4/h264/1080/Jellyfish_1080_10s_2MB.mp4'
+            />
         <HomePageSection
           title="Trending Products"
         >

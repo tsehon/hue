@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { View } from 'react-native';
+import { View, ScrollView } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import ProductsList from './ProductsList';
 import CategoryButtonGrid from './CategoryButtons';
@@ -33,14 +33,17 @@ export default function SearchTabView({ data, dict, navigation }) {
         <Tab.Screen
             name="Categories"
             children={() => 
-                <View style={{padding: 10}}>
+                <ScrollView style={{padding: 10}}>
                     <CategoryButtonGrid categories={categories} buttonWidth={370} navigation={navigation} />
-                </View>
+                </ScrollView>
             }
         />
         <Tab.Screen
             name="Products"
-            children={() => <ProductsList products={products} navigation={navigation} />}
+            children={() => 
+                <ScrollView>
+                    <ProductsList products={products} navigation={navigation}/>
+                </ScrollView>}
         />
     </Tab.Navigator>
     );
