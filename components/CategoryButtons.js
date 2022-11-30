@@ -20,9 +20,9 @@ function CategoryButton(props) {
     const renderIcon = (title) => {
         return (
             <View style={{
-                position: 'relative',
-                left: '70%',
-                bottom: '-5%',
+                position: 'absolute',
+                right: 10,
+                bottom: 10,
             }}>
                 { icons[title]}
             </View>
@@ -31,7 +31,7 @@ function CategoryButton(props) {
 
     return (
         <TouchableOpacity
-            style={[styles.button, { width: props.buttonWidth, backgroundColor: colors[props.title] }]}
+            style={[styles.button, { flex: 1, backgroundColor: colors[props.title] }]}
             onPress={() => {
                 props.navigation.push('ReviewFeed', {
                     searchType: 'categoryName',
@@ -61,6 +61,7 @@ export default function CategoryButtonGrid(props) {
                 <View
                     style={{
                         marginTop: 8,
+                        flexBasis: props.flexBasis
                     }}
                     key={index}>
                     <CategoryButton

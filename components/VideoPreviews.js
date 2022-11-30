@@ -33,7 +33,7 @@ const Thumbnail = (props) => {
     const [viduri, setVidUri] = useState(null);
 
     useEffect(() => {
-        typeof props.ImgURI !== 'undefined' ? setImage(props.imgURI) : setVidUri(props.videoURI);
+        typeof props.imgURI !== 'undefined' ? setImage(props.imgURI) : setVidUri(props.videoURI);
         if (image == null && viduri != null) generateThumbnail();
     });
 

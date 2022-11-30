@@ -34,7 +34,7 @@ export default function SearchTabView({ data, dict, navigation }) {
             name="Categories"
             children={() => 
                 <ScrollView style={{padding: 10}}>
-                    <CategoryButtonGrid categories={categories} buttonWidth={370} navigation={navigation} />
+                    <CategoryButtonGrid categories={categories} flexBasis='100%' navigation={navigation} />
                 </ScrollView>
             }
         />
