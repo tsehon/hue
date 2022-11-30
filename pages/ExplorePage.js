@@ -42,15 +42,7 @@ export default function ExplorePage({ navigation, route }) {
                 >
                     <ScrollView horizontal>
                         <VideoPreview
-                            style={{ width: 137, height: 222, borderRadius: 10 }}
-                            navigation={navigation}
-                            searchType='categoryName'
-                            searchQuery='Beauty'
-                            firstID='gEe9D6F5Fh9FrZmV8oxk'
-                            videoURI='https://firebasestorage.googleapis.com/v0/b/lavalab-hue.appspot.com/o/gEe9D6F5Fh9FrZmV8oxk.mp4?alt=media&token=0b0a2983-d79c-4ed9-bdf4-ffa3c23ccf1b'
-                        />
-                        <VideoPreview
-                            style={{ width: 137, height: 222, borderRadius: 10, marginLeft: 10 }}
+                            style={{ width: 137, height: 222, borderRadius: 10}}
                             navigation={navigation}
                             searchType='categoryName'
                             searchQuery="Skincare"
@@ -72,6 +64,14 @@ export default function ExplorePage({ navigation, route }) {
                             searchQuery='Tech'
                             firstID='nwymyYw2zIWWml7KFUXB'
                             videoURI='https://firebasestorage.googleapis.com/v0/b/lavalab-hue.appspot.com/o/nwymyYw2zIWWml7KFUXB.mp4?alt=media&token=ab4f60a3-d5d2-4d0e-baf8-ee41e80326a7'
+                        />
+                        <VideoPreview
+                            style={{ width: 137, height: 222, borderRadius: 10 }}
+                            navigation={navigation}
+                            searchType='categoryName'
+                            searchQuery='Beauty'
+                            firstID='gEe9D6F5Fh9FrZmV8oxk'
+                            videoURI='https://firebasestorage.googleapis.com/v0/b/lavalab-hue.appspot.com/o/gEe9D6F5Fh9FrZmV8oxk.mp4?alt=media&token=0b0a2983-d79c-4ed9-bdf4-ffa3c23ccf1b'
                         />
                     </ScrollView>
                 </HomePageSection>
