@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, Image, TextInput, TouchableOpacity, FlatList } from 'react-native'
+import { StyleSheet, KeyboardAvoidingView, ScrollView, View, Text, Image, TextInput, TouchableOpacity, FlatList } from 'react-native'
 import BottomSheet from '@gorhom/bottom-sheet';
 import { useSelector, useDispatch } from 'react-redux'
 import { Ionicons } from '@expo/vector-icons'
@@ -9,10 +9,11 @@ import { clearModal } from '../redux/actions/commentModal';
 import { commentListener, addComment, clearCommentListener } from '../services/comments';
 
 const CommentItem = ({ item }) => {
+    const userTag = "@" + item.creator;
     return (
         <View style={styles.itemcontainer}>
             <View style={styles.containerText}>
-                <Text style={styles.displayName}>{item.creator}</Text>
+                <Text style={styles.displayName}> {userTag} </Text>
                 <Text>{item.comment}</Text>
             </View>
         </View>
@@ -35,7 +36,6 @@ const CommentSubModal = ({ post }) => {
         }
         setComment('')
         addComment(post.id, 'username', comment)
-        console.log("comment is " + comment);
         commentListener(post.id, setCommentList);
     }
 
@@ -44,7 +44,10 @@ const CommentSubModal = ({ post }) => {
     }
 
     return (
-        <View style={styles.container}>
+        <KeyboardAvoidingView
+            behavior={"padding"}
+            style={styles.container}
+        >
             <FlatList
                 data={commentList}
                 renderItem={renderItem}
@@ -60,7 +63,7 @@ const CommentSubModal = ({ post }) => {
                     <Ionicons name="arrow-up-circle" size={34} color={'grey'} />
                 </TouchableOpacity>
             </View>
-        </View>
+        </KeyboardAvoidingView>
     )
 };
 
@@ -114,7 +117,9 @@ const styles = StyleSheet.create({
     },
     displayName: {
         color: 'gray',
-        fontSize: 13
+        fontSize: 13,
+        marginLeft: -5,
+        marginBottom: 2,
     },
     container: {
         justifyContent: 'flex-end',
@@ -122,8 +127,8 @@ const styles = StyleSheet.create({
     },
     containerInput: {
         padding: 10,
+        flexDirection: 'row',
         marginBottom: 30,
-        flexDirection: 'row'
     },
     input: {
         backgroundColor: 'lightgrey',

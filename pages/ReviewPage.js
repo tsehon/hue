@@ -12,7 +12,7 @@ import Stars from '../components/Stars';
 import FocusAwareStatusBar from '../components/FocusAwareStatusBar';
 
 import { useDispatch, useSelector } from "react-redux";
-import { openCommentModal } from '../redux/actions/commentModal';
+import { clearModal, openCommentModal } from '../redux/actions/commentModal';
 
 /**
  * 
@@ -81,7 +81,10 @@ export default function ReviewFeed({ navigation, route }) {
                 <BackButton navigation={navigation} color='white' size={48} />
                 <TouchableOpacity
                     style={[styles.button, { paddingTop: 6, paddingRight: 12 }]}
-                    onPress={() => navigation.navigate('Search')}
+                    onPress={() => {
+                        dispatch(clearModal);   
+                        navigation.navigate('Search');
+                    }}
                 >
                     <Ionicons
                         name="search"
@@ -235,6 +238,14 @@ const VideoSingle = forwardRef((props, parentRef) => {
                         <Text style={[styles.text, { fontSize: 12 }]}>{downvotes}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
+                            onPress={() => {
+                                dispatch(openCommentModal(true, props.item))
+                            }}
+                            style={{ marginTop: 20, alignItems: 'center' }}
+                        >
+                            <Ionicons name={'chatbox-ellipses-outline'} size={28} color='white' />
+                        </TouchableOpacity>
+                    <TouchableOpacity
                         onPress={() => {
                             if (!saved) setSaved(true);
                             else setSaved(false);
@@ -243,14 +254,7 @@ const VideoSingle = forwardRef((props, parentRef) => {
                     >
                         <Ionicons name={saved ? 'bookmark' : 'bookmark-outline'} size={28} color='white' />
                     </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={() => {
-                            dispatch(openCommentModal(true, props.item))
-                        }}
-                        style={{ marginTop: 30, alignItems: 'center' }}
-                    >
-                        <Feather name={'message-square'} size={28} color='white' />
-                    </TouchableOpacity>
+                    
                     <Text style={styles.actionButtonText}>
                         {props.item.commentsCount ? props.item.commentsCount : null}
                     </Text>

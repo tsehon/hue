@@ -76,7 +76,6 @@ export default function CameraPage({ navigation, route }) {
 
                 if (videoRecordPromise) {
                     const data = await videoRecordPromise;
-                    setIsRecording(false);
 
                     const source = data.uri
                     const sourceThumb = await generateThumbnail(source)
@@ -84,8 +83,9 @@ export default function CameraPage({ navigation, route }) {
                     console.log('video at' + source);
                     console.log('thumbnail at ' + sourceThumb);
                     console.log('navigating to upload page.');
-
                     navigation.navigate('Upload', { source, sourceThumb })
+
+                    setIsRecording(false);
                 }
             } catch (error) {
                 console.warn(error)
@@ -200,20 +200,22 @@ export default function CameraPage({ navigation, route }) {
                                         maxValue={60}
                                         initialValue={0}
                                         radius={55}
-                                        activeStrokeWidth={7}
+                                        activeStrokeWidth={10}
+                                        inActiveStrokeWidth={10}
                                         duration={60000}
                                         onAnimationComplete={() => stopVideo()}
-                                        strokeLinecap='butt'
                                         progressValueColor="transparent"
                                         inActiveStrokeOpacity={0.3}
-                                        inActiveStrokeWidth={5}
                                         activeStrokeColor="#ff0000"
-                                        activeStrokeSecondaryColor="#ffffff55"
+                                        activeStrokeSecondaryColor="#ff000055"
+                                        /*
+                                        strokeLinecap='butt'
                                         inActiveStrokeColor="black"
                                         dashedStrokeConfig={{
                                             count: 60,
                                             width: 4,
                                         }}
+                                        */
                                     />
                                 </View>
                             </View>

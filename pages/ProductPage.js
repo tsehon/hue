@@ -101,7 +101,7 @@ export default function ProductPage({ navigation, route }) {
           </TouchableOpacity>
           <Text style={[styles.semiBold, {fontSize: 20, marginTop: 36}]}>Tagged Reviews</Text>
         </View>
-        <ProductReviewsGrid productName={productName} navigation={navigation}/>
+        <ProductReviewsGrid productId={productId} productName={productName} navigation={navigation}/>
       </ScrollView>
     </SafeAreaView>
   )

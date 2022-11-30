@@ -5,6 +5,21 @@ import db from '../config/firebase';
 
 import VideoPreview from './VideoPreviews';
 
+const getReviews = async (productName, productId) => {
+    const q = query(collection(db, 'reviews'), where('productName', '==', productName), orderBy('upvotesMinusDownvotes', 'desc'));
+
+    const querySnapshot = await getDocs(q);
+
+    const arr = [];
+
+    querySnapshot.forEach((doc) => {
+        const id = doc.id;
+        const data = doc.data();
+        arr.push({ id, ...data });
+    });
+    return arr;
+}
+
 export default function ProductReviewsGrid(props) {
     const [reviews, setReviews] = useState([]);
 
@@ -12,7 +27,7 @@ export default function ProductReviewsGrid(props) {
     const heightScaleFactor = 16/9
 
     useEffect(() => {
-        getReviews(props.productName).then(setReviews);
+        getReviews(props.productName, props.productId).then(setReviews);
     }, [props.productName]);
 
 
@@ -34,21 +49,6 @@ export default function ProductReviewsGrid(props) {
             )})}
         </View>
     );
-}
-
-const getReviews = async (productName) => {
-    const q = query(collection(db, 'reviews'), where('productName', '==', productName), orderBy('upvotesMinusDownvotes', 'desc'));
-
-    const querySnapshot = await getDocs(q);
-
-    const arr = [];
-
-    querySnapshot.forEach((doc) => {
-        const id = doc.id;
-        const data = doc.data();
-        arr.push({id, ...data});
-    });
-    return arr;
 }
 
 const styles = StyleSheet.create({

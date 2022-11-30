@@ -4,7 +4,7 @@ import { setDoc, Timestamp, getDocs, collection, where, query, doc, updateDoc, g
 let commentListenerInstance = null
 
 export const addComment = async (id, creator, comment) => {
-    time = Timestamp.now();
+    let time = Timestamp.now();
     console.log("time" + time);
 
     const commentsRef = collection(db, 'reviews', id, 'comments');
