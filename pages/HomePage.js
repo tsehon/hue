@@ -176,16 +176,16 @@ export default function HomePage({ navigation }) {
         </HomePageSection>
 
         <HomePageSection
-          title="Trending in Skincare"
+          title="Trending in Clothing"
         >
           <ScrollView horizontal>
             <VideoPreview
               style={{width: 137, height: 222, borderRadius: 10}}
               navigation={navigation}
               searchType='categoryName'
-              searchQuery='Beauty'
-              firstID='MXILb6SdiK9Sq5ZjIzZU'
-              videoURI='https://test-videos.co.uk/vids/jellyfish/mp4/h264/1080/Jellyfish_1080_10s_2MB.mp4'
+              searchQuery={'Women\'s Clothing'}
+              firstID='EvqNgESTageVCvA5HMKc'
+              imgURI='https://firebasestorage.googleapis.com/v0/b/lavalab-hue.appspot.com/o/EvqNgESTageVCvA5HMKc.jpg?alt=media&token=6c4a614d-676c-4ee2-8eea-e9aa6bb28f13'
             />
             <VideoPreview
               style={{width: 137, height: 222, borderRadius: 10, marginLeft: 10}}

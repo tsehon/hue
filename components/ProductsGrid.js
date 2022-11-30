@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, Image, TouchableOpacity, Button, ScrollView } from 'react-native';
+import { StyleSheet, View, Text, Image, TouchableOpacity, Button, ScrollView, Dimensions } from 'react-native';
 
 import { doc, getDoc, getDocs, collection } from "firebase/firestore";
 import db from '../config/firebase';
@@ -33,14 +33,16 @@ function Product(props) {
         setProductImage(image.url);
     }
 
+    const width = Dimensions.get('window').width * 0.442;
+
     return (
         <TouchableOpacity
-            style={styles.button}
+            style={[{width: width}, styles.button]}
             onPress={() => {
                 props.navigation.navigate('Product', { productId: productId });
             }}
         >
-            <Image style={{width: 172, height: 172, borderRadius: 10}} source={{uri: productImage}} />
+            <Image style={{width: width, height: width, borderRadius: 10}} source={{uri: productImage}} />
             <Text style={[styles.text, {marginTop: 9}]} numberOfLines={1}>{productName}</Text>
             <Text style={[styles.text, {marginTop: 3, marginBottom: 1}]}>${productPrice}</Text>
             <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
@@ -81,7 +83,7 @@ export default function ProductsGrid(props) {
 
 const styles = StyleSheet.create({
     button: {
-        width: 172,
+        // width: 172,
         height: 249,
         marginBottom: 7,
         marginTop: 7
