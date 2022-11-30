@@ -66,7 +66,7 @@ export default function ExplorePage({ navigation, route }) {
                             videoURI='https://firebasestorage.googleapis.com/v0/b/lavalab-hue.appspot.com/o/nwymyYw2zIWWml7KFUXB.mp4?alt=media&token=ab4f60a3-d5d2-4d0e-baf8-ee41e80326a7'
                         />
                         <VideoPreview
-                            style={{ width: 137, height: 222, borderRadius: 10 }}
+                            style={{ width: 137, height: 222, borderRadius: 10, marginLeft: 10 }}
                             navigation={navigation}
                             searchType='categoryName'
                             searchQuery='Beauty'
