@@ -27,7 +27,7 @@ export default function ExplorePage({ navigation, route }) {
 
     return (
         <SafeAreaView style={styles.page} edges={['top', 'left', 'right']}>
-            <FocusAwareStatusBar barStyle='dark-content'/>
+            <FocusAwareStatusBar barStyle='dark-content' />
             <ScrollView>
                 <SearchBar
                     ref={searchRef}
@@ -42,28 +42,36 @@ export default function ExplorePage({ navigation, route }) {
                 >
                     <ScrollView horizontal>
                         <VideoPreview
-                            style={{width: 137, height: 222, borderRadius: 10}}
+                            style={{ width: 137, height: 222, borderRadius: 10 }}
                             navigation={navigation}
                             searchType='categoryName'
                             searchQuery='Beauty'
-                            firstID='MXILb6SdiK9Sq5ZjIzZU'
-                            videoURI='https://test-videos.co.uk/vids/jellyfish/mp4/h264/1080/Jellyfish_1080_10s_2MB.mp4'
+                            firstID='gEe9D6F5Fh9FrZmV8oxk'
+                            videoURI='https://firebasestorage.googleapis.com/v0/b/lavalab-hue.appspot.com/o/gEe9D6F5Fh9FrZmV8oxk.mp4?alt=media&token=0b0a2983-d79c-4ed9-bdf4-ffa3c23ccf1b'
                         />
                         <VideoPreview
-                            style={{width: 137, height: 222, borderRadius: 10, marginLeft: 10}}
+                            style={{ width: 137, height: 222, borderRadius: 10, marginLeft: 10 }}
                             navigation={navigation}
                             searchType='categoryName'
-                            searchQuery='Beauty'
-                            firstID='2DtUlonFdbiimC0LNB18'
-                            videoURI='https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_2MB.mp4'
+                            searchQuery="Skincare"
+                            firstID='jgsVTxXpy6QednIM9GX2'
+                            videoURI='https://firebasestorage.googleapis.com/v0/b/lavalab-hue.appspot.com/o/jgsVTxXpy6QednIM9GX2.mp4?alt=media&token=2ebc4fb9-312c-49b7-850e-cb79023c96b3'
                         />
                         <VideoPreview
-                            style={{width: 137, height: 222, borderRadius: 10, marginLeft: 10}}
+                            style={{ width: 137, height: 222, borderRadius: 10, marginLeft: 10 }}
                             navigation={navigation}
                             searchType='categoryName'
                             searchQuery='Beauty'
-                            firstID='izG3zce88U4wsXUvBqFM'
-                            videoURI='https://test-videos.co.uk/vids/sintel/mp4/h264/1080/Sintel_1080_10s_2MB.mp4'
+                            firstID='uzjDRJ2kZWq4bswDffVl'
+                            videoURI='https://firebasestorage.googleapis.com/v0/b/lavalab-hue.appspot.com/o/uzjDRJ2kZWq4bswDffVl.mp4?alt=media&token=04dff38e-abcb-4f09-b412-3678fb89422b'
+                        />
+                        <VideoPreview
+                            style={{ width: 137, height: 222, borderRadius: 10, marginLeft: 10 }}
+                            navigation={navigation}
+                            searchType='categoryName'
+                            searchQuery='Tech'
+                            firstID='nwymyYw2zIWWml7KFUXB'
+                            videoURI='https://firebasestorage.googleapis.com/v0/b/lavalab-hue.appspot.com/o/nwymyYw2zIWWml7KFUXB.mp4?alt=media&token=ab4f60a3-d5d2-4d0e-baf8-ee41e80326a7'
                         />
                     </ScrollView>
                 </HomePageSection>
@@ -73,10 +81,10 @@ export default function ExplorePage({ navigation, route }) {
                     <ProductsList
                         navigation={navigation}
                         products={[
-                        'g8CN9lm5cxXeZ1BhwYN2',
-                        'M9CDo9l429QwsrzCepYv',
-                        'X0J19ZzbHByWJHBGMzzv',
-                        'OBbjTcEtoglR2IdMAjna',
+                            'g8CN9lm5cxXeZ1BhwYN2',
+                            'M9CDo9l429QwsrzCepYv',
+                            'X0J19ZzbHByWJHBGMzzv',
+                            'OBbjTcEtoglR2IdMAjna',
                         ]}
                     />
                 </HomePageSection>
