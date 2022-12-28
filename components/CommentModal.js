@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, KeyboardAvoidingView, ScrollView, View, Text, Image, TextInput, TouchableOpacity, FlatList } from 'react-native'
-import BottomSheet from '@gorhom/bottom-sheet';
+import BottomSheet, { BottomSheetTextInput } from '@gorhom/bottom-sheet';
 import { useSelector, useDispatch } from 'react-redux'
 import { Ionicons } from '@expo/vector-icons'
 import { useRef, useEffect, useState } from 'react';
@@ -9,7 +9,7 @@ import { clearModal } from '../redux/actions/commentModal';
 import { commentListener, addComment, clearCommentListener } from '../services/comments';
 
 const CommentItem = ({ item }) => {
-    const userTag = "@" + item.creator;
+    const userTag = "@" + item.displayName;
     return (
         <View style={styles.itemcontainer}>
             <View style={styles.containerText}>
@@ -20,7 +20,7 @@ const CommentItem = ({ item }) => {
     )
 };
 
-const CommentSubModal = ({ post }) => {
+const CommentSubModal = ({ post, bottomSheetRef }) => {
     const [comment, setComment] = useState('')
     const [commentList, setCommentList] = useState([])
 
@@ -35,7 +35,7 @@ const CommentSubModal = ({ post }) => {
             return;
         }
         setComment('')
-        addComment(post.id, 'username', comment)
+        addComment(post.id, comment)
         commentListener(post.id, setCommentList);
     }
 
@@ -44,8 +44,7 @@ const CommentSubModal = ({ post }) => {
     }
 
     return (
-        <KeyboardAvoidingView
-            behavior={"padding"}
+        <View
             style={styles.container}
         >
             <FlatList
@@ -54,16 +53,17 @@ const CommentSubModal = ({ post }) => {
                 keyExtractor={(item) => item.id}
             />
             <View style={styles.containerInput}>
-                <TextInput
+                <BottomSheetTextInput
                     value={comment}
                     onChangeText={setComment}
                     style={styles.input}
+                    onBlur={() => {bottomSheetRef.current.snapToIndex(0)}}
                 />
                 <TouchableOpacity onPress={() => handleCommentSend()}>
                     <Ionicons name="arrow-up-circle" size={34} color={'grey'} />
                 </TouchableOpacity>
             </View>
-        </KeyboardAvoidingView>
+        </View>
     )
 };
 
@@ -78,11 +78,11 @@ export default function CommentModal({ navigation, route }) {
         }
     }, [modalState])
 
-    const renderContent = () => {
+    const renderContent = (bottomSheetRef) => {
         console.log(modalState.data);
         switch (modalState.modalType) {
             case 0:
-                return (<CommentSubModal post={modalState.data} />)
+                return (<CommentSubModal post={modalState.data} bottomSheetRef={bottomSheetRef} />)
             default:
                 return (<></>)
         }
@@ -98,8 +98,9 @@ export default function CommentModal({ navigation, route }) {
             index={-1}
             onClose={onClose}
             handleHeight={40}
-            enablePanDownToClose>
-            {renderContent()}
+            enablePanDownToClose
+        >
+            {renderContent(bottomSheetRef)}
         </BottomSheet>
     );
 }

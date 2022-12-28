@@ -63,7 +63,7 @@ export default function HomePage({ navigation }) {
               searchType='categoryName'
               searchQuery='Beauty'
               firstID='uzjDRJ2kZWq4bswDffVl'
-              videoURI='https://firebasestorage.googleapis.com/v0/b/lavalab-hue.appspot.com/o/video-capture-3767.png?alt=media&token=3644737b-bbf0-4174-b6d7-ae2dc821947b'
+              imgURI='https://firebasestorage.googleapis.com/v0/b/lavalab-hue.appspot.com/o/video-capture-3767.png?alt=media&token=3644737b-bbf0-4174-b6d7-ae2dc821947b'
             />
             {/* <VideoPreview
               style={{width: 137, height: 222, borderRadius: 10, marginLeft: 10}}

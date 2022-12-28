@@ -40,7 +40,7 @@ const Thumbnail = (props) => {
     const generateThumbnail = async () => {
     try {
         const { uri } = await VideoThumbnails.getThumbnailAsync(
-        viduri, { time: 1000, }
+        viduri, { time: 0, }
         );
         setImage(uri);
     } catch (e) {
