@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     },
     input: {
         fontSize: 18,
-        fontFamily: 'Plus-Jakarta-Sans',
+        fontFamily: 'PlusJakartaSans-Regular',
         borderColor: 'lightgrey',
         borderWidth: 1,
         padding: 5,

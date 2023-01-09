@@ -1,23 +1,24 @@
 import React, { useEffect, useState, useRef } from 'react'
 
 import { StyleSheet } from "react-native";
-import { Keyboard } from 'react-native';
-import { ScrollView, ActivityIndicator, Image, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, Image, Text, TextInput, TouchableOpacity, View } from 'react-native'
 
 import Stars from '../components/Stars';
 import { Feather } from '@expo/vector-icons'
-import { StackActions } from '@react-navigation/native';
 
 import db from '../config/firebase';
-import { storage } from '../config/firebase';
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { doc, collection, addDoc, updateDoc } from "firebase/firestore";
-import CameraPage from './CameraPage';
+import { collection, addDoc, updateDoc } from "firebase/firestore";
+
 import Header from '../components/Header';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import FocusAwareStatusBar from '../components/FocusAwareStatusBar';
 
-const videosRef = ref(storage, 'videos');
+import { getAuth } from 'firebase/auth';
+import { Alert } from 'react-native';
+import uploadMedia from '../services/uploadMedia';
+import styles from '../styles/styles';
+
+const auth = getAuth();
 
 export default function UploadReviewPage({ navigation, route }) {
     const [productID, setProductID] = useState('');
@@ -47,7 +48,10 @@ export default function UploadReviewPage({ navigation, route }) {
     }, [route])
 
     const handlePost = () => {
-        console.log("handling post");
+        if (!auth.currentUser) {
+            Alert.alert('You must be logged in to post')
+            return;
+        }
 
         if (source == null) {
             navigation.goBack();
@@ -55,39 +59,6 @@ export default function UploadReviewPage({ navigation, route }) {
         }
 
         postReview();
-    }
-
-    const postMedia = async (storageURI, media, docRef, typeURI) => {
-        const uploadRef = ref(storage, storageURI);
-
-        const promise = new Promise(function(resolve, reject) {
-            fetch(media)
-            .then(response => response.blob())
-            .then(videoblob => {
-                const uploadTask = uploadBytesResumable(uploadRef, videoblob)
-                uploadTask.on('state_changed',
-                    (snapshot) => {
-                        console.log(snapshot.bytesTransferred + ' / ' + snapshot.totalBytes);
-                    },
-                    (error) => {
-                        console.log('postMedia error: ' + error);
-                        reject(error);
-                    },
-                    () => {
-                        // Upload completed successfully, now we can get the download URL and add to document
-                        videoblob.close();
-                        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                            console.log('File available at', downloadURL);
-                            updateDoc(docRef, {[typeURI]: downloadURL});
-                            resolve();
-                        });
-                        
-                    }
-                )
-            })
-        });
-
-        return await promise;
     }
 
     const postReview = async () => {
@@ -102,16 +73,17 @@ export default function UploadReviewPage({ navigation, route }) {
             upvotes: 0,
             downvotes: 0,
             upvotesMinusDownvotes: 0,
+            uid: auth.currentUser.uid,
         });
 
-        const videoURI = (String)(reviewRef.id) + ".mp4";
-        console.log(videoURI)
-        console.log(source)
-        await postMedia(videoURI, source, reviewRef, 'videoDownloadURL');
+        const videoName = (String)(reviewRef.id) + ".mp4";
+        const videoDownload = await uploadMedia(videoName, source);
+        await updateDoc(reviewRef, {videoDownloadURL: videoDownload});
 
         if (sourceThumb) {
-            const thumbnailURI = (String)(reviewRef.id) + ".jpg";
-            await postMedia(thumbnailURI, sourceThumb, reviewRef, 'thumbnailDownloadURL');
+            const thumbnailName = (String)(reviewRef.id) + ".jpg";
+            const thumbDownload = await uploadMedia(thumbnailName, sourceThumb);
+            await updateDoc(reviewRef, {thumbnailDownloadURL: thumbDownload});
         }
 
         console.log("review posted with ID: " + reviewRef.id);
@@ -122,7 +94,7 @@ export default function UploadReviewPage({ navigation, route }) {
 
     if (requestRunning) {
         return (
-            <View style={styles.uploadingContainer}>
+            <View style={localStyles.uploadingContainer}>
                 <FocusAwareStatusBar barStyle='dark-content'/>
                 <ActivityIndicator color='red' size='large' />
             </View>
@@ -132,12 +104,12 @@ export default function UploadReviewPage({ navigation, route }) {
     return (
         <SafeAreaView style={styles.page} edges={['top', 'left', 'right']}>
             <FocusAwareStatusBar barStyle='dark-content'/>
-            <View style={styles.container}>
+            <View style={localStyles.container}>
                 <Header navigation={navigation} title='Post a review' style={{marginBottom: 8}}/>
-                <View style={[styles.formContainer, {borderTopColor: 'lightgrey', borderTopWidth: 1,}]}>
+                <View style={[localStyles.formContainer, {borderTopColor: 'lightgrey', borderTopWidth: 1,}]}>
                     <TextInput
                         ref={searchRef}
-                        style={[styles.inputText, styles.text]}
+                        style={[localStyles.inputText, localStyles.text]}
                         maxLength={30}
                         onFocus={() => {
                             navigation.navigate('UploadSearch')
@@ -148,9 +120,9 @@ export default function UploadReviewPage({ navigation, route }) {
                         returnKeyType='done'
                     />
                 </View>
-                <View style={[styles.formContainer, {alignItems: 'flex-start'}]}>
+                <View style={[localStyles.formContainer, {alignItems: 'flex-start'}]}>
                     <TextInput
-                        style={[styles.inputText, styles.text]}
+                        style={[localStyles.inputText, localStyles.text]}
                         maxLength={180}
                         onChangeText={(text) => setDescription(text.trim())}
                         placeholder="Write your review"
@@ -158,14 +130,14 @@ export default function UploadReviewPage({ navigation, route }) {
                     />
                     <TouchableOpacity>
                         <Image
-                            style={styles.mediaPreview}
+                            style={localStyles.mediaPreview}
                             source={ sourceThumb ? { uri: sourceThumb } : {}}
                         />
-                        <Text style={styles.mediaPreviewOverlay}>Set Cover</Text>
+                        <Text style={localStyles.mediaPreviewOverlay}>Set Cover</Text>
                     </TouchableOpacity>
                 </View>
-                <View style={styles.bottomFormContainer}>
-                    <Text style={styles.text}> Rating </Text>
+                <View style={localStyles.bottomFormContainer}>
+                    <Text style={localStyles.text}> Rating </Text>
                     <Stars
                         rating={rating}
                         starSize={32}
@@ -175,33 +147,33 @@ export default function UploadReviewPage({ navigation, route }) {
                         onChange={setRating}
                     />
                 </View>
-                <TouchableOpacity style={styles.bottomFormContainer}>
-                    <Text style={styles.text}> Tags </Text>
+                <TouchableOpacity style={localStyles.bottomFormContainer}>
+                    <Text style={localStyles.text}> Tags </Text>
                     <Feather name="plus" size={24} color="black" />
                 </TouchableOpacity>
-                <View style={styles.bottomFormContainer}>
-                    <Text style={styles.text}> Brand: </Text>
-                    <Text style={styles.text}> {productBrand} </Text>
+                <View style={localStyles.bottomFormContainer}>
+                    <Text style={localStyles.text}> Brand: </Text>
+                    <Text style={localStyles.text}> {productBrand} </Text>
                 </View>
-                <View style={styles.bottomFormContainer}>
-                    <Text style={styles.text}> Category: </Text>
-                    <Text style={styles.text}> {productCategory} </Text>
+                <View style={localStyles.bottomFormContainer}>
+                    <Text style={localStyles.text}> Category: </Text>
+                    <Text style={localStyles.text}> {productCategory} </Text>
                 </View>
-                <View style={styles.spacer}
+                <View style={localStyles.spacer}
                     onClick={() => null}
                 />
-                <View style={styles.buttonsContainer}>
+                <View style={localStyles.buttonsContainer}>
                     <TouchableOpacity
                         onPress={() => navigation.goBack()}
-                        style={styles.cancelButton}>
-                        <Text style={styles.cancelButtonText}>Draft</Text>
+                        style={localStyles.cancelButton}>
+                        <Text style={localStyles.cancelButtonText}>Draft</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity
                         onPress={() => handlePost()}
-                        style={styles.postButton}>
+                        style={localStyles.postButton}>
                         <Feather name="corner-left-up" size={24} color="black" />
-                        <Text style={styles.postButtonText}>Post review</Text>
+                        <Text style={localStyles.postButtonText}>Post review</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -209,14 +181,10 @@ export default function UploadReviewPage({ navigation, route }) {
     )
 }
 
-const styles = StyleSheet.create({
-    page: {
-        flex: 1,
-        backgroundColor: 'white',
-    },
+const localStyles = StyleSheet.create({
     text: {
         fontSize: 14,
-        fontFamily: 'Plus-Jakarta-Sans',
+        fontFamily: 'PlusJakartaSans-Regular',
     },
     container: {
         flex: 1,
@@ -229,10 +197,6 @@ const styles = StyleSheet.create({
     },
     spacer: {
         flex: 1,
-    },
-    topSpacer: {
-        padding: 20,
-        flexDirection: 'row',
     },
     formContainer: {
         padding: 20,
@@ -280,22 +244,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         backgroundColor: '#7D7D7D',
         fontSize: 12,
-        fontFamily: 'Plus-Jakarta-Sans',
-    },
-    tag: {
-        flexDirection: 'row',
-        backgroundColor: 'darkgrey',
-        textAlign: 'center',
-        paddingVertical: 5,
-        paddingHorizontal: 30,
-        marginHorizontal: 10,
-        marginVertical: 5,
-        borderWidth: 2,
-        borderRadius: 10,
-    },
-    star: {
-        paddingTop: 5,
-        paddingBottom: 5,
+        fontFamily: 'PlusJakartaSans-Regular',
     },
     cancelButton: {
         alignItems: 'center',
@@ -318,14 +267,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         borderRadius: 5,
     },
-    tagText: {
-        marginLeft: 5,
-        color: 'white',
-        fontSize: 16
-    },
     cancelButtonText: {
         marginLeft: 5,
-        fontFamily: 'Plus-Jakarta-Sans',
+        fontFamily: 'PlusJakartaSans-Regular',
         fontSize: 16
     },
     postButtonText: {

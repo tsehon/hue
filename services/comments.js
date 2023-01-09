@@ -1,20 +1,17 @@
 import db from '../config/firebase'
 import { setDoc, Timestamp, getDocs, collection, where, query, doc, updateDoc, getDoc, orderBy, addDoc } from "firebase/firestore";
-import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
 import getDisplayName from './getDisplayName';
-
-const auth = getAuth();
 
 let commentListenerInstance = null
 
-export const addComment = async (id, comment) => {
+export const addComment = async (id, uid, comment) => {
     let time = Timestamp.now();
     console.log("time" + time);
 
     const commentsRef = collection(db, 'reviews', id, 'comments');
 
     const docRef = await addDoc(commentsRef, {
-        uid: auth.currentUser.uid,
+        uid: uid,
         comment: comment,
         creation: time,
     });

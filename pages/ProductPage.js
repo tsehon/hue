@@ -5,11 +5,12 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Ionicons } from '@expo/vector-icons';
 
-import BackButton from '../components/BackButton';
 import ProductReviewsGrid from '../components/ProductReviewsGrid';
 import FocusAwareStatusBar from '../components/FocusAwareStatusBar';
 import { ImgCarousel } from '../components/ImgCarousel';
 import Header from '../components/Header';
+
+import styles from '../styles/styles';
 
 import { doc, getDoc, getDocs, collection } from "firebase/firestore";
 import db from '../config/firebase';
@@ -63,16 +64,16 @@ export default function ProductPage({ navigation, route }) {
           />
         </View>
         <View
-          style={styles.infoSection}
+          style={localStyles.infoSection}
         >
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-            <Text style={[styles.title, {width: '90%'}]} numberOfLines={2}>{productName}</Text>
+            <Text style={[localStyles.title, {width: '90%'}]} numberOfLines={2}>{productName}</Text>
             <TouchableOpacity onPress={() => setSaved(!saved)}>
               <Ionicons name={saved ? 'bookmark' : 'bookmark-outline'} size={28} color='black'/>
             </TouchableOpacity>
           </View>
           <Text
-            style={[styles.info, styles.title]}
+            style={[localStyles.info, localStyles.title]}
           >
             ${productPrice}
           </Text>
@@ -83,12 +84,12 @@ export default function ProductPage({ navigation, route }) {
               style={{alignSelf: 'center'}}
             />
             <Text
-              style={[styles.semiBold]}
+              style={[localStyles.semiBold]}
             >
               {productRating}
             </Text>
             <Text
-              style={[styles.text, {color: '#B0B0B0', marginLeft: 8}]}
+              style={[localStyles.text, {color: '#B0B0B0', marginLeft: 8}]}
             >
               ({productNumRatings} {productNumRatings == 1 ? 'review' : 'reviews'})
             </Text>
@@ -97,9 +98,9 @@ export default function ProductPage({ navigation, route }) {
             style={{backgroundColor: '#D9D9D9', borderRadius: 9, height: 52, marginTop: 25, alignItems: 'center', justifyContent: 'center'}}
             onPress={() => Linking.openURL(productLink)}
           >
-            <Text style={styles.semiBold}>Purchase</Text>
+            <Text style={localStyles.semiBold}>Purchase</Text>
           </TouchableOpacity>
-          <Text style={[styles.semiBold, {fontSize: 20, marginTop: 36}]}>Tagged Reviews</Text>
+          <Text style={[localStyles.semiBold, {fontSize: 20, marginTop: 36}]}>Tagged Reviews</Text>
         </View>
         <ProductReviewsGrid productId={productId} productName={productName} navigation={navigation}/>
       </ScrollView>
@@ -107,25 +108,12 @@ export default function ProductPage({ navigation, route }) {
   )
 }
 
-const styles = StyleSheet.create({
-  page: {
-    flex: 1,
-    backgroundColor: 'white',
-  },
-  centered: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+const localStyles = StyleSheet.create({
   infoSection: {
     padding: 15,
     paddingTop: 10,
     paddingBottom: 10,
     flex: 1,
-  },
-  backButton: {
-    fill: 1,
-    paddingLeft: 20,
-    marginTop: 25,
   },
   title: {
     fontSize: 20,
@@ -135,12 +123,9 @@ const styles = StyleSheet.create({
     paddingTop: 12,
     paddingBottom: 12,
   },
-  rightAlign: {
-    alignItems: 'flex-end'
-  },
   text: {
     fontSize: 16,
-    fontFamily: 'Plus-Jakarta-Sans',
+    fontFamily: 'PlusJakartaSans-Regular',
   },
   semiBold: {
     fontFamily: 'PlusJakartaSans-SemiBold',

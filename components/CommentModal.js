@@ -7,6 +7,10 @@ import { useRef, useEffect, useState } from 'react';
 import { clearModal } from '../redux/actions/commentModal';
 
 import { commentListener, addComment, clearCommentListener } from '../services/comments';
+import { getAuth } from 'firebase/auth';
+import { Alert } from 'react-native';
+
+const auth = getAuth();
 
 const CommentItem = ({ item }) => {
     const userTag = "@" + item.displayName;
@@ -31,11 +35,15 @@ const CommentSubModal = ({ post, bottomSheetRef }) => {
     }, [])
 
     const handleCommentSend = () => {
+        if (!auth.currentUser) {
+            Alert.alert('You must be logged in to comment')
+            return;
+        }
         if (comment.length == 0) {
             return;
         }
         setComment('')
-        addComment(post.id, comment)
+        addComment(post.id, auth.currentUser.uid, comment)
         commentListener(post.id, setCommentList);
     }
 

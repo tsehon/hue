@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import SearchBar from 'react-native-elements/dist/searchbar/SearchBar-ios';
+import React from 'react';
 
 import { StyleSheet, Text, View, ScrollView, Button } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -11,6 +10,8 @@ import { ReviewCarousel } from '../components/ImgCarousel';
 import FocusAwareStatusBar from '../components/FocusAwareStatusBar';
 import ProductsGrid from '../components/ProductsGrid';
 import ProductsList from '../components/ProductsList';
+
+import styles from '../styles/styles';
 
 export default function HomePage({ navigation }) {
   return (
@@ -34,7 +35,7 @@ export default function HomePage({ navigation }) {
                 imgURI: 'https://firebasestorage.googleapis.com/v0/b/lavalab-hue.appspot.com/o/TBoPLVjV7wiZ5Va1Fz1J.jpg?alt=media&token=baaa8a56-c543-4628-be75-8e0fdaf2c05f',
               }
             ]}
-            style={ styles.reviewdisplay }
+            style={ localStyles.reviewDisplay }
             navigation={navigation}
           />
         </HomePageSection>
@@ -211,27 +212,8 @@ export default function HomePage({ navigation }) {
   );
 }
 
-const styles = StyleSheet.create({
-  page: {
-    flex: 1,
-    backgroundColor: 'white',
-  },
-  container: {
-    padding: 30,
-    flex: 1,
-    backgroundColor: 'lightblue',
-    borderColor: 'black',
-    borderWidth: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  feed: {
-    flex: 4,
-    backgroundColor: 'lightgrey',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  reviewdisplay: {
+const localStyles = StyleSheet.create({
+  reviewDisplay: {
     width: '100%',
     alignSelf: 'center',
   }

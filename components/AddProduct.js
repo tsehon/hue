@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 14,
-        fontFamily: 'Plus-Jakarta-Sans',
+        fontFamily: 'PlusJakartaSans-Regular',
     },
     container: {
         flex: 1,
@@ -294,7 +294,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         backgroundColor: '#7D7D7D',
         fontSize: 12,
-        fontFamily: 'Plus-Jakarta-Sans',
+        fontFamily: 'PlusJakartaSans-Regular',
     },
     tag: {
         flexDirection: 'row',
@@ -339,7 +339,7 @@ const styles = StyleSheet.create({
     },
     cancelButtonText: {
         marginLeft: 5,
-        fontFamily: 'Plus-Jakarta-Sans',
+        fontFamily: 'PlusJakartaSans-Regular',
         fontSize: 16
     },
     postButtonText: {

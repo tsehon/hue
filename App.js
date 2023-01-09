@@ -39,7 +39,6 @@ const store = createStore(
 
 export default function MainDirectory() {
   const [fontsLoaded] = useFonts({
-    'Plus-Jakarta-Sans': require('./assets/fonts/Plus-Jakarta-Sans.ttf'),
     'PlusJakartaSans-Bold': require('./assets/fonts/PlusJakartaSans-Bold.ttf'),
     'PlusJakartaSans-ExtraBold': require('./assets/fonts/PlusJakartaSans-ExtraBold.ttf'),
     'PlusJakartaSans-BoldItalic': require('./assets/fonts/PlusJakartaSans-BoldItalic.ttf'),

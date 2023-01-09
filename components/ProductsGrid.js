@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     subtext: {
         fontSize: 14,
         lineHeight: 16,
-        fontFamily: 'Plus-Jakarta-Sans',
+        fontFamily: 'PlusJakartaSans-Regular',
     },
     flexGrid: {
         flexDirection: 'row',

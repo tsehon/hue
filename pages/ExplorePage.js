@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import SearchBar from 'react-native-elements/dist/searchbar/SearchBar-ios';
 
-import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
-import { Button } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import HomePageSection from '../components/HomePageSection';
@@ -15,8 +13,7 @@ import FocusAwareStatusBar from '../components/FocusAwareStatusBar';
 import ProductsList from '../components/ProductsList';
 import VideoPreview from '../components/VideoPreviews';
 
-import { collection, getDocs } from "firebase/firestore";
-import { ref } from 'firebase/storage';
+import styles from '../styles/styles';
 
 export default function ExplorePage({ navigation, route }) {
     const searchRef = useRef(null);
@@ -92,25 +89,3 @@ export default function ExplorePage({ navigation, route }) {
         </SafeAreaView>
     );
 }
-
-const styles = StyleSheet.create({
-    page: {
-        flex: 1,
-        backgroundColor: 'white',
-    },
-    container: {
-        padding: 30,
-        flex: 1,
-        backgroundColor: 'lightblue',
-        borderColor: 'black',
-        borderWidth: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    feed: {
-        flex: 4,
-        backgroundColor: 'lightgrey',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-});

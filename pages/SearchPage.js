@@ -7,11 +7,10 @@ import { Feather, MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 
 import db from '../config/firebase';
 
-import SearchItem from '../lib/SearchItem';
-import BackButton from '../components/BackButton';
 import FocusAwareStatusBar from '../components/FocusAwareStatusBar';
 import SearchTabView from '../components/SearchTabView';
 import ProductsList from '../components/ProductsList';
+import styles from '../styles/styles';
 
 export default function SearchPage({ navigation, route, productsOnly }) {
     const [query, setQuery] = useState(route.text);
@@ -114,7 +113,7 @@ export default function SearchPage({ navigation, route, productsOnly }) {
 
             return (
                 <TouchableOpacity
-                    style={styles.searchItemContainer}
+                    style={localStyles.searchItemContainer}
                     onPress={() => {
                         const recents = recentlyViewed;
                         var index = recents.indexOf(item);
@@ -138,7 +137,7 @@ export default function SearchPage({ navigation, route, productsOnly }) {
                 >
                     {query ? <Ionicons name='ios-search' size={20} color='black' /> : 
                         <MaterialCommunityIcons name="clock-time-four-outline" size={20} color="black" />}
-                    <Text style={[styles.text, {marginLeft: 15}]}>
+                    <Text style={[localStyles.text, {marginLeft: 15}]}>
                         {name}
                     </Text>
                 </TouchableOpacity>
@@ -147,11 +146,11 @@ export default function SearchPage({ navigation, route, productsOnly }) {
     }
 
     return (
-        <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
+        <SafeAreaView style={styles.page} edges={['top', 'left', 'right']}>
             <FocusAwareStatusBar barStyle='dark-content'/>
-            <SafeAreaView style={styles.searchContainer}>
+            <SafeAreaView style={localStyles.searchContainer}>
                 <TouchableOpacity
-                    style={styles.backButton}
+                    style={localStyles.backButton}
                     onPress={() => { navigation.goBack() }}
                 >
                     <Feather
@@ -161,7 +160,7 @@ export default function SearchPage({ navigation, route, productsOnly }) {
                     />
                 </TouchableOpacity>
                 <SearchBar
-                    containerStyle={styles.searchbar}
+                    containerStyle={localStyles.searchbar}
                     onChangeText={filterResults}
                     onSubmitEditing={() => setSubmitted(true)}
                     value={query}
@@ -189,17 +188,10 @@ export default function SearchPage({ navigation, route, productsOnly }) {
     );
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: 'white'
-    },
+const localStyles = StyleSheet.create({
     searchContainer: {
         fill: 1,
         flexDirection: 'row',
-    },
-    dropdownContainer: {
-        fill: 1,
     },
     backButton: {
         fill: 1,
@@ -218,7 +210,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     text: {
-        fontFamily: 'Plus-Jakarta-Sans',
+        fontFamily: 'PlusJakartaSans-Regular',
         fontSize: 16,
     },
 });

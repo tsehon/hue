@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: '400',
         color: '#000000',
-        fontFamily: 'Plus-Jakarta-Sans',
+        fontFamily: 'PlusJakartaSans-Regular',
     },
     flexGrid: {
         flexDirection: 'row',

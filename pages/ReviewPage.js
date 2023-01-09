@@ -55,7 +55,7 @@ export default function ReviewFeed({ navigation, route }) {
     }
 
     return (
-        <View style={styles.page}>
+        <View>
             <FocusAwareStatusBar barStyle='light-content' />
             <FlatList
                 ref={flatListRef}
@@ -77,10 +77,10 @@ export default function ReviewFeed({ navigation, route }) {
                 onViewableItemsChanged={onViewableItemsChanged.current}
                 showsVerticalScrollIndicator={false}
             />
-            <SafeAreaView style={[styles.absolute, styles.topmostButtons]}>
+            <SafeAreaView style={[localStyles.absolute, localStyles.topmostButtons]}>
                 <BackButton navigation={navigation} color='white' size={48} />
                 <TouchableOpacity
-                    style={[styles.button, { paddingTop: 6, paddingRight: 12 }]}
+                    style={[localStyles.button, { paddingTop: 6, paddingRight: 12 }]}
                     onPress={() => {
                         dispatch(clearModal);   
                         navigation.navigate('Search');
@@ -168,10 +168,10 @@ const VideoSingle = forwardRef((props, parentRef) => {
     }
 
     return (
-        <View style={styles.page}>
+        <View style={{ flex: 1}}>
             <Video
                 ref={ref}
-                style={styles.page}
+                style={{ flex: 1}}
                 resizeMode='cover'
                 shouldPlay={false}
                 isLooping
@@ -206,7 +206,7 @@ const VideoSingle = forwardRef((props, parentRef) => {
                         style={{ alignItems: 'center' }}
                     >
                         <MaterialIcons name={upvoted ? 'thumb-up-alt' : 'thumb-up-off-alt'} size={28} color='white' iconStyle={{ backgroundColor: 'white' }} />
-                        <Text style={[styles.text, { fontSize: 12 }]}>{upvotes}</Text>
+                        <Text style={[localStyles.text, { fontSize: 12 }]}>{upvotes}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => {
@@ -235,7 +235,7 @@ const VideoSingle = forwardRef((props, parentRef) => {
                         style={{ marginTop: 20, alignItems: 'center' }}
                     >
                         <MaterialIcons name={downvoted ? 'thumb-down-alt' : 'thumb-down-off-alt'} size={28} color='white' />
-                        <Text style={[styles.text, { fontSize: 12 }]}>{downvotes}</Text>
+                        <Text style={[localStyles.text, { fontSize: 12 }]}>{downvotes}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                             onPress={() => {
@@ -255,15 +255,15 @@ const VideoSingle = forwardRef((props, parentRef) => {
                         <Ionicons name={saved ? 'bookmark' : 'bookmark-outline'} size={28} color='white' />
                     </TouchableOpacity>
                     
-                    <Text style={styles.actionButtonText}>
+                    <Text style={localStyles.actionButtonText}>
                         {props.item.commentsCount ? props.item.commentsCount : null}
                     </Text>
                 </View>
-                <Text style={[styles.text, { fontSize: 16 }]}>{props.item.userName}</Text>
+                <Text style={[localStyles.text, { fontSize: 16 }]}>{props.item.userName}</Text>
                 <Text
                     // Reviews don't currently include the corresponding product ID
                     // onPress={() => props.navigation.navigate('Product', {productId: props.item.productID})}
-                    style={[styles.text, { fontSize: 20, marginBottom: 9, marginTop: 11 }]}
+                    style={[localStyles.text, { fontSize: 20, marginBottom: 9, marginTop: 11 }]}
                     numberOfLines={2}
                     onPress={() => {
                         if (props.item.productID) handleProductClick(props.item.productID);
@@ -271,7 +271,7 @@ const VideoSingle = forwardRef((props, parentRef) => {
                 >
                     {props.item.productName}
                 </Text>
-                <View style={styles.flexRow}>
+                <View style={localStyles.flexRow}>
                     <Stars
                         rating={props.item.rating}
                         starSize={16}
@@ -280,15 +280,15 @@ const VideoSingle = forwardRef((props, parentRef) => {
                         alignSelf='center'
                         marginSubtract={-5}
                     />
-                    <Text style={[styles.text, { fontSize: 16 }]}>{props.item.rating}</Text>
+                    <Text style={[localStyles.text, { fontSize: 16 }]}>{props.item.rating}</Text>
                 </View>
                 <ReadMore
-                    style={[styles.text, { fontSize: 16, marginTop: 24 }]}
+                    style={[localStyles.text, { fontSize: 16, marginTop: 24 }]}
                     numberOfLines={2}
                     seeMoreText='more'
-                    seeMoreStyle={styles.moreLess}
+                    seeMoreStyle={localStyles.moreLess}
                     seeLessText='less'
-                    seeLessStyle={styles.moreLess}
+                    seeLessStyle={localStyles.moreLess}
                     debounceSeeMoreCalc={1}
                 >
                     {props.item.description}
@@ -316,10 +316,7 @@ const getFeed = async (type, searchTerm, firstID) => {
     return arr;
 }
 
-const styles = StyleSheet.create({
-    page: {
-        flex: 1,
-    },
+const localStyles = StyleSheet.create({
     absolute: {
         position: 'absolute',
         left: 0,
@@ -339,10 +336,10 @@ const styles = StyleSheet.create({
     },
     text: {
         color: 'white',
-        fontFamily: 'Plus-Jakarta-Sans',
+        fontFamily: 'PlusJakartaSans-Regular',
     },
     moreLess: {
         color: '#B3B3B3',
-        fontFamily: 'Plus-Jakarta-Sans',
+        fontFamily: 'PlusJakartaSans-Regular',
     }
 });
