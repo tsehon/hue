@@ -1,10 +1,10 @@
 import React from 'react';
-import { StyleSheet, KeyboardAvoidingView, ScrollView, View, Text, Image, TextInput, TouchableOpacity, FlatList } from 'react-native'
-import BottomSheet, { BottomSheetTextInput } from '@gorhom/bottom-sheet';
+import { StyleSheet, KeyboardAvoidingView, ScrollView, View, Text, Image, TextInput, TouchableOpacity, FlatList, Pressable } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
 import { Ionicons } from '@expo/vector-icons'
 import { useRef, useEffect, useState } from 'react';
 import { clearModal } from '../redux/actions/commentModal';
+import Modal from "react-native-modal";
 
 import { commentListener, addComment, clearCommentListener } from '../services/comments';
 import { getAuth } from 'firebase/auth';
@@ -24,7 +24,7 @@ const CommentItem = ({ item }) => {
     )
 };
 
-const CommentSubModal = ({ post, bottomSheetRef }) => {
+const CommentSubModal = ({ post }) => {
     const [comment, setComment] = useState('')
     const [commentList, setCommentList] = useState([])
 
@@ -61,12 +61,11 @@ const CommentSubModal = ({ post, bottomSheetRef }) => {
                 keyExtractor={(item) => item.id}
             />
             <View style={styles.containerInput}>
-                <BottomSheetTextInput
-                    value={comment}
-                    onChangeText={setComment}
-                    style={styles.input}
-                    onBlur={() => {bottomSheetRef.current.snapToIndex(0)}}
-                />
+                    <TextInput
+                        value={comment}
+                        onChangeText={setComment}
+                        style={styles.input}
+                    />
                 <TouchableOpacity onPress={() => handleCommentSend()}>
                     <Ionicons name="arrow-up-circle" size={34} color={'grey'} />
                 </TouchableOpacity>
@@ -77,20 +76,13 @@ const CommentSubModal = ({ post, bottomSheetRef }) => {
 
 export default function CommentModal({ navigation, route }) {
     const modalState = useSelector(state => state.modal);
-    const bottomSheetRef = useRef(null)
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        if (modalState.open && bottomSheetRef.current) {
-            bottomSheetRef.current.expand()
-        }
-    }, [modalState])
-
-    const renderContent = (bottomSheetRef) => {
+    const renderContent = () => {
         console.log(modalState.data);
         switch (modalState.modalType) {
             case 0:
-                return (<CommentSubModal post={modalState.data} bottomSheetRef={bottomSheetRef} />)
+                return (<CommentSubModal post={modalState.data} />)
             default:
                 return (<></>)
         }
@@ -100,16 +92,22 @@ export default function CommentModal({ navigation, route }) {
     }
 
     return (
-        <BottomSheet
-            ref={bottomSheetRef}
-            snapPoints={["50%"]}
-            index={-1}
-            onClose={onClose}
-            handleHeight={40}
-            enablePanDownToClose
+        <Modal
+            isVisible={modalState.open}
+            style={{margin: 0}}
         >
-            {renderContent(bottomSheetRef)}
-        </BottomSheet>
+            <Pressable
+                onPress={() => onClose()}
+                style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0}}
+            />
+            <KeyboardAvoidingView
+                behavior='position'
+                style={{position: 'absolute', bottom: 0, left: 0, right: 0, height: '50%'}}
+                contentContainerStyle={{height: '100%', backgroundColor: 'white'}}
+            >
+                {renderContent()}
+            </KeyboardAvoidingView>
+        </Modal>
     );
 }
 
