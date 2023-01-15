@@ -12,6 +12,7 @@ import ProductsGrid from '../components/ProductsGrid';
 import ProductsList from '../components/ProductsList';
 
 import styles from '../styles/styles';
+import { ReviewHorizontalScroll } from '../components/ReviewHorizontalScroll';
 
 export default function HomePage({ navigation }) {
   return (
@@ -49,63 +50,26 @@ export default function HomePage({ navigation }) {
         <HomePageSection
           title="Trending in Beauty"
         >
-          <ScrollView horizontal>
-            <VideoPreview
-              style={{width: 137, height: 222, borderRadius: 10}}
-              navigation={navigation}
-              searchType='categoryName'
-              searchQuery='Beauty'
-              firstID='aThozCvbHM7iwODec9ZI'
-              imgURI='https://firebasestorage.googleapis.com/v0/b/lavalab-hue.appspot.com/o/video-capture-9153.png?alt=media&token=a7dd9444-b100-40a3-adec-197d9dfa5600'
-            />
-            <VideoPreview
-              style={{width: 137, height: 222, borderRadius: 10, marginLeft: 10}}
-              navigation={navigation}
-              searchType='categoryName'
-              searchQuery='Beauty'
-              firstID='uzjDRJ2kZWq4bswDffVl'
-              imgURI='https://firebasestorage.googleapis.com/v0/b/lavalab-hue.appspot.com/o/video-capture-3767.png?alt=media&token=3644737b-bbf0-4174-b6d7-ae2dc821947b'
-            />
-            {/* <VideoPreview
-              style={{width: 137, height: 222, borderRadius: 10, marginLeft: 10}}
-              navigation={navigation}
-              searchType='categoryName'
-              searchQuery='Beauty'
-              firstID='izG3zce88U4wsXUvBqFM'
-              videoURI='https://test-videos.co.uk/vids/sintel/mp4/h264/1080/Sintel_1080_10s_2MB.mp4'
-            /> */}
-          </ScrollView>
+          <ReviewHorizontalScroll
+            data={[
+              'aThozCvbHM7iwODec9ZI',
+              'uzjDRJ2kZWq4bswDffVl',
+              'YsKe3980xS4EkuX5iJyE',
+            ]}
+            navigation={navigation}
+          />
         </HomePageSection>
 
         <HomePageSection
           title="Trending in Skincare"
         >
-          <ScrollView horizontal>
-            <VideoPreview
-              style={{width: 137, height: 222, borderRadius: 10}}
-              navigation={navigation}
-              searchType='categoryName'
-              searchQuery='Skincare'
-              firstID='jgsVTxXpy6QednIM9GX2'
-              videoURI='https://firebasestorage.googleapis.com/v0/b/lavalab-hue.appspot.com/o/jgsVTxXpy6QednIM9GX2.mp4?alt=media&token=2ebc4fb9-312c-49b7-850e-cb79023c96b3'
-            />
-            {/* <VideoPreview
-              style={{width: 137, height: 222, borderRadius: 10, marginLeft: 10}}
-              navigation={navigation}
-              searchType='categoryName'
-              searchQuery='Beauty'
-              firstID='2DtUlonFdbiimC0LNB18'
-              videoURI='https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_2MB.mp4'
-            /> */}
-            {/* <VideoPreview
-              style={{width: 137, height: 222, borderRadius: 10, marginLeft: 10}}
-              navigation={navigation}
-              searchType='categoryName'
-              searchQuery='Beauty'
-              firstID='izG3zce88U4wsXUvBqFM'
-              videoURI='https://test-videos.co.uk/vids/sintel/mp4/h264/1080/Sintel_1080_10s_2MB.mp4'
-            /> */}
-          </ScrollView>
+          <ReviewHorizontalScroll
+            data={[
+              'jgsVTxXpy6QednIM9GX2',
+              'O6bc3VGbKaZ4MEciteLi',
+            ]}
+            navigation={navigation}
+          />
         </HomePageSection>
 
         <HomePageSection
@@ -148,63 +112,25 @@ export default function HomePage({ navigation }) {
         <HomePageSection
           title="Trending in Tech"
         >
-          <ScrollView horizontal>
-            <VideoPreview
-              style={{width: 137, height: 222, borderRadius: 10}}
-              navigation={navigation}
-              searchType='categoryName'
-              searchQuery='Tech'
-              firstID='JiDG2gW3yiHJRL8QiU0U'
-              imgURI='https://firebasestorage.googleapis.com/v0/b/lavalab-hue.appspot.com/o/JiDG2gW3yiHJRL8QiU0U.jpg?alt=media&token=5e6ba21f-7e7a-45f9-b4d3-e764d12a7a36'
-            />
-            <VideoPreview
-              style={{width: 137, height: 222, borderRadius: 10, marginLeft: 10}}
-              navigation={navigation}
-              searchType='categoryName'
-              searchQuery='Beauty'
-              firstID='2DtUlonFdbiimC0LNB18'
-              videoURI='https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_2MB.mp4'
-            />
-            <VideoPreview
-              style={{width: 137, height: 222, borderRadius: 10, marginLeft: 10}}
-              navigation={navigation}
-              searchType='categoryName'
-              searchQuery='Beauty'
-              firstID='izG3zce88U4wsXUvBqFM'
-              videoURI='https://test-videos.co.uk/vids/sintel/mp4/h264/1080/Sintel_1080_10s_2MB.mp4'
-            />
-          </ScrollView>
+          <ReviewHorizontalScroll
+            data={[
+              'JiDG2gW3yiHJRL8QiU0U',
+              'nwymyYw2zIWWml7KFUXB',
+            ]}
+            navigation={navigation}
+          />
         </HomePageSection>
 
         <HomePageSection
           title="Trending in Clothing"
         >
-          <ScrollView horizontal>
-            <VideoPreview
-              style={{width: 137, height: 222, borderRadius: 10}}
-              navigation={navigation}
-              searchType='categoryName'
-              searchQuery={'Women\'s Clothing'}
-              firstID='EvqNgESTageVCvA5HMKc'
-              imgURI='https://firebasestorage.googleapis.com/v0/b/lavalab-hue.appspot.com/o/EvqNgESTageVCvA5HMKc.jpg?alt=media&token=6c4a614d-676c-4ee2-8eea-e9aa6bb28f13'
-            />
-            <VideoPreview
-              style={{width: 137, height: 222, borderRadius: 10, marginLeft: 10}}
-              navigation={navigation}
-              searchType='categoryName'
-              searchQuery='Beauty'
-              firstID='2DtUlonFdbiimC0LNB18'
-              videoURI='https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_2MB.mp4'
-            />
-            <VideoPreview
-              style={{width: 137, height: 222, borderRadius: 10, marginLeft: 10}}
-              navigation={navigation}
-              searchType='categoryName'
-              searchQuery='Beauty'
-              firstID='izG3zce88U4wsXUvBqFM'
-              videoURI='https://test-videos.co.uk/vids/sintel/mp4/h264/1080/Sintel_1080_10s_2MB.mp4'
-            />
-          </ScrollView>
+          <ReviewHorizontalScroll
+            data={[
+              'EvqNgESTageVCvA5HMKc',
+              'gEe9D6F5Fh9FrZmV8oxk',
+            ]}
+            navigation={navigation}
+          />
         </HomePageSection>
 
       </ScrollView>

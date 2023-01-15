@@ -9,6 +9,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    horizontalScrollItem: {
+        width: 137,
+        height: 222,
+        borderRadius: 10,
+        marginRight: 10,
+    }
 });
 
 export default styles;
