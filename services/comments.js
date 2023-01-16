@@ -1,6 +1,6 @@
 import db from '../config/firebase'
 import { setDoc, Timestamp, getDocs, collection, where, query, doc, updateDoc, getDoc, orderBy, addDoc } from "firebase/firestore";
-import getDisplayName from './getDisplayName';
+import { getDisplayName } from './users';
 
 let commentListenerInstance = null
 

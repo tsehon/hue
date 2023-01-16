@@ -3,11 +3,12 @@ import { StyleSheet, Text, Button, Alert, TextInput } from 'react-native';
 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import FocusAwareStatusBar from '../components/FocusAwareStatusBar';
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
-import db from '../config/firebase';
-import { doc, setDoc } from "firebase/firestore";
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { functions } from '../config/firebase';
+import { connectFunctionsEmulator, httpsCallable } from "firebase/functions";
 
 const auth = getAuth();
+const createUser = httpsCallable(functions, 'createUser');
 
 export default function SignUpPage({navigation, route}) {
     const [email, setEmail] = useState('');
@@ -19,19 +20,29 @@ export default function SignUpPage({navigation, route}) {
             Alert.alert('All fields must be completed')
             return;
         }
+        if (!displayName.match(/^[a-zA-Z0-9.\-_]+$/)) {
+            Alert.alert('Username must consist of valid characters')
+            return;
+        }
+        if (displayName.length < 4) {
+            Alert.alert('Username must be at least four characters long')
+            return;
+        }
       
         try {
-            const response = await createUserWithEmailAndPassword(auth, email, password);
-            await addUserToDB(response.user.uid);
+            // Send a request to the backend to validate input and create user
+            const result = await createUser({
+                email: email,
+                displayName: displayName,
+                password: password,
+            })
+            // If account successfully created, sign in to it
+            if (result) {
+                await signInWithEmailAndPassword(auth, email, password);
+            }
         } catch (error) {
             Alert.alert(error.message)
         }
-    }
-
-    async function addUserToDB(uid) {
-        const docRef = await setDoc(doc(db, 'users', uid), {
-            displayName: displayName,
-        });
     }
 
     return (

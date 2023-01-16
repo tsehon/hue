@@ -15,9 +15,9 @@ const auth = getAuth();
 const CommentItem = ({ item }) => {
     const userTag = "@" + item.displayName;
     return (
-        <View style={styles.itemcontainer}>
-            <View style={styles.containerText}>
-                <Text style={styles.displayName}> {userTag} </Text>
+        <View style={localStyles.itemcontainer}>
+            <View style={localStyles.containerText}>
+                <Text style={localStyles.displayName}> {userTag} </Text>
                 <Text>{item.comment}</Text>
             </View>
         </View>
@@ -53,18 +53,18 @@ const CommentSubModal = ({ post }) => {
 
     return (
         <View
-            style={styles.container}
+            style={localStyles.container}
         >
             <FlatList
                 data={commentList}
                 renderItem={renderItem}
                 keyExtractor={(item) => item.id}
             />
-            <View style={styles.containerInput}>
+            <View style={localStyles.containerInput}>
                     <TextInput
                         value={comment}
                         onChangeText={setComment}
-                        style={styles.input}
+                        style={localStyles.input}
                     />
                 <TouchableOpacity onPress={() => handleCommentSend()}>
                     <Ionicons name="arrow-up-circle" size={34} color={'grey'} />
@@ -103,7 +103,7 @@ export default function CommentModal({ navigation, route }) {
             <KeyboardAvoidingView
                 behavior='position'
                 style={{position: 'absolute', bottom: 0, left: 0, right: 0, height: '50%'}}
-                contentContainerStyle={{height: '100%', backgroundColor: 'white'}}
+                contentContainerStyle={{height: '100%', backgroundColor: 'white', borderTopLeftRadius: 10, borderTopRightRadius: 10}}
             >
                 {renderContent()}
             </KeyboardAvoidingView>
@@ -112,7 +112,7 @@ export default function CommentModal({ navigation, route }) {
 }
 
 
-const styles = StyleSheet.create({
+const localStyles = StyleSheet.create({
     itemcontainer: {
         paddingHorizontal: 20,
         paddingVertical: 10,

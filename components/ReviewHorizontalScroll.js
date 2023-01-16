@@ -1,7 +1,7 @@
 import { doc, getDoc } from 'firebase/firestore';
 import { useEffect } from 'react';
 import { useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, Button } from 'react-native';
+import { ScrollView } from 'react-native';
 import VideoPreview from '../components/VideoPreviews';
 import db from '../config/firebase'
 import styles from '../styles/styles';
@@ -30,9 +30,7 @@ export const ReviewHorizontalScroll = ({ navigation, data }) => {
 
     return (
         <ScrollView horizontal>
-            {reviews.map((element, index) => {
-                console.log(element)
-                return (
+            {reviews.map((element, index) => (
                 <VideoPreview
                     style={styles.horizontalScrollItem}
                     navigation={navigation}
@@ -43,7 +41,7 @@ export const ReviewHorizontalScroll = ({ navigation, data }) => {
                     videoURI={element.videoURI}
                     key={index}
                 />
-            )})}
+            ))}
           </ScrollView>
     )
 }

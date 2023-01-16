@@ -5,7 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import FocusAwareStatusBar from '../components/FocusAwareStatusBar';
 
 import { getAuth, signOut } from 'firebase/auth';
-import getDisplayName from '../services/getDisplayName';
+import { getDisplayName } from '../services/users';
 import styles from '../styles/styles';
 
 

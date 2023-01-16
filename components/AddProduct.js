@@ -6,15 +6,18 @@ import { ScrollView, ActivityIndicator, Image, Text, TextInput, TouchableOpacity
 import { Feather, MaterialIcons } from '@expo/vector-icons'
 
 import db from '../config/firebase';
-import { storage } from '../config/firebase';
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { doc, collection, addDoc, setDoc, updateDoc } from "firebase/firestore";
+import { doc, collection, addDoc, setDoc } from "firebase/firestore";
 import Header from '../components/Header';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import FocusAwareStatusBar from '../components/FocusAwareStatusBar';
 
 import * as ImagePicker from 'expo-image-picker'
 import * as MediaLibrary from 'expo-media-library'
+import uploadMedia from '../services/uploadMedia';
+import { getAuth } from 'firebase/auth';
+import { Alert } from 'react-native';
+
+const auth = getAuth();
 
 export default function AddProduct({navigation, route}) {
     const [productName, setProductName] = useState('');
@@ -55,6 +58,11 @@ export default function AddProduct({navigation, route}) {
     }
 
     const post = async () => {
+        if (!auth.currentUser) {
+            Alert.alert('You must be logged in to add products')
+            return;
+        }
+
         setRequestRunning(true);
 
         const docRef = await addDoc(collection(db, "products"), {
@@ -63,12 +71,15 @@ export default function AddProduct({navigation, route}) {
             category: category,
             link: link,
             price: price,
+            uid: auth.currentUser.uid,
             avgRating: Math.round((Math.random()*1.5 + 3.5) * 10)/10,
             numRatings: 0,
         });
 
         for (let i = 0; i<images.length; i++) {
-            await postMedia((String)(docRef.id), images[i], i)
+            const docID = (String)(docRef.id) + (i+1).toString() + ".jpg"
+            const downloadURL = await uploadMedia(docID, images[i], i)
+            await setDoc(doc(db, 'products', docID, 'images', (i+1).toString()), { url: downloadURL })
         }
 
         console.log('product upload complete')
@@ -82,39 +93,6 @@ export default function AddProduct({navigation, route}) {
                 productCategory: category,
             })
         }
-    }
-
-    const postMedia = async (docID, media, i) => {
-        const uploadRef = ref(storage, docID + (i+1).toString() + ".jpg");
-
-        const promise = new Promise(function(resolve, reject) {
-            fetch(media)
-            .then(response => response.blob())
-            .then(blob => {
-                const uploadTask = uploadBytesResumable(uploadRef, blob)
-                uploadTask.on('state_changed',
-                    (snapshot) => {
-                        console.log(snapshot.bytesTransferred + ' / ' + snapshot.totalBytes);
-                    },
-                    (error) => {
-                        console.log('postMedia error: ' + error);
-                        reject(error);
-                    },
-                    () => {
-                        // Upload completed successfully, now we can get the download URL and add to document
-                        blob.close();
-                        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                            console.log('File available at', downloadURL);
-                            setDoc(doc(db, "products", docID, 'images', (i+1).toString()), { url: downloadURL })
-                            resolve();
-                        });
-                        
-                    }
-                )
-            })
-        });
-
-        return await promise;
     }
 
     if (requestRunning) {

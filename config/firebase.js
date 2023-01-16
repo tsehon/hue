@@ -1,9 +1,10 @@
 import { initializeApp } from "firebase/app";
-import { initializeFirestore } from "firebase/firestore";
+import { getFirestore, initializeFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 import 'firebase/auth';
 
 import { API_KEY, AUTH_DOMAIN, PROJECT_ID, STORAGE_BUCKET, MESSAGING_SENDER_ID, APP_ID, MEASUREMENT_ID } from '@env';
+import { getFunctions } from "firebase/functions";
 
 const firebaseConfig = {
     apiKey: API_KEY,
@@ -23,5 +24,7 @@ const db = initializeFirestore(app, {
 });
 
 export const storage = getStorage(app);
+
+export const functions = getFunctions(app);
 
 export default db;
